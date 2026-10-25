@@ -277,10 +277,10 @@ function addUserBubble({ text, inputType, audioUrl }) {
   if (!container) return;
 
   const bubble = document.createElement('div');
-  bubble.className = 'msg-row msg-user';
+  bubble.className = 'wa-msg-row msg-row wa-user msg-user';
   
   const innerBubble = document.createElement('div');
-  innerBubble.className = 'msg-bubble msg-bubble-user';
+  innerBubble.className = 'wa-bubble msg-bubble wa-bubble-user msg-bubble-user';
 
   if (inputType === 'voice' && audioUrl) {
     innerBubble.appendChild(createWaVoicePlayer(audioUrl));
@@ -288,12 +288,13 @@ function addUserBubble({ text, inputType, audioUrl }) {
 
   const textEl = document.createElement('div');
   textEl.className = 'msg-text';
+  textEl.style.lineHeight = '1.45';
   textEl.textContent = (inputType === 'voice' ? '🎙️ ' : '') + text;
   innerBubble.appendChild(textEl);
 
   const timeEl = document.createElement('div');
-  timeEl.className = 'msg-time';
-  timeEl.innerHTML = `${getTimeString()} <span class="wa-ticks">✓✓</span>`;
+  timeEl.className = 'wa-meta';
+  timeEl.innerHTML = `<span class="wa-time">${getTimeString()}</span> <span class="wa-ticks">✓✓</span>`;
   innerBubble.appendChild(timeEl);
 
   bubble.appendChild(innerBubble);
@@ -306,15 +307,16 @@ function addBotBubble({ text, audioUrl, sources = [] }) {
   if (!container) return;
 
   const bubble = document.createElement('div');
-  bubble.className = 'msg-row msg-bot';
+  bubble.className = 'wa-msg-row msg-row wa-bot msg-bot';
 
   const avatar = document.createElement('div');
   avatar.className = 'bot-avatar';
+  avatar.style.cssText = 'width: 28px; height: 28px; border-radius: 50%; background: #008069; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0;';
   avatar.textContent = '🛰️';
   bubble.appendChild(avatar);
 
   const innerBubble = document.createElement('div');
-  innerBubble.className = 'msg-bubble msg-bubble-bot';
+  innerBubble.className = 'wa-bubble msg-bubble wa-bubble-bot msg-bubble-bot';
 
   // If there's an audio note from Space Buddy, render WhatsApp voice player!
   if (audioUrl) {
@@ -323,14 +325,16 @@ function addBotBubble({ text, audioUrl, sources = [] }) {
 
   const textEl = document.createElement('div');
   textEl.className = 'msg-text';
+  textEl.style.lineHeight = '1.45';
   textEl.textContent = text;
   innerBubble.appendChild(textEl);
 
   if (sources && sources.length > 0) {
     const sourcesEl = document.createElement('div');
     sourcesEl.className = 'msg-sources';
+    sourcesEl.style.cssText = 'margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; gap: 0.35rem;';
     sourcesEl.innerHTML = sources.map(s => `
-      <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="source-chip" title="${s.title}">
+      <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="source-chip" style="font-size: 0.72rem; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; padding: 0.15rem 0.5rem; border-radius: 9999px; text-decoration: none;" title="${s.title}">
         Source: ${s.title.slice(0, 24)}... (as of ${s.as_of || 'verified'})
       </a>
     `).join('');
@@ -338,8 +342,8 @@ function addBotBubble({ text, audioUrl, sources = [] }) {
   }
 
   const timeEl = document.createElement('div');
-  timeEl.className = 'msg-time';
-  timeEl.textContent = getTimeString();
+  timeEl.className = 'wa-meta';
+  timeEl.innerHTML = `<span class="wa-time">${getTimeString()}</span>`;
   innerBubble.appendChild(timeEl);
 
   bubble.appendChild(innerBubble);
@@ -356,11 +360,13 @@ function showTypingIndicator() {
 
   const indicator = document.createElement('div');
   indicator.id = 'typing-indicator';
-  indicator.className = 'msg-row msg-bot';
+  indicator.className = 'wa-msg-row msg-row wa-bot msg-bot';
   indicator.innerHTML = `
-    <div class="bot-avatar">🛰️</div>
-    <div class="msg-bubble msg-bubble-bot typing-dots">
-      <span></span><span></span><span></span>
+    <div style="width: 28px; height: 28px; border-radius: 50%; background: #008069; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0;">🛰️</div>
+    <div class="wa-bubble msg-bubble wa-bubble-bot typing-dots" style="padding: 0.6rem 0.85rem;">
+      <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#64748b; margin:0 2px;"></span>
+      <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#64748b; margin:0 2px;"></span>
+      <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#64748b; margin:0 2px;"></span>
     </div>
   `;
   container.appendChild(indicator);

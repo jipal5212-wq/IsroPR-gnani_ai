@@ -20,6 +20,7 @@
 | 3 | 2026-10-25 | Full Stack Implementation per `plan.md` | Node.js 20+, Express, SQLite (`better-sqlite3` with WAL & FTS5), Gnani AI (Timbre v2.5 TTS & Prisma v2.5 STT), Vanilla ES modules |
 | 4 | 2026-10-25 | Native SQLite FTS5 for RAG | Deterministic, rapid BM25 keyword retrieval with zero external vector database dependencies |
 | 5 | 2026-10-25 | Single admin account with CLI creation | Secure bcrypt (cost 12) hashing with 8-hour HttpOnly JWT session cookie |
+| 6 | 2026-10-25 | Light, human editorial UI/UX & WhatsApp Web chat | Clean, accessible design avoiding generic dark "AI" neon; authentic WhatsApp Web look for conversational chat |
 
 ---
 

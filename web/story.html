@@ -8,9 +8,9 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
   <style>
     .story-page-container {
-      max-width: 900px;
+      max-width: 860px;
       margin: 2rem auto;
-      padding: 0 1.5rem 4rem;
+      padding: 0 1.5rem 5rem;
     }
     .story-header-box {
       margin-bottom: 2rem;
@@ -20,19 +20,28 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 1rem;
-      margin: 1rem 0;
-      color: var(--text-dim);
+      margin-bottom: 1.25rem;
+      color: var(--text-muted);
       font-size: 0.85rem;
+      font-weight: 500;
     }
-    /* Player Box Styling */
+    .story-meta-row a {
+      color: var(--isro-blue);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .story-meta-row a:hover {
+      text-decoration: underline;
+    }
+
+    /* Modern Light Podcast Player */
     .space-player-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-glow);
+      background: #ffffff;
+      border: 1px solid var(--border-light);
       border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      box-shadow: var(--shadow-glow);
-      margin-bottom: 2.5rem;
-      backdrop-filter: blur(16px);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 2.75rem;
     }
     .player-controls-row {
       display: flex;
@@ -44,35 +53,40 @@
       width: 52px;
       height: 52px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), #4f46e5);
-      color: #fff;
+      background: var(--isro-blue);
+      color: #ffffff;
       border: none;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 0 20px var(--primary-glow);
-      transition: transform 0.2s;
+      box-shadow: 0 4px 14px rgba(15, 76, 129, 0.3);
+      transition: all 0.2s ease;
+      flex-shrink: 0;
     }
     .player-btn-main:hover {
+      background: var(--isro-blue-hover);
       transform: scale(1.06);
     }
     .player-btn-secondary {
-      background: none;
+      background: #f8fafc;
       border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
+      color: var(--text-secondary);
       border-radius: 50%;
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
     }
     .player-btn-secondary:hover {
-      color: var(--text-main);
-      border-color: var(--primary);
+      color: var(--isro-blue);
+      border-color: var(--isro-blue);
+      background: #f1f5f9;
+      transform: translateY(-1px);
     }
     .player-timeline {
       flex-grow: 1;
@@ -85,55 +99,82 @@
       flex-grow: 1;
       height: 6px;
       border-radius: var(--radius-full);
-      accent-color: var(--primary);
+      accent-color: var(--isro-blue);
       cursor: pointer;
     }
     .time-label {
       font-family: monospace;
       font-size: 0.82rem;
-      color: var(--text-dim);
+      color: var(--text-muted);
+      font-weight: 600;
     }
     .speed-btn {
-      background: rgba(255, 255, 255, 0.08);
+      background: #f1f5f9;
       border: 1px solid var(--border-subtle);
-      color: var(--text-main);
-      padding: 0.35rem 0.75rem;
+      color: var(--text-primary);
+      padding: 0.4rem 0.85rem;
       border-radius: var(--radius-full);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
+      transition: all 0.2s;
     }
+    .speed-btn:hover {
+      background: #e2e8f0;
+      border-color: var(--isro-blue);
+    }
+
+    /* Human Editorial Transcript */
     .transcript-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      border: 1px solid var(--border-light);
       border-radius: var(--radius-lg);
-      padding: 2rem;
-      line-height: 1.8;
+      padding: 2.25rem;
+      line-height: 1.85;
       font-size: 1.05rem;
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
+      box-shadow: var(--shadow-sm);
     }
     .transcript-p {
-      margin-bottom: 1.25rem;
-      color: #e2e8f0;
+      margin-bottom: 1.35rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
     }
+    .transcript-p strong {
+      color: var(--text-primary);
+    }
+
+    /* Up Next Grid */
     .up-next-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1.25rem;
       margin-top: 1rem;
     }
     .up-next-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      border: 1px solid var(--border-light);
       border-radius: var(--radius-md);
-      padding: 1.25rem;
+      padding: 1.35rem;
       text-decoration: none;
       display: block;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
     }
     .up-next-card:hover {
-      border-color: var(--border-glow);
+      border-color: var(--isro-blue);
       transform: translateY(-2px);
+      box-shadow: var(--shadow-card-hover);
+    }
+    .up-next-card h4 {
+      color: var(--text-primary);
+      font-size: 1.05rem;
+      margin-bottom: 0.35rem;
+    }
+    .up-next-card p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.45;
     }
   </style>
 </head>

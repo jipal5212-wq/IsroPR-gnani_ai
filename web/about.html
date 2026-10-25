@@ -33,37 +33,52 @@
     </div>
   </header>
 
-  <main style="max-width: 800px; margin: 3rem auto; padding: 0 1.5rem 4rem;">
-    <h1 class="hero-title" style="text-align: left; font-size: 2.5rem; margin-bottom: 1.5rem;">
+  <main style="max-width: 860px; margin: 3rem auto; padding: 0 1.5rem 5rem;">
+    <div class="hero-pill" style="margin-bottom: 1rem;">
+      <span>🛰️</span> Mission & Public Outreach
+    </div>
+    <h1 class="hero-title" style="text-align: left; font-size: 2.6rem; margin-bottom: 1.25rem;">
       Making Every Indian Citizen <span>Space-Aware</span>
     </h1>
 
-    <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 2rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem;">
-      <h3 style="color: #fff; margin-bottom: 1rem; font-family: var(--font-heading);">Our Vision</h3>
-      <p style="margin-bottom: 1.25rem;">
+    <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 2.5rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 2.5rem; box-shadow: var(--shadow-card);">
+      <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-family: var(--font-heading); font-size: 1.4rem;">Our Vision</h3>
+      <p style="margin-bottom: 1.25rem; font-size: 1.05rem;">
         From bicycle-carried rocket parts in Thumba to soft-landing near the lunar South Pole and observing the solar corona from the L1 Lagrange point, India's space program is a story of determination, scientific brilliance, and self-reliance.
       </p>
-      <p style="margin-bottom: 1.25rem;">
-        <strong>Space Bharat</strong> bridges the gap between complex orbital mechanics and every Indian citizen. By delivering spoken stories and voice-enabled conversational AI in Hindi, Tamil, Telugu, Bengali, English, and more, we ensure language is never a barrier to space awareness.
+      <p style="margin-bottom: 1.5rem; font-size: 1.05rem;">
+        <strong style="color: var(--isro-blue);">Space Bharat</strong> bridges the gap between complex orbital mechanics and every Indian citizen. By delivering spoken stories and voice-enabled conversational AI in Hindi, Tamil, Telugu, Bengali, English, and more, we ensure language is never a barrier to space awareness.
       </p>
       
-      <h3 style="color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-family: var(--font-heading);">Technology & Voice Stack</h3>
-      <p style="margin-bottom: 1rem;">
-        - <strong>Speech Synthesis (TTS):</strong> Powered by <em>Gnani Timbre v2.5</em>, producing studio-grade Indian language narration.<br>
-        - <strong>Speech Recognition (STT):</strong> Powered by <em>Gnani Prisma v2.5</em>, supporting conversational multilingual voice input.<br>
-        - <strong>Verified Facts & Safety:</strong> Answers are retrieved strictly from an administrator-vetted SQLite FTS5 knowledge base with verified dates and official ISRO citations.
-      </p>
+      <h3 style="color: var(--text-primary); margin-top: 2.25rem; margin-bottom: 1rem; font-family: var(--font-heading); font-size: 1.4rem;">Technology & Voice Stack</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.25rem;">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🎙️</div>
+          <strong style="color: var(--text-primary); display: block; margin-bottom: 0.25rem;">Gnani Timbre v2.5</strong>
+          <span style="font-size: 0.88rem; color: var(--text-muted);">Studio-grade Indian language narration across Hindi, Tamil, Telugu, Bengali, and English.</span>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.25rem;">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">👂</div>
+          <strong style="color: var(--text-primary); display: block; margin-bottom: 0.25rem;">Gnani Prisma v2.5</strong>
+          <span style="font-size: 0.88rem; color: var(--text-muted);">Conversational multilingual speech recognition for voice notes and questions.</span>
+        </div>
+        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.25rem;">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🛡️</div>
+          <strong style="color: var(--text-primary); display: block; margin-bottom: 0.25rem;">SQLite FTS5 RAG</strong>
+          <span style="font-size: 0.88rem; color: var(--text-muted);">Administrator-vetted, verified ISRO facts with official citations and zero hallucinated dates.</span>
+        </div>
+      </div>
 
-      <h3 style="color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-family: var(--font-heading);">Principles</h3>
-      <ol style="padding-left: 1.25rem;">
-        <li><strong>Light & Sovereign:</strong> Self-contained server architecture, local database, zero external tracker scripts.</li>
-        <li><strong>Honest Answers:</strong> Space Buddy never guesses or hallucinates dates. If a fact is unverified, it directs visitors to official publications.</li>
-        <li><strong>Accessible:</strong> Mobile-friendly, high audio clarity, and readable transcripts for all stories.</li>
+      <h3 style="color: var(--text-primary); margin-top: 2rem; margin-bottom: 1rem; font-family: var(--font-heading); font-size: 1.4rem;">Our Principles</h3>
+      <ol style="padding-left: 1.5rem; line-height: 1.9; font-size: 1rem;">
+        <li><strong style="color: var(--text-primary);">Light & Sovereign:</strong> Self-contained server architecture, local database, zero external tracker scripts.</li>
+        <li><strong style="color: var(--text-primary);">Honest Answers:</strong> Space Buddy never guesses or hallucinates dates. If a fact is unverified, it directs visitors to official publications.</li>
+        <li><strong style="color: var(--text-primary);">Accessible:</strong> Mobile-friendly, high audio clarity, and readable transcripts for all stories.</li>
       </ol>
     </div>
 
-    <div style="text-align: center; margin-top: 2rem;">
-      <a href="/" class="btn-listen" style="padding: 0.75rem 1.75rem; font-size: 1rem;">Explore Story Library</a>
+    <div style="text-align: center; margin-top: 2.5rem;">
+      <a href="/" class="btn-listen" style="padding: 0.75rem 2rem; font-size: 1rem;">Explore Story Library</a>
     </div>
   </main>
 
