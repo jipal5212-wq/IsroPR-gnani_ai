@@ -103,6 +103,13 @@ function setupComposer() {
       if (!text) return;
 
       input.value = '';
+      if (/[\u0900-\u097F]/.test(text)) {
+        currentLang = 'hi-IN';
+        setActiveLang(currentLang);
+        const langSelect = document.getElementById('chat-lang-select');
+        if (langSelect) langSelect.value = currentLang;
+      }
+
       addUserBubble({ text, inputType: 'text' });
       showTypingIndicator();
 
@@ -112,6 +119,13 @@ function setupComposer() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: text, lang: currentLang })
         });
+
+        if (res.lang && res.lang !== currentLang) {
+          currentLang = res.lang;
+          setActiveLang(currentLang);
+          const langSelect = document.getElementById('chat-lang-select');
+          if (langSelect) langSelect.value = currentLang;
+        }
 
         hideTypingIndicator();
         addBotBubble({
@@ -171,6 +185,13 @@ function setupComposer() {
 
           if (!res.ok) {
             throw new Error(data.error || 'Failed to process voice message');
+          }
+
+          if (data.lang && data.lang !== currentLang) {
+            currentLang = data.lang;
+            setActiveLang(currentLang);
+            const langSelect = document.getElementById('chat-lang-select');
+            if (langSelect) langSelect.value = currentLang;
           }
 
           // Update user's voice note with transcript

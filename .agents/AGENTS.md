@@ -23,6 +23,7 @@
 | 6 | 2026-10-25 | Light, human editorial UI/UX & WhatsApp Web chat | Clean, accessible design avoiding generic dark "AI" neon; authentic WhatsApp Web look for conversational chat |
 | 7 | 2026-10-25 | Official Vachana AI (Gnani) STT/TTS & Resilient RAG Voice Output | Real studio speech synthesis via X-API-Key-ID, Indic Unicode \p{M} token preservation, dual text + voice note response |
 | 8 | 2026-10-25 | Rebranding to IsroPR & Admin Relocation to Footer | Renamed platform to IsroPR across all surfaces; moved admin access to subtle bottom footer to prevent public distraction; updated official description citing ISRO & indianspaceflight.in |
+| 9 | 2026-10-25 | Multilingual Language Auto-Detection & RAG Precision | Auto-detect query script (Devanagari, Tamil, Telugu, etc.), Hinglish and English syntax; match response language strictly in text and Gnani Timbre voice notes; filter Indic & English stop-words |
 
 ---
 
@@ -77,6 +78,7 @@
 | Sample Content Seeding | ✅ Done | Chandrayaan-3 and Agnikul Cosmos stories seeded in 5 languages |
 | Automated Test Suite | ✅ Done | 12 tests passing across schema, auth, and CRUD |
 | Gnani AI & OpenAI Integration | ✅ Done | Live Vachana TTS/STT verified; dual text + voice note responses active |
+| Multilingual Auto-Detection & Accuracy | ✅ Done | Auto-detects query language, matches response in same language & audio |
 
 ---
 
