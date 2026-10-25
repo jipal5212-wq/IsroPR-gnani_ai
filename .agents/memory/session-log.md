@@ -53,6 +53,7 @@
 - ✅ Seeded database (`server/db/seed.js`) with 2 sample stories (Chandrayaan-3 and Agnikul Cosmos) in English, Hindi, Tamil, Telugu, and Bengali, alongside verified ISRO knowledge facts.
 - ✅ Created automated test suites (`tests/db.test.js`, `tests/auth.test.js`, `tests/stories.test.js`): 12 tests passing with zero errors.
 - ✅ Created `scripts/backup.sh` and comprehensive `README.md`.
+- ✅ Linked user-supplied audio (`generated-audio.wav`, 39s) to Chandrayaan-3 stories across `chandrayaan` and `chandrayaan-3` in English and Hindi, with active HTTP media streaming.
 
 ### Status:
 All core requirements and deliverables for Space Bharat are operational, tested, and documented.
