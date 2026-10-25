@@ -1,0 +1,39 @@
+{
+  "project": "isro-pr",
+  "created": "2026-10-25",
+  "files": {
+    "plan.md": {
+      "purpose": "Project planning document",
+      "status": "empty"
+    },
+    ".agents/AGENTS.md": {
+      "purpose": "Persistent AI memory - auto-loaded every session",
+      "status": "active"
+    },
+    ".agents/rules/project-rules.md": {
+      "purpose": "Coding standards and memory rules",
+      "status": "active"
+    },
+    ".agents/memory/session-log.md": {
+      "purpose": "Chronological session history",
+      "status": "active"
+    },
+    ".agents/memory/tech-decisions.md": {
+      "purpose": "Architecture Decision Records",
+      "status": "active"
+    },
+    ".agents/memory/memory-config.md": {
+      "purpose": "Memory system configuration",
+      "status": "active"
+    },
+    ".agents/memory/project-index.json": {
+      "purpose": "This file - auto-generated project file map",
+      "status": "active"
+    }
+  },
+  "memory_layers": {
+    "layer1_static": [".agents/AGENTS.md", ".agents/rules/project-rules.md"],
+    "layer2_dynamic": [".agents/memory/session-log.md", ".agents/memory/tech-decisions.md"],
+    "layer3_mcp": "agentmemory (rohitg00/agentmemory)"
+  }
+}
