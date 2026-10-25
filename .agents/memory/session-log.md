@@ -127,4 +127,34 @@ Chat system with Gnani AI Shivani female voice and SQLite FTS5 RAG is live, veri
 ### Status:
 Platform successfully rebranded to IsroPR with discreet admin placement.
 
+---
+
+## Session 5 — 2026-10-25
+
+**Goal**: Fix voice note recording end-to-end: record audio in browser, transcribe via Gnani Prisma STT, query RAG, ground response with LLM, synthesize voice note with Gnani Timbre (Shivani), and display both text and voice player cards in chat.
+
+### What was done:
+- ✅ Identified root cause of STT rejection:
+  - Chrome/Edge default `MediaRecorder` outputs `audio/webm;codecs=opus`, which Gnani Prisma v2.5 rejects with `UNSUPPORTED_AUDIO_FORMAT` (only supports wav, mp3, ogg, aac, flac).
+  - Without ffmpeg on Windows, webm could not be transcoded on the backend.
+- ✅ Engineered client-side 16kHz mono 16-bit linear PCM WAV recorder in [`web/js/recorder.js`](file:///c:/Users/ASHISH%20KUMAR%20PAL/OneDrive/Desktop/Isro's%20PR/web/js/recorder.js):
+  - Uses standard Web Audio API `AudioContext` and `ScriptProcessorNode`.
+  - Captures raw PCM audio, downsamples cleanly to 16,000 Hz, writes standard 44-byte RIFF/WAVE header, and returns `Blob([view], { type: 'audio/wav' })`.
+  - Zero server-side ffmpeg dependencies required.
+- ✅ Updated audio service [`server/services/audio.js`](file:///c:/Users/ASHISH%20KUMAR%20PAL/OneDrive/Desktop/Isro's%20PR/server/services/audio.js):
+  - Added native RIFF/WAVE header detection to bypass external transcoder when incoming audio is already WAV.
+- ✅ Enhanced voice recording UX in [`web/js/chat.js`](file:///c:/Users/ASHISH%20KUMAR%20PAL/OneDrive/Desktop/Isro's%20PR/web/js/chat.js) and [`web/chat.html`](file:///c:/Users/ASHISH%20KUMAR%20PAL/OneDrive/Desktop/Isro's%20PR/web/chat.html):
+  - Sends `recording.wav` via multipart FormData to `/api/chat/voice`.
+  - Renders user's own recorded voice note card with local playback while transcribing.
+  - Dynamically updates user bubble text with transcript once Gnani Prisma STT responds: `🎙️ "<transcript>"`.
+  - Renders bot reply with verified citations and playable Shivani voice note player card.
+  - Enhanced recording banner with pulsing red indicator and `(Tap mic again to send)` guidance.
+- ✅ Verified live end-to-end:
+  - Submitted audio note to `/api/chat/voice` resulting in HTTP 200: STT transcribed in 205ms, RAG retrieved Gaganyaan facts, and Timbre synthesized Shivani voice WAV served at `/media/audio/chat/...wav`.
+  - All 12 automated unit and integration tests passing.
+
+### Status:
+Multimodal voice note recording and dual response pipeline is 100% operational.
+
+
 

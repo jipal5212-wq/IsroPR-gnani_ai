@@ -31,6 +31,17 @@ export function splitIntoSentences(text, maxChars = 400) {
 // Convert uploaded audio to WAV 16kHz Mono for STT
 export async function convertToWav16kMono(inputPath, outputPath) {
   try {
+    if (fs.existsSync(inputPath)) {
+      const header = Buffer.alloc(12);
+      const fd = fs.openSync(inputPath, 'r');
+      fs.readSync(fd, header, 0, 12, 0);
+      fs.closeSync(fd);
+      // If already a valid RIFF/WAVE container, use directly without ffmpeg
+      if (header.slice(0, 4).toString() === 'RIFF' && header.slice(8, 12).toString() === 'WAVE') {
+        return inputPath;
+      }
+    }
+
     const cmd = `"${ENV.FFMPEG_PATH}" -y -i "${inputPath}" -ar 16000 -ac 1 -c:a pcm_s16le "${outputPath}"`;
     await execAsync(cmd);
     return outputPath;

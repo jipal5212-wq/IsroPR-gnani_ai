@@ -147,16 +147,18 @@ function setupComposer() {
 
         if (!blob || blob.size < 100) return;
 
-        // Optimistically add user voice bubble
+        // Optimistically add user voice bubble with their local voice playback
+        const userAudioUrl = URL.createObjectURL(blob);
         addUserBubble({
-          text: 'Voice note...',
-          inputType: 'voice'
+          text: 'Sending voice note...',
+          inputType: 'voice',
+          audioUrl: userAudioUrl
         });
         showTypingIndicator();
 
         try {
           const formData = new FormData();
-          formData.append('audio', blob, 'note.webm');
+          formData.append('audio', blob, 'recording.wav');
           formData.append('lang', currentLang);
 
           const res = await fetch('/api/chat/voice', {
@@ -172,8 +174,9 @@ function setupComposer() {
           }
 
           // Update user's voice note with transcript
-          const lastUserText = document.querySelector('.msg-bubble-user:last-child .msg-text');
-          if (lastUserText && data.transcript) {
+          const userBubbles = document.querySelectorAll('.wa-bubble-user .msg-text');
+          if (userBubbles.length > 0 && data.transcript) {
+            const lastUserText = userBubbles[userBubbles.length - 1];
             lastUserText.textContent = `🎙️ "${data.transcript}"`;
           }
 
@@ -198,11 +201,15 @@ function setupComposer() {
       }
     });
 
-    micBtn.addEventListener('click', () => {
+    micBtn.addEventListener('click', async () => {
       if (!isRecording) {
-        recorder.start();
+        try {
+          await recorder.start();
+        } catch (err) {
+          console.error('Failed to start recorder:', err);
+        }
       } else {
-        recorder.stop();
+        await recorder.stop();
       }
     });
   }
