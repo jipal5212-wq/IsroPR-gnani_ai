@@ -191,18 +191,112 @@ function setupComposer() {
   }
 }
 
-function addUserBubble({ text, inputType }) {
+function createWaVoicePlayer(audioUrl, durationHint = '0:20') {
+  const container = document.createElement('div');
+  container.className = 'wa-voice-note';
+
+  const audio = new Audio(audioUrl);
+  audio.preload = 'metadata';
+
+  // 26 randomized waveform bar heights mimicking real voice audio amplitudes
+  const heights = [6, 12, 18, 14, 22, 16, 10, 24, 18, 14, 20, 24, 16, 8, 14, 22, 18, 12, 20, 16, 12, 18, 14, 8, 12, 6];
+  const barsHtml = heights.map((h, i) => `<div class="wa-bar" data-idx="${i}" style="height: ${h}px;"></div>`).join('');
+
+  container.innerHTML = `
+    <button type="button" class="wa-play-btn" aria-label="Play voice note">
+      <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
+    <div class="wa-waveform-container">
+      <div class="wa-bars-row">${barsHtml}</div>
+      <div class="wa-meta-row">
+        <span class="wa-time-label">0:00</span>
+        <span>
+          <span class="wa-total-label">${durationHint}</span>
+          <span class="wa-ticks">✓✓</span>
+        </span>
+      </div>
+    </div>
+  `;
+
+  const playBtn = container.querySelector('.wa-play-btn');
+  const iconPlay = container.querySelector('.icon-play');
+  const iconPause = container.querySelector('.icon-pause');
+  const timeLabel = container.querySelector('.wa-time-label');
+  const totalLabel = container.querySelector('.wa-total-label');
+  const bars = container.querySelectorAll('.wa-bar');
+
+  playBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      // Pause any other playing voice notes on page
+      document.querySelectorAll('audio').forEach(a => { if (a !== audio) a.pause(); });
+      audio.play().catch(console.error);
+    } else {
+      audio.pause();
+    }
+  });
+
+  audio.addEventListener('play', () => {
+    iconPlay.style.display = 'none';
+    iconPause.style.display = 'block';
+  });
+
+  audio.addEventListener('pause', () => {
+    iconPlay.style.display = 'block';
+    iconPause.style.display = 'none';
+  });
+
+  audio.addEventListener('loadedmetadata', () => {
+    if (audio.duration && !isNaN(audio.duration)) {
+      totalLabel.textContent = formatDuration(audio.duration);
+    }
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    timeLabel.textContent = formatDuration(audio.currentTime);
+    const progressPct = audio.currentTime / audio.duration;
+    const playedCount = Math.floor(progressPct * bars.length);
+    bars.forEach((b, idx) => {
+      b.classList.toggle('played', idx <= playedCount);
+    });
+  });
+
+  audio.addEventListener('ended', () => {
+    iconPlay.style.display = 'block';
+    iconPause.style.display = 'none';
+    bars.forEach(b => b.classList.remove('played'));
+    timeLabel.textContent = '0:00';
+  });
+
+  return container;
+}
+
+function addUserBubble({ text, inputType, audioUrl }) {
   const container = document.getElementById('chat-messages');
   if (!container) return;
 
   const bubble = document.createElement('div');
   bubble.className = 'msg-row msg-user';
-  bubble.innerHTML = `
-    <div class="msg-bubble msg-bubble-user">
-      <div class="msg-text">${inputType === 'voice' ? '🎙️ ' : ''}${escapeHtml(text)}</div>
-      <div class="msg-time">${getTimeString()}</div>
-    </div>
-  `;
+  
+  const innerBubble = document.createElement('div');
+  innerBubble.className = 'msg-bubble msg-bubble-user';
+
+  if (inputType === 'voice' && audioUrl) {
+    innerBubble.appendChild(createWaVoicePlayer(audioUrl));
+  }
+
+  const textEl = document.createElement('div');
+  textEl.className = 'msg-text';
+  textEl.textContent = (inputType === 'voice' ? '🎙️ ' : '') + text;
+  innerBubble.appendChild(textEl);
+
+  const timeEl = document.createElement('div');
+  timeEl.className = 'msg-time';
+  timeEl.innerHTML = `${getTimeString()} <span class="wa-ticks">✓✓</span>`;
+  innerBubble.appendChild(timeEl);
+
+  bubble.appendChild(innerBubble);
   container.appendChild(bubble);
   scrollToBottom();
 }
@@ -214,37 +308,41 @@ function addBotBubble({ text, audioUrl, sources = [] }) {
   const bubble = document.createElement('div');
   bubble.className = 'msg-row msg-bot';
 
-  let audioPlayerHtml = '';
+  const avatar = document.createElement('div');
+  avatar.className = 'bot-avatar';
+  avatar.textContent = '🛰️';
+  bubble.appendChild(avatar);
+
+  const innerBubble = document.createElement('div');
+  innerBubble.className = 'msg-bubble msg-bubble-bot';
+
+  // If there's an audio note from Space Buddy, render WhatsApp voice player!
   if (audioUrl) {
-    audioPlayerHtml = `
-      <div class="chat-audio-player">
-        <audio controls src="${audioUrl}" preload="none" class="chat-inline-audio"></audio>
-      </div>
-    `;
+    innerBubble.appendChild(createWaVoicePlayer(audioUrl));
   }
 
-  let sourcesHtml = '';
+  const textEl = document.createElement('div');
+  textEl.className = 'msg-text';
+  textEl.textContent = text;
+  innerBubble.appendChild(textEl);
+
   if (sources && sources.length > 0) {
-    sourcesHtml = `
-      <div class="msg-sources">
-        ${sources.map(s => `
-          <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="source-chip" title="${s.title}">
-            Source: ${s.title.slice(0, 24)}... (as of ${s.as_of || 'verified'})
-          </a>
-        `).join('')}
-      </div>
-    `;
+    const sourcesEl = document.createElement('div');
+    sourcesEl.className = 'msg-sources';
+    sourcesEl.innerHTML = sources.map(s => `
+      <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="source-chip" title="${s.title}">
+        Source: ${s.title.slice(0, 24)}... (as of ${s.as_of || 'verified'})
+      </a>
+    `).join('');
+    innerBubble.appendChild(sourcesEl);
   }
 
-  bubble.innerHTML = `
-    <div class="bot-avatar">🛰️</div>
-    <div class="msg-bubble msg-bubble-bot">
-      ${audioPlayerHtml}
-      <div class="msg-text">${escapeHtml(text)}</div>
-      ${sourcesHtml}
-      <div class="msg-time">${getTimeString()}</div>
-    </div>
-  `;
+  const timeEl = document.createElement('div');
+  timeEl.className = 'msg-time';
+  timeEl.textContent = getTimeString();
+  innerBubble.appendChild(timeEl);
+
+  bubble.appendChild(innerBubble);
   container.appendChild(bubble);
   scrollToBottom();
 }
