@@ -23,11 +23,81 @@ const STOP_WORDS = new Set([
   'bataiye', 'hai', 'hain', 'tha', 'thi', 'the', 'hoga', 'hogi', 'honge', 'hua',
   'hui', 'hue', 'raha', 'rahi', 'rahe', 'karo', 'kare', 'karna', 'kitna', 'kitne',
   'kitni', 'aur', 'par', 'se', 'me', 'mein', 'ko', 'ka', 'ki', 'ke', 'ye', 'yeh',
-  'wo', 'woh', 'apna', 'apni', 'apne', 'tum', 'aap', 'hum', 'kuch', 'koi'
+  'wo', 'woh', 'apna', 'apni', 'apne', 'tum', 'aap', 'hum', 'kuch', 'koi',
+  // Kannada
+  'ಮತ್ತು', 'ಇದು', 'ಈ', 'ಆ', 'ಅಲ್ಲಿ', 'ಇಲ್ಲಿ', 'ಯಾವಾಗ', 'ಹೇಗೆ', 'ಏನು', 'ಯಾರು', 'ಎಲ್ಲಿ',
+  'ಬಗ್ಗೆ', 'ಹೇಳಿ', 'ಮಾಡಿ', 'ಆಗಿದೆ', 'ಆಯಿತು', 'ಇದೆ', 'ಇದ್ದಾರೆ', 'ಎಂದು',
+  // Tamil
+  'மற்றும்', 'இது', 'இந்த', 'அந்த', 'எப்போது', 'எப்படி', 'என்ன', 'எங்கு', 'யார்', 'பற்றி',
+  'சொல்லுங்கள்', 'சொல்லுங்க', 'சொல்ல', 'செய்தது', 'உள்ளது', 'இருந்தது', 'ஆகிய',
+  // Telugu
+  'మరియు', 'ఇది', 'ఈ', 'ఆ', 'ఎప్పుడు', 'ఎలా', 'ఏమి', 'ఎక్కడ', 'ఎవరు', 'గురించి',
+  'చెప్పండి', 'చేసింది', 'ఉంది', 'అయింది', 'అయినది', 'ఉన్నాయి',
+  // Bengali
+  'এবং', 'এটি', 'এই', 'সেই', 'কবে', 'কিভাবে', 'কী', 'কোথায়', 'কে', 'সম্পর্কে',
+  'বলুন', 'বলো', 'করেছিল', 'হয়েছে', 'আছে', 'ছিল'
 ]);
 
 const MISSION_EXPANSIONS = {
-  // Chandrayaan & Lunar
+  // Kannada
+  'ಚಂದ್ರಯಾನ': ['Chandrayaan', 'Vikram', 'Pragyan', 'Lunar', 'South Pole'],
+  'ಪ್ರಜ್ಞಾನ್': ['Pragyan', 'rover', 'Chandrayaan-3'],
+  'ವಿಕ್ರಮ್': ['Vikram', 'lander', 'Chandrayaan-3'],
+  'ಲ್ಯಾಂಡಿಂಗ್': ['landing', 'touchdown', 'August 23'],
+  'ಇಳಿಯಿತು': ['landing', 'touchdown', 'August 23'],
+  'ಗಗನ್‌ಯಾನ್': ['Gaganyaan', 'crew', 'astronaut', 'human spaceflight'],
+  'ಗಗನ್ಯಾನ್': ['Gaganyaan', 'crew', 'astronaut', 'human spaceflight'],
+  'ವ್ಯೋಮಮಿತ್ರ': ['Vyommitra', 'robot', 'Gaganyaan'],
+  'ಎಲ್‌ವಿಎಂ': ['LVM3', 'Launch Vehicle Mark-3', 'Bahubali'],
+  'ಎಲ್‌ವಿಎಂ3': ['LVM3', 'Launch Vehicle Mark-3', 'Bahubali'],
+  'ಆದಿತ್ಯ': ['Aditya', 'Aditya-L1', 'Lagrange', 'Halo orbit', 'Sun'],
+  'ಅಗ್ನಿಕುಲ್': ['Agnikul', 'Agnibaan', 'Agnilet', 'Dhanush'],
+  'ಅಗ್ನಿಬಾಣ': ['Agnibaan', 'Agnikul', 'Dhanush'],
+  'ಸ್ಕೈರೂಟ್': ['Skyroot', 'Vikram-S'],
+  'ಉಡಾವಣೆ': ['launch', 'timeline'],
+  'ಉಪಗ್ರಹ': ['satellite', 'payload'],
+  'ರಾಕೆಟ್': ['rocket', 'launch vehicle'],
+
+  // Tamil
+  'சந்திரயான்': ['Chandrayaan', 'Vikram', 'Pragyan', 'Lunar', 'South Pole'],
+  'விக்ரம்': ['Vikram', 'lander', 'Chandrayaan-3'],
+  'பிரக்யான்': ['Pragyan', 'rover', 'Chandrayaan-3'],
+  'தரையிறங்கியது': ['landing', 'touchdown', 'August 23'],
+  'தரையிறக்கம்': ['landing', 'touchdown', 'August 23'],
+  'ககன்யான்': ['Gaganyaan', 'crew', 'astronaut', 'human spaceflight'],
+  'வியோமித்ரா': ['Vyommitra', 'robot', 'Gaganyaan'],
+  'எல்விஎம்': ['LVM3', 'Launch Vehicle Mark-3', 'Bahubali'],
+  'ஆதித்யா': ['Aditya', 'Aditya-L1', 'Lagrange', 'Sun'],
+  'அக்னிகுல்': ['Agnikul', 'Agnibaan', 'Agnilet', 'Dhanush'],
+  'அக்னிபான்': ['Agnibaan', 'Agnikul', 'Dhanush'],
+  'ராக்கெட்': ['rocket', 'launch vehicle'],
+
+  // Telugu
+  'చంద్రయాన్': ['Chandrayaan', 'Vikram', 'Pragyan', 'Lunar', 'South Pole'],
+  'విక్రమ్': ['Vikram', 'lander', 'Chandrayaan-3'],
+  'ప్రగ్యాన్': ['Pragyan', 'rover', 'Chandrayaan-3'],
+  'ల్యాండ్': ['landing', 'touchdown', 'August 23'],
+  'ల్యాండింగ్': ['landing', 'touchdown', 'August 23'],
+  'గగన్‌యాన్': ['Gaganyaan', 'crew', 'astronaut', 'human spaceflight'],
+  'వ్యోమమిత్ర': ['Vyommitra', 'robot', 'Gaganyaan'],
+  'ఎల్‌విఎమ్': ['LVM3', 'Launch Vehicle Mark-3', 'Bahubali'],
+  'ఆదిత్య': ['Aditya', 'Aditya-L1', 'Lagrange', 'Sun'],
+  'అగ్నికుల్': ['Agnikul', 'Agnibaan', 'Agnilet', 'Dhanush'],
+  'అగ్నిబాణ్': ['Agnibaan', 'Agnikul', 'Dhanush'],
+  'రాకెట్': ['rocket', 'launch vehicle'],
+
+  // Bengali
+  'চন্দ্রযান': ['Chandrayaan', 'Vikram', 'Pragyan', 'Lunar', 'South Pole'],
+  'বিক্রম': ['Vikram', 'lander', 'Chandrayaan-3'],
+  'প্রজ্ঞান': ['Pragyan', 'rover', 'Chandrayaan-3'],
+  'ল্যান্ডিং': ['landing', 'touchdown', 'August 23'],
+  'গগনযান': ['Gaganyaan', 'crew', 'astronaut', 'human spaceflight'],
+  'ব্যোমমিত্র': ['Vyommitra', 'robot', 'Gaganyaan'],
+  'এলভিএম': ['LVM3', 'Launch Vehicle Mark-3', 'Bahubali'],
+  'আদিত্য': ['Aditya', 'Aditya-L1', 'Lagrange', 'Sun'],
+  'অগ্নিকুল': ['Agnikul', 'Agnibaan', 'Agnilet', 'Dhanush'],
+  'অগ্নিবাণ': ['Agnibaan', 'Agnikul', 'Dhanush'],
+  'রকেট': ['rocket', 'launch vehicle'],
   'चंद्रयान': ['Chandrayaan', 'Vikram', 'Pragyan', 'Lunar', 'South Pole'],
   'chandrayaan': ['Chandrayaan', 'Vikram', 'Pragyan', 'Lunar', 'South Pole'],
   'प्रज्ञान': ['Pragyan', 'rover', 'Chandrayaan-3', 'LIBS'],

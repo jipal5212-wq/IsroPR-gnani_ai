@@ -39,7 +39,7 @@ export async function seedDatabase() {
   const story1Translations = [
     {
       lang: 'en-IN',
-      voice: 'Pranav',
+      voice: 'Shivani',
       body: `Picture this: August 23, 2023. In the mission operations complex in Bengaluru, scientists sat in pin-drop silence. Millions across the nation held their breath. Four years earlier, Chandrayaan-2 had crashed into the lunar surface at the final second. This time, there was zero room for error.
 
 At exactly 17:44 Indian Standard Time, the Vikram lander fired its four throttleable engines 30 kilometers above the Moon. This was the famous fifteen minutes of terror. Vikram was flying completely on its own, guided by laser Doppler velocimeters and hazard avoidance cameras. Step by step, it killed horizontal velocity, transitioned to vertical descent, hovered gently over cratered shadows, and touched down like a feather on the lunar South Pole!
@@ -48,7 +48,7 @@ Within hours, the ramp slid open. Pragyan, the six-wheeled rover, rolled down on
     },
     {
       lang: 'hi-IN',
-      voice: 'Nalini',
+      voice: 'Shivani',
       body: `23 अगस्त 2023 की वो ऐतिहासिक शाम, जिसे कोई भी भारतवासी कभी नहीं भूल सकता। बेंगलुरु के मिशन कंट्रोल रूम में सुई गिरने जैसी शांति थी। चार साल पहले चंद्रयान-2 की लैंडिंग में आई रुकावट के बाद, इस बार वैज्ञानिकों ने लैंडर के पैरों से लेकर सॉफ्टवेयर तक हर चीज को अभेद्य बनाया था।
 
 शाम 5 बजकर 44 मिनट पर चंद्रमा से 30 किलोमीटर ऊपर विक्रम लैंडर के इंजनों ने फायर किया। यह वही दिल की धड़कनें थाम देने वाले '15 मिनट्स ऑफ टेरर' थे। लैंडर पूरी तरह अपने ऑन-बोर्ड कंप्यूटर के दम पर नीचे आ रहा था। उसने एक-एक करके अपनी रफ्तार कम की, गड्ढों से बचते हुए जगह चुनी, और 6 बजकर 4 मिनट पर चंद्रमा के दक्षिणी ध्रुव पर तिरंगा लहरा दिया!
@@ -57,24 +57,31 @@ Within hours, the ramp slid open. Pragyan, the six-wheeled rover, rolled down on
     },
     {
       lang: 'ta-IN',
-      voice: 'Asmita',
+      voice: 'Shivani',
       body: `ஆகஸ்ட் 23, 2023 அன்று, இந்திய விண்வெளி வரலாற்றில் பொன்னெழுத்துக்களால் பொறிக்கப்பட்ட ஒரு நாள். பெங்களூரு கட்டுப்பாட்டு மையத்தில் விஞ்ஞானிகள் தீவிர அமைதியுடன் திரையை உற்று நோக்கிக் கொண்டிருந்தனர். 
 
 சந்திரயான்-3 விண்கலத்தின் விக்ரம் லேண்டர், நிலவின் தென் துருவத்தில் மிகவும் துல்லியமாக மென்மையாகத் தரை இறங்கியது. லேண்டரிலிருந்து வெளியே வந்த பிரக்யான் ரோவர், நிலவின் மேற்பரப்பில் இஸ்ரோவின் சின்னத்தையும் இந்தியாவின் தேசிய சின்னத்தையும் பதித்தது. நிலவின் தென் துருவத்தில் கால் பதித்த முதல் நாடு என்ற பெருமையை இந்தியா உலகுக்கு உணர்த்தியது!`
     },
     {
       lang: 'te-IN',
-      voice: 'Suhana',
+      voice: 'Shivani',
       body: `ఆగస్టు 23, 2023న భారతదేశం సగర్వంగా తలెత్తుకున్న క్షణం. చంద్రయాన్-3 ద్వారా విక్రమ్ ల్యాండర్ చంద్రుని దక్షిణ ధ్రువంపై అత్యంత సురక్షితంగా కాలుమోపింది. 
 
 ల్యాండింగ్ సమయంలోని ఉత్కంఠభరితమైన 15 నిమిషాలను తట్టుకుని, విక్రమ్ ల్యాండర్ చారిత్రక ఘనత సాధించింది. ప్రగ్యాన్ రోవర్ బయటకు వచ్చి చంద్రుడి నేలపై మన మువ్వన్నెల జెండా గౌరవాన్ని నిలిపింది. చంద్రుని దక్షిణ ధ్రువానికి చేరుకున్న తొలి దేశంగా భారత్ చరిత్రకెక్కింది!`
     },
     {
       lang: 'bn-IN',
-      voice: 'Kirra',
+      voice: 'Shivani',
       body: `২৩ আগস্ট ২০২৩, এক অবিস্মরণীয় ঐতিহাসিক দিন। ইসরোর চন্দ্রযান-৩ চাঁদের দক্ষিণ মেরুতে সফল সফট ল্যান্ডিং করে বিশ্বকে তাক লাগিয়ে দেয়। 
 
-সেই উত্তেজনাকর ১৫ মিনিটের ব্র্যাকিং ধাপ পেরিয়ে বিক্রম ল্যান্ডার আলতো করে চাঁদের মাটি স্পর্শ করে। তারপর প্রজ্ঞান রোভার চাঁদের মাটিতে অশোক চক্রের ছাপ এঁকে প্রমাণ করে দিল ভারতীয় বিজ্ঞানের অপার শক্তি!`
+সেই উত্তেजनাকর ১৫ মিনিটের ব্র্যাকিং ধাপ পেরিয়ে বিক্রম ল্যান্ডার আলতো করে চাঁদের মাটি স্পর্শ করে। তারপর প্রজ্ঞান রোভার চাঁদের মাটিতে অশোক চক্রের ছাপ এঁকে প্রমাণ করে দিল ভারতীয় বিজ্ঞানের অপার শক্তি!`
+    },
+    {
+      lang: 'kn-IN',
+      voice: 'Shivani',
+      body: `ಆಗಸ್ಟ್ 23, 2023 ಭಾರತದ ಬಾಹ್ಯಾಕಾಶ ಇತಿಹಾಸದಲ್ಲಿ ಸುವರ್ಣಾಕ್ಷರಗಳಲ್ಲಿ ಬರೆದಿಡುವ ದಿನ. ಬೆಂಗಳೂರಿನ ಇಸ್ರೋ ಕಂಟ್ರೋಲ್ ರೂಮ್‌ನಲ್ಲಿ ವಿಜ್ಞಾನಿಗಳು ಉಸಿರು ಬಿಗಿಹಿಡಿದು ಕುಳಿತಿದ್ದರು. ಚಂದ್ರಯಾನ-3 ಮಿಷನ್‌ನ ವಿಕ್ರಮ್ ಲ್ಯಾಂಡರ್ ಚಂದ್ರನ ದಕ್ಷಿಣ ಧ್ರುವದ ಮೇಲೆ ಅತ್ಯಂತ ನಿಖರವಾಗಿ ಸಾಫ್ಟ್ ಲ್ಯಾಂಡಿಂಗ್ ಮಾಡಿತು!
+
+ಆ ರೋಮಾಂಚಕಾರಿ 15 ನಿಮಿಷಗಳ ಬ್ರೇಕಿಂಗ್ ಹಂತವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಮುಗಿಸಿ ವಿಕ್ರಮ್ ಲ್ಯಾಂಡರ್ ಇಳಿಯುತ್ತಿದ್ದಂತೆ ಇಡೀ ಜಗತ್ತೇ ಭಾರತಕ್ಕೆ ಜೈಕಾರ ಹಾಕಿತು. ನಂತರ ಪ್ರಜ್ಞಾನ್ ರೋವರ್ ಹೊರಬಂದು ಚಂದ್ರನ ಮಣ್ಣಿನ ಮೇಲೆ ಅಶೋಕ ಸ್ತಂಭ ಮತ್ತು ಇಸ್ರೋದ ಲಾಂಛನವನ್ನು ಮುದ್ರಿಸಿತು. ಚಂದ್ರನ ದಕ್ಷಿಣ ಧ್ರುವದಲ್ಲಿ ಇಳಿದ ವಿಶ್ವದ ಮೊದಲ ರಾಷ್ಟ್ರ ಎಂಬ ಹೆಗ್ಗಳಿಕೆಗೆ ಭಾರತ ಪಾತ್ರವಾಯಿತು!`
     }
   ];
 
@@ -110,34 +117,41 @@ Within hours, the ramp slid open. Pragyan, the six-wheeled rover, rolled down on
   const story2Translations = [
     {
       lang: 'en-IN',
-      voice: 'Pranav',
+      voice: 'Shivani',
       body: `Traditional rocket engines are engineering nightmares: thousands of intricate pipes, welds, and valves that take months of skilled machining. But young aerospace engineers at Chennai's Agnikul Cosmos asked a daring question: Why assemble hundreds of pieces when you can print the entire engine in one single continuous block of metal?
 
 That audacity gave birth to Agnilet, the world's very first single-piece 3D-printed semi-cryogenic engine. And on May 30, 2024, their Agnibaan rocket lifted off from India's first-ever private launchpad, Dhanush, at Sriharikota. Agnikul proved that Indian startups aren't just following global trends; they are reinventing how rockets are made, making satellite launches rapid, customizable, and remarkably affordable!`
     },
     {
       lang: 'hi-IN',
-      voice: 'Nalini',
+      voice: 'Shivani',
       body: `पारंपरिक रॉकेट इंजन बनाना बेहद जटिल काम माना जाता है, जिसमें सैकड़ों पुर्जों और महीनों की वेल्डिंग लगती है। लेकिन आईआईटी मद्रास के स्टार्टअप अग्निकुल कॉस्मॉस ने इस सोच को पूरी तरह बदल दिया।
 
 उन्होंने बनाया 'अग्निलेट'—दुनिया का पहला सिंगल-पीस 3डी प्रिंटेड सेमी-क्रायोजेनिक रॉकेट इंजन! और 30 मई 2024 को श्रीहरिकोटा के भारत के पहले निजी लॉन्चपैड से अग्निबाण रॉकेट ने आसमान को चीरते हुए उड़ान भरी। अग्निकुल ने साबित कर दिया कि भारत का युवा स्पेस इकोसिस्टम दुनिया को नई दिशा दिखाने के लिए पूरी तरह तैयार है!`
     },
     {
       lang: 'ta-IN',
-      voice: 'Asmita',
+      voice: 'Shivani',
       body: `சென்னை ஐஐடியில் உருவான அக்னிகுல் காஸ்மாஸ், விண்வெளித் துறையில் ஒரு புதிய புரட்சியை உருவாக்கியுள்ளது. நூற்றுக்கணக்கான உதிரிபாகங்களைக் கொண்ட ராக்கெட் என்ஜின்களை மாற்றி, ஒற்றைத் துண்டில் 3D பிரிண்ட் செய்யப்பட்ட அக்னிலெட் என்ஜினை உருவாக்கியது. 
 
 ஸ்ரீஹரிகோட்டாவில் உள்ள தனியார் ஏவுதளத்திலிருந்து ஏவப்பட்ட அக்னிபான் ராக்கெட், இந்திய விண்வெளி ஸ்டார்ட்-அப்களின் அபார திறனை உலகிற்குப் பறைசாற்றியுள்ளது!`
     },
     {
       lang: 'te-IN',
-      voice: 'Suhana',
+      voice: 'Shivani',
       body: `చెన్నైకి చెందిన అగ్నికుల్ కాస్మోస్ ప్రపంచంలోనే మొట్టమొదటి సింగిల్ పీస్ 3D ప్రింటెడ్ సెమీ క్రయోజెనిక్ రాకెట్ ఇంజిన్ 'అగ్నిలెట్' రూపొందించి చరిత్ర సృష్టించింది. శ్రీహరికోటలోని ప్రైవేట్ లాంచ్‌ప్యాడ్ నుండి జరిగిన అగ్నిబాణ్ ప్రయోగం భారత ప్రైవేట్ అంతరిక్ష రంగానికి నూతన జవసత్వాలను అందించింది!`
     },
     {
       lang: 'bn-IN',
-      voice: 'Kirra',
+      voice: 'Shivani',
       body: `আইআইটি মাদ্রাজে তৈরি স্টার্টআপ অগ্নিকুল কসমস রকেট প্রযুক্তিতে এক যুগান্তকারী পরিবর্তন এনেছে। তারা একক টুকরো থ্রি-ডি প্রিন্টেড ইঞ্জিন তৈরি করে অগ্নিবাণ রকেট উৎক্ষেপণ করেছে, যা প্রমাণ করে ভারতের বেসরকারি মহাকাশ সংস্থাগুলি কতটা অগ্রগামী!`
+    },
+    {
+      lang: 'kn-IN',
+      voice: 'Shivani',
+      body: `ಚೆನ್ನೈನ ಐಐಟಿ ಮದ್ರಾಸ್‌ನಲ್ಲಿ ಆರಂಭವಾದ ಸ್ಟಾರ್ಟಪ್ ಅಗ್ನಿಕುಲ್ ಕಾಸ್ಮೋಸ್, ಜಾಗತಿಕ ಬಾಹ್ಯಾಕಾಶ ರಂಗದಲ್ಲಿ ಕ್ರಾಂತಿ ಸೃಷ್ಟಿಸಿದೆ. ನೂರಾರು ಬಿಡಿಭಾಗಗಳನ್ನು ಜೋಡಿಸುವ ಬದಲು, ವಿಶ್ವದ ಮೊದಲ ಸಿಂಗಲ್-ಪೀಸ್ 3D ಮುದ್ರಿತ ಸೆಮಿ-ಕ್ರಯೋಜೆನಿಕ್ ಎಂಜಿನ್ 'ಅಗ್ನಿಲೆಟ್' ಅನ್ನು ಅಭಿವೃದ್ಧಿಪಡಿಸಿದೆ.
+
+ಮೇ 30, 2024 ರಂದು ಶ್ರೀಹರಿಕೋಟಾದ ಮೊದಲ ಖಾಸಗಿ ಲಾಂಚ್‌ಪ್ಯಾಡ್ ಧನುಷ್‌ನಿಂದ ಅಗ್ನಿಬಾಣ ರಾಕೆಟ್ ಯಶಸ್ವಿಯಾಗಿ ಉಡಾವಣೆಯಾಯಿತು. ಭಾರತೀಯ ಯುವ ಸ್ಟಾರ್ಟಪ್‌ಗಳು ಉಪಗ್ರಹ ಉಡಾವಣೆಯನ್ನು ಅತ್ಯಂತ ವೇಗವಾಗಿ ಮತ್ತು ಕೈಗೆಟುಕುವ ವೆಚ್ಚದಲ್ಲಿ ಮಾಡಲು ಸಿದ್ಧವಾಗಿವೆ ಎಂದು ಅಗ್ನಿಕುಲ್ ಸಾಬೀತುಪಡಿಸಿದೆ!`
     }
   ];
 
@@ -173,32 +187,39 @@ That audacity gave birth to Agnilet, the world's very first single-piece 3D-prin
   const story3Translations = [
     {
       lang: 'en-IN',
-      voice: 'Pranav',
+      voice: 'Shivani',
       body: `Affectionately called 'Fat Boy' and 'Bahubali' by space enthusiasts, the Launch Vehicle Mark-3, or LVM3, is ISRO's most powerful operational launch vehicle. Standing 43.5 meters tall with a liftoff mass of 640 tonnes, it is an absolute marvel of propulsion engineering.
 
 At liftoff, two gigantic S200 solid strap-on boosters ignite, generating tremendous thrust to punch through Earth's dense lower atmosphere. Next, the twin liquid-fueled Vikas engines of the L110 core stage take over. But the crowning jewel is the C25 cryogenic upper stage, powered by India's home-grown CE-20 engine burning liquid hydrogen at minus 253 degrees Celsius with liquid oxygen. LVM3 carried Chandrayaan-2 and Chandrayaan-3, placed 72 commercial OneWeb satellites into orbit, and is now human-rated to fly Indian astronauts into space under Mission Gaganyaan!`
     },
     {
       lang: 'hi-IN',
-      voice: 'Nalini',
+      voice: 'Shivani',
       body: `इसरो का सबसे ताकतवर रॉकेट एलवीएम-3, जिसे प्यार से लोग 'बाहुबली' कहते हैं, भारत की अंतरिक्ष शक्ति का सच्चा प्रतीक है। 43.5 मीटर ऊंचे और 640 टन वजनी इस महाबली रॉकेट में दो विशाल सॉलिड बूस्टर और कोर लिक्विड स्टेज लगी है।
 
 इसकी सबसे बड़ी ताकत है इसका क्रायोजेनिक अपर स्टेज C25, जो माइनस 253 डिग्री सेल्सियस पर लिक्विड हाइड्रोजन जलाकर प्रचंड थ्रस्ट पैदा करता है। चंद्रयान-2, चंद्रयान-3 और वनवेब के 72 सैटेलाइट्स को सफलतापूर्वक कक्षा में स्थापित करने वाला एलवीएम-3 अब भारत के पहले मानव अंतरिक्ष मिशन 'गगनयान' के लिए तैयार है!`
     },
     {
       lang: 'ta-IN',
-      voice: 'Asmita',
+      voice: 'Shivani',
       body: `இஸ்ரோவின் மிகவும் சக்திவாய்ந்த எல்விஎம்-3 ராக்கெட், 'பாகுபலி' என்று அன்போடு அழைக்கப்படுகிறது. 640 டன் எடை கொண்ட இந்த பிரம்மாண்ட ராக்கெட், உள்நாட்டு கிரையோஜெனிக் என்ஜின் மூலம் இயங்குகிறது. சந்திரயான்-3 விண்கலத்தை வெற்றிகரமாக விண்ணில் செலுத்திய இந்த ராக்கெட், ககன்யான் மனித விண்வெளி பயணத்திற்கும் தேர்வாகியுள்ளது.`
     },
     {
       lang: 'te-IN',
-      voice: 'Suhana',
+      voice: 'Shivani',
       body: `ఇస్రో అత్యంత శక్తివంతమైన రాకెట్ ఎల్‌విఎమ్-3, బాహుబలిగా ప్రసిద్ధి చెందింది. 640 టన్నుల బరువున్న ఈ రాకెట్ చంద్రయాన్-3 ని విజయవంతంగా రోదసిలోకి చేర్చింది. ఇప్పుడు గగన్‌యాన్ మానవ సహిత యాత్ర కోసం సిద్ధమవుతోంది.`
     },
     {
       lang: 'bn-IN',
-      voice: 'Kirra',
+      voice: 'Shivani',
       body: `ইসরোর সর্বাপেক্ষা শক্তিশালী রকেট এলভিএম-৩, যা জনপ্রিয়ভাবে 'বাহুবলী' নামে পরিচিত। চন্দ্রযান-৩ উৎক্ষেপণে প্রধান ভূমিকা পালন করা এই দৈত্যাকার রকেটটিই এখন গগনযানের মহাকাশচারীদের মহাকাশে নিয়ে যেতে প্রস্তুত!`
+    },
+    {
+      lang: 'kn-IN',
+      voice: 'Shivani',
+      body: `ಇಸ್ರೋದ ಅತ್ಯಂತ ಶಕ್ತಿಶಾಲಿ ರಾಕೆಟ್ ಎಲ್‌ವಿಎಂ-3, ಬಾಹ್ಯಾಕಾಶ ಪ್ರಿಯರಿಂದ 'ಬಾಹುಬಲಿ' ಎಂದು ಪ್ರೀತಿಯಿಂದ ಕರೆಯಲ್ಪಡುತ್ತದೆ. 43.5 ಮೀಟರ್ ಎತ್ತರದ ಮತ್ತು 640 ಟನ್ ತೂಕದ ಈ ಬೃಹತ್ ರಾಕೆಟ್ ಎರಡು ಘನ ಬೂಸ್ಟರ್‌ಗಳು ಮತ್ತು ಸ್ವದೇಶಿ ಕ್ರಯೋಜೆನಿಕ್ C25 ಹಂತವನ್ನು ಒಳಗೊಂಡಿದೆ.
+
+ಚಂದ್ರಯಾನ-2, ಚಂದ್ರಯಾನ-3 ಮತ್ತು 72 ಒನ್‌ವೆಬ್ ಉಪಗ್ರಹಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಕಕ್ಷೆಗೆ ಸೇರಿಸಿದ ಎಲ್‌ವಿಎಂ-3, ಈಗ ಭಾರತೀಯ ಗಗನಯಾತ್ರಿಗಳನ್ನು ಬಾಹ್ಯಾಕಾಶಕ್ಕೆ ಕೊಂಡೊಯ್ಯುವ 'ಗಗನ್‌ಯಾನ್' ಮಾನವ ಸಹಿತ ಯಾತ್ರೆಗೆ ಸಂಪೂರ್ಣ ಸಜ್ಜಾಗಿದೆ!`
     }
   ];
 

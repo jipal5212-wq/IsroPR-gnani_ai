@@ -83,6 +83,11 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
         text: "नमस्ते! इस विषय पर हमारे ज्ञानकोष में अभी सत्यापित जानकारी उपलब्ध नहीं है। इसरो के आधिकारिक मिशन शेड्यूल और अपडेट के लिए कृपया isro.gov.in देखें।"
       };
     }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: "ನಮಸ್ಕಾರ! ಈ ವಿಷಯದ ಬಗ್ಗೆ ನಮ್ಮ ಜ್ಞಾನಕೋಶದಲ್ಲಿ ಸದ್ಯಕ್ಕೆ ಅಧಿಕೃತ ಮಾಹಿತಿ ಲಭ್ಯವಿಲ್ಲ. ಇಸ್ರೋದ ಅಧಿಕೃತ ಯೋಜನೆಗಳು ಮತ್ತು ವಿವರಗಳಿಗಾಗಿ ದಯವಿಟ್ಟು isro.gov.in ನೋಡಿ."
+      };
+    }
     if (detectedLang === 'ta-IN') {
       return {
         text: "வணக்கம்! இது குறித்த சரிபார்க்கப்பட்ட தகவல் தற்போது எங்களிடம் இல்லை. அதிகாரப்பூர்வ விவரங்களுக்கு isro.gov.in தளத்தைப் பார்க்கவும்."
@@ -104,15 +109,30 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
   }
 
   // 1. Agnikul Cosmos & Agnibaan
-  if (lastUserMsg.includes('अग्निकुल') || lastUserMsg.includes('agnikul') || lastUserMsg.includes('agnibaan') || lastUserMsg.includes('अग्निबाण') || lastUserMsg.includes('agnilet') || topFactTitle.includes('agnikul')) {
+  if (lastUserMsg.includes('ಅಗ್ನಿಕುಲ್') || lastUserMsg.includes('अग्निकुल') || lastUserMsg.includes('agnikul') || lastUserMsg.includes('agnibaan') || lastUserMsg.includes('अग्निबाण') || lastUserMsg.includes('agnilet') || topFactTitle.includes('agnikul')) {
     if (detectedLang === 'hi-IN') {
       return {
         text: "सत्यापित रिकॉर्ड के अनुसार: चेन्नई के स्टार्टअप अग्निकुल कॉस्मॉस ने दुनिया का पहला सिंगल-पीस 3D प्रिंटेड सेमी-क्रायोजेनिक रॉकेट इंजन 'अग्निलेट' विकसित किया। 30 मई 2024 को श्रीहरिकोटा के पहले निजी लॉन्चपैड धनुष से उनके अग्निबाण रॉकेट का सफल प्रक्षेपण हुआ।"
       };
     }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: "ದೃಢೀಕರಿಸಿದ ದಾಖಲೆಗಳ ಪ್ರಕಾರ: ಚೆನ್ನೈನ ಸ್ಟಾರ್ಟಪ್ ಅಗ್ನಿಕುಲ್ ಕಾಸ್ಮೋಸ್ ವಿಶ್ವದ ಮೊದಲ ಸಿಂಗಲ್-ಪೀಸ್ 3D ಮುದ್ರಿತ ಸೆಮಿ-ಕ್ರಯೋಜೆನಿಕ್ ಎಂಜಿನ್ 'ಅಗ್ನಿಲೆಟ್' ಅಭಿವೃದ್ಧಿಪಡಿಸಿದೆ. ಮೇ 30, 2024 ರಂದು ಶ್ರೀಹರಿಕೋಟಾದ ಮೊದಲ ಖಾಸಗಿ ಲಾಂಚ್‌ಪ್ಯಾಡ್ ಧನುಷ್‌ನಿಂದ ಅಗ್ನಿಬಾಣ ರಾಕೆಟ್ ಯಶಸ್ವಿ ಉಡಾವಣೆ ಕಂಡಿತು."
+      };
+    }
     if (detectedLang === 'ta-IN') {
       return {
         text: "சரிபார்க்கப்பட்ட தகவலின்படி: சென்னை அக்னிகுல் காஸ்மாஸ் உலகின் முதல் 3D பிரிண்ட் செய்யப்பட்ட அக்னிலெட் என்ஜினை உருவாக்கியது. மே 30, 2024 அன்று ஸ்ரீஹரிகோட்டாவின் தனியார் ஏவுதளத்திலிருந்து அக்னிபான் ராக்கெட் வெற்றிகரமாக ஏவப்பட்டது."
+      };
+    }
+    if (detectedLang === 'te-IN') {
+      return {
+        text: "ధృవీకరించబడిన సమాచారం ప్రకారం: చెన్నైకి చెందిన అగ్నికుల్ కాస్మోస్ ప్రపంచంలోనే మొట్టమొదటి సింగిల్ పీస్ 3D ప్రింటెడ్ సెమీ క్రయోజెనిక్ ఇంజిన్ అగ్నిలెట్ రూపొందించింది. మే 30, 2024న శ్రీహరికోటలోని ప్రైవేట్ లాంచ్‌ప్యాడ్ నుండి అగ్నిబాణ్ ప్రయోగం విజయవంతమైంది."
+      };
+    }
+    if (detectedLang === 'bn-IN') {
+      return {
+        text: "যাচাইকৃত তথ্য অনুসারে: চেন্নাইয়ের অগ্নিকুল কসমস বিশ্বের প্রথম একক টুকরো থ্রি-ডি প্রিন্টেড রকেট ইঞ্জিন 'অগ্নিলেট' তৈরি করেছে। ৩০ মে ২০২৪ তারিখে শ্রীহরিকোটার বেসরকারি লঞ্চপ্যাড থেকে অগ্নিবাণ রকেট সফলভাবে উৎক্ষেপণ করা হয়।"
       };
     }
     return {
@@ -121,15 +141,30 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
   }
 
   // 2. LVM3 Heavy Lifter / Bahubali / Launch Vehicles
-  if (lastUserMsg.includes('lvm') || lastUserMsg.includes('एलवीएम') || lastUserMsg.includes('बाहुबली') || lastUserMsg.includes('bahubali') || topFactTitle.includes('lvm3')) {
+  if (lastUserMsg.includes('ಎಲ್‌ವಿಎಂ') || lastUserMsg.includes('lvm') || lastUserMsg.includes('एलवीएम') || lastUserMsg.includes('बाहुबली') || lastUserMsg.includes('bahubali') || topFactTitle.includes('lvm3')) {
     if (detectedLang === 'hi-IN') {
       return {
         text: "सत्यापित रिकॉर्ड के अनुसार: एलवीएम-3 (LVM3) इसरो का 640 टन वजनी भारी लिफ्टर रॉकेट है, जिसकी ऊंचाई 43.5 मीटर है। यह जियोसिंक्रोनस ट्रांसफर ऑर्बिट (GTO) में 4,000 किग्रा और लो अर्थ ऑर्बिट (LEO) में 8,000 किग्रा तक उपग्रह ले जाने में सक्षम है। यह गगनयान मिशन के लिए भी प्रमाणित है।"
       };
     }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: "ದೃಢೀಕರಿಸಿದ ದಾಖಲೆಗಳ ಪ್ರಕಾರ: ಎಲ್‌ವಿಎಂ-3 (LVM3) ಇಸ್ರೋದ 640 ಟನ್ ತೂಕದ ಮತ್ತು 43.5 ಮೀಟರ್ ಎತ್ತರದ ಹೆವಿ ಲಿಫ್ಟರ್ ರಾಕೆಟ್ ಆಗಿದೆ. ಇದು ಜಿಟಿಒಗೆ 4,000 ಕೆಜಿ ಮತ್ತು ಎಲ್‌ಇಒಗೆ 8,000 ಕೆಜಿ ಪೆಲೋಡ್ ಸಾಗಿಸುವ ಸಾಮರ್ಥ್ಯ ಹೊಂದಿದೆ. ಇದು ಗಗನ್‌ಯಾನ್ ಮಿಷನ್‌ಗೂ ಮಾನವ-ಪ್ರಮಾಣೀಕೃತವಾಗಿದೆ."
+      };
+    }
     if (detectedLang === 'ta-IN') {
       return {
-        text: "சரிபார்க்கப்பட்ட தகவலின்படி: எல்விஎம்-3 இஸ்ரோவின் 640 டன் எடை கொண்ட பிரம்மாண்ட ராக்கெட். இது ஜிடிஓ சுற்றுப்பாதைக்கு 4,000 கிலோ மற்றும் எல்இஓ சுற்றுப்பாதைக்கு 8,000 கிலோ எடையைச் சுமந்து செல்லும் திறன் கொண்டது."
+        text: "சரிபார்க்கப்பட்ட தகவலின்படி: எல்விஎம்-3 இஸ்ரோவின் 640 டன் எடை கொண்ட பிரம்மாண்ட ராக்கெட். இது ஜிடிஓ சுற்றுப்பாதைக்கு 4,000 கிலோ மற்றும் எல்இஓ சுற்றுப்பாதைக்கு 8,000 கிலோ எடையைச் சுமந்து செல்லும் திறன் கொண்டது. இது ககன்யான் மனித விண்வெளிப் பயணத்திற்கும் தகுதி பெற்றுள்ளது."
+      };
+    }
+    if (detectedLang === 'te-IN') {
+      return {
+        text: "ధృవీకరించబడిన సమాచారం ప్రకారం: ఎల్‌విఎమ్-3 ఇస్రో యొక్క 640 టన్నుల బరువైన శక్తివంతమైన ರಾಕೆట్. ఇది జీటీఓకి 4,000 కేజీలు మరియు ఎల్ఈఓకి 8,000 కేజీల ఉపగ్రహాలను మోసుకెళ్లగలదు. ఇది గగన్‌యాన్ మిషన్‌కు కూడా మానవ-ధృవీకరించబడింది."
+      };
+    }
+    if (detectedLang === 'bn-IN') {
+      return {
+        text: "যাচাইকৃত তথ্য অনুসারে: এলভিএম-৩ ইসরোর ৬৪০ টন ওজনের শক্তিশালী ভারী লিফটার রকেট। এটি জিটিওতে ৪,০০০ কেজি এবং এলইওতে ৮,০০০ কেজি ওজনের উপগ্রহ স্থাপন করতে সক্ষম এবং গগনযানের জন্যও মানব-রেটেড।"
       };
     }
     return {
@@ -138,10 +173,30 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
   }
 
   // 3. NVS-01 Navigation Satellite & NavIC
-  if (lastUserMsg.includes('nvs') || lastUserMsg.includes('एनवीएस') || lastUserMsg.includes('navic') || lastUserMsg.includes('नाविक') || topFactTitle.includes('nvs') || topFactTitle.includes('navic')) {
+  if (lastUserMsg.includes('ಎನ್‌ವಿಎಸ್') || lastUserMsg.includes('nvs') || lastUserMsg.includes('एनवीएस') || lastUserMsg.includes('navic') || lastUserMsg.includes('नाविक') || topFactTitle.includes('nvs') || topFactTitle.includes('navic')) {
     if (detectedLang === 'hi-IN') {
       return {
         text: "सत्यापित रिकॉर्ड के अनुसार: एनवीएस-01 (NVS-01) इसरो का दूसरी पीढ़ी का नेविगेशन उपग्रह है, जिसे 29 मई 2023 को जीएसएलवी-एफ12 द्वारा लॉन्च किया गया था। इसका वजन 2,232 किग्रा है और इसमें स्वदेशी रूबिडियम परमाणु घड़ी और नागरिक L1 बैंड सिग्नल शामिल हैं जो आम स्मार्टफ़ोन के अनुकूल हैं।"
+      };
+    }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: "ದೃಢೀಕರಿಸಿದ ದಾಖಲೆಗಳ ಪ್ರಕಾರ: ಎನ್‌ವಿಎಸ್-01 (NVS-01) ಇಸ್ರೋದ ಎರಡನೇ ತಲೆಮಾರಿನ ನ್ಯಾವಿಗೇಷನ್ ಉಪಗ್ರಹವಾಗಿದ್ದು, ಮೇ 29, 2023 ರಂದು ಜಿಎಸ್‌ಎಲ್‌ವಿ-ಎಫ್12 ಮೂಲಕ ಉಡಾವಣೆಗೊಂಡಿತು. ಇದು ಸ್ವದೇಶಿ ರುಬಿಡಿಯಂ ಪರಮಾಣು ಗಡಿಯಾರ ಮತ್ತು ನಾಗರಿಕ ಎಲ್1 ಬ್ಯಾಂಡ್ ಸಿಗ್ನಲ್‌ಗಳನ್ನು ಒಳಗೊಂಡಿದೆ."
+      };
+    }
+    if (detectedLang === 'ta-IN') {
+      return {
+        text: "சரிபார்க்கப்பட்ட தகவலின்படி: என்விஎஸ்-01 மே 29, 2023 அன்று ஜிஎஸ்எல்வி-எஃப்12 மூலம் ஏவப்பட்டது. இதில் உள்நாட்டு ரூபிடியம் அணு கடிகாரம் மற்றும் ஸ்மார்ட்போன்களுக்கான எல்1 சிக்னல்கள் உள்ளன."
+      };
+    }
+    if (detectedLang === 'te-IN') {
+      return {
+        text: "ధృవీకరించబడిన సమాచారం ప్రకారం: ఎన్‌విఎస్-01 మే 29, 2023న జీఎస్‌ఎల్‌వి-ఎఫ్12 ద్వారా ప్రయోగించబడింది. ఇందులో స్వదేశీ రూబిడియం పరమాణు గడియారం మరియు పౌర ఎల్1 సిಗ್నల్స్ ఉన్నాయి."
+      };
+    }
+    if (detectedLang === 'bn-IN') {
+      return {
+        text: "যাচাইকৃত তথ্য অনুসারে: এনভিএস-০১ ২৯ মে ২০২৩ তারিখে জিএসএলভি-এফ১২ দ্বারা উৎক্ষেপিত হয়েছিল। এতে স্বদেশী রুবিডিয়াম পারমাণবিক ঘড়ি এবং স্মার্টফোনের জন্য এল১ ব্যান্ড অন্তর্ভুক্ত রয়েছে।"
       };
     }
     return {
@@ -150,10 +205,30 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
   }
 
   // 4. Gaganyaan Human Spaceflight & Vyommitra
-  if (lastUserMsg.includes('gaganyaan') || lastUserMsg.includes('गगनयान') || lastUserMsg.includes('व्योममित्र') || lastUserMsg.includes('vyommitra') || lastUserMsg.includes('astronaut') || topFactTitle.includes('gaganyaan') || topFactTitle.includes('vyommitra')) {
+  if (lastUserMsg.includes('ಗಗನ್‌ಯಾನ್') || lastUserMsg.includes('gaganyaan') || lastUserMsg.includes('गगनयान') || lastUserMsg.includes('व्योममित्र') || lastUserMsg.includes('vyommitra') || lastUserMsg.includes('astronaut') || topFactTitle.includes('gaganyaan') || topFactTitle.includes('vyommitra')) {
     if (detectedLang === 'hi-IN') {
       return {
         text: "सत्यापित रिकॉर्ड के अनुसार: गगनयान भारत का पहला मानव अंतरिक्ष मिशन है। इसमें 3 सदस्यीय दल को 400 किमी की निचली कक्षा में 3 दिनों के मिशन पर भेजा जाएगा। चार नामित अंतरिक्ष यात्री प्रशांत नायर, अजीत कृष्णन, अंगद प्रताप और शुभांशु शुक्ला हैं। परीक्षण उड़ानों में व्योममित्र रोबोट शामिल है।"
+      };
+    }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: "ದೃಢೀಕರಿಸಿದ ದಾಖಲೆಗಳ ಪ್ರಕಾರ: ಗಗನ್‌ಯಾನ್ ಭಾರತದ ಮೊದಲ ಮಾನವಸಹಿತ ಬಾಹ್ಯಾಕಾಶ ಯಾನವಾಗಿದ್ದು, 3 ಸದಸ್ಯರ ತಂಡವನ್ನು 400 ಕಿಮೀ ಕಕ್ಷೆಗೆ 3 ದಿನಗಳ ಕಾಲ ಕಳುಹಿಸಲಾಗುತ್ತದೆ. ನಾಲ್ಕು ನಿಯೋಜಿತ ಗಗನಯಾತ್ರಿಗಳೆಂದರೆ ಪ್ರಶಾಂತ್ ನಾಯರ್, ಅಜಿತ್ ಕೃಷ್ಣನ್, ಅಂಗದ್ ಪ್ರತಾಪ್ ಮತ್ತು ಶುಭಾಂಶು ಶುಕ್ಲಾ."
+      };
+    }
+    if (detectedLang === 'ta-IN') {
+      return {
+        text: "சரிபார்க்கப்பட்ட தகவலின்படி: ககன்யான் இந்தியாவின் முதல் மனித விண்வெளிப் பயணம். 3 வீரர்கள் 400 கிமீ சுற்றுப்பாதையில் 3 நாட்கள் தங்கி திரும்புவர். பிரசாந்த் நாயர் உட்பட நான்கு வீரர்கள் தேர்வு செய்யப்பட்டுள்ளனர்."
+      };
+    }
+    if (detectedLang === 'te-IN') {
+      return {
+        text: "ధృవీకరించబడిన సమాచారం ప్రకారం: గగన్‌యాన్ భారత తొలి మానవ సహిత అంతరిక్ష యాత్ర. 3 మంది వ్యోమగాములను 400 కిమీ కక్ష్యలోకి 3 రోజుల పాటు పంపనున్నారు. ప్రశాంత్ నాయర్ సహా నలుగురు వ్యోమగాములు ఎంపికయ్యారు."
+      };
+    }
+    if (detectedLang === 'bn-IN') {
+      return {
+        text: "যাচাইকৃত তথ্য অনুসারে: গগনযান ভারতের প্রথম মানব মহাকাশ অভিযান। ৩ জন মহাকাশচারীকে ৪০০ কিমি কক্ষপথে ৩ দিনের অভিযানে পাঠানো হবে। প্রশান্ত নায়ার সহ চারজন নভোচারী মনোনীত হয়েছেন।"
       };
     }
     return {
@@ -162,10 +237,30 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
   }
 
   // 5. Aditya-L1 Solar Mission
-  if (lastUserMsg.includes('aditya') || lastUserMsg.includes('आदित्य') || lastUserMsg.includes('solar') || lastUserMsg.includes('सूर्य') || topFactTitle.includes('aditya')) {
+  if (lastUserMsg.includes('ಆದಿತ್ಯ') || lastUserMsg.includes('aditya') || lastUserMsg.includes('आदित्य') || lastUserMsg.includes('solar') || lastUserMsg.includes('सूर्य') || topFactTitle.includes('aditya')) {
     if (detectedLang === 'hi-IN') {
       return {
         text: "सत्यापित रिकॉर्ड के अनुसार: आदित्य-एल1 भारत की पहली सौर वेधशाला है, जिसे 6 जनवरी 2024 को पृथ्वी से लगभग 15 लाख किमी दूर सूर्य-पृथ्वी के एल1 लैग्रेंज बिंदु के चारों ओर हेलो कक्षा में सफलतापूर्वक स्थापित किया गया था।"
+      };
+    }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: "ದೃಢೀಕರಿಸಿದ ದಾಖಲೆಗಳ ಪ್ರಕಾರ: ಆದಿತ್ಯ-ಎಲ್1 ಭಾರತದ ಪ್ರಮುಖ ಸೌರ ವೀಕ್ಷಣಾಲಯವಾಗಿದ್ದು, ಜನವರಿ 6, 2024 ರಂದು ಭೂಮಿಯಿಂದ 15 ಲಕ್ಷ ಕಿಮೀ ದೂರದಲ್ಲಿರುವ ಸೂರ್ಯ-ಭೂಮಿಯ ಎಲ್1 ಲ್ಯากรಾಂಜ್ ಬಿಂದುವಿನ ಹ್ಯಾಲೋ ಕಕ್ಷೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ತಲುಪಿತು."
+      };
+    }
+    if (detectedLang === 'ta-IN') {
+      return {
+        text: "சரிபார்க்கப்பட்ட தகவலின்படி: ஆதித்யா-எல்1 ஜனவரி 6, 2024 அன்று பூமியிலிருந்து 15 லட்சம் கிமீ தொலைவில் உள்ள எல்1 புள்ளியில் வெற்றிகரமாக நிலைநிறுத்தப்பட்டது."
+      };
+    }
+    if (detectedLang === 'te-IN') {
+      return {
+        text: "ధృవీకరించబడిన సమాచారం ప్రకారం: ఆదిత్య-ఎల్1 జనవరి 6, 2024న భూమి నుండి 15 లక్షల కిమీ దూరంలోని ఎల్1 పాయింట్ వద్ద హ్యాలో కక్ష్యలోకి ప్రవేశపెట్టబడింది."
+      };
+    }
+    if (detectedLang === 'bn-IN') {
+      return {
+        text: "যাচাইকৃত তথ্য অনুসারে: আদিত্য-এল১ ৬ জানুয়ারি ২০২৪ তারিখে পৃথিবী থেকে ১৫ লক্ষ কিমি দূরে এল১ ল্যাগ্রাঞ্জ পয়েন্টে সফলভাবে স্থাপন করা হয়।"
       };
     }
     return {
@@ -174,10 +269,15 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
   }
 
   // 6. Skyroot Aerospace & Vikram-S / Vikram-1
-  if (lastUserMsg.includes('skyroot') || lastUserMsg.includes('स्काईरूट') || lastUserMsg.includes('vikram-s') || lastUserMsg.includes('vikram-1') || topFactTitle.includes('skyroot')) {
+  if (lastUserMsg.includes('ಸ್ಕೈರೂಟ್') || lastUserMsg.includes('skyroot') || lastUserMsg.includes('स्काईरूट') || lastUserMsg.includes('vikram-s') || lastUserMsg.includes('vikram-1') || topFactTitle.includes('skyroot')) {
     if (detectedLang === 'hi-IN') {
       return {
         text: "सत्यापित रिकॉर्ड के अनुसार: हैदराबाद के स्टार्टअप स्काईरूट एयरोस्पेस ने 18 नवंबर 2022 को मिशन प्रारंभ के तहत भारत का पहला निजी रॉकेट विक्रम-एस (Vikram-S) लॉन्च किया था। वे अब अपने विक्रम-1 कक्षीय रॉकेट पर कार्य कर रहे हैं।"
+      };
+    }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: "ದೃಢೀಕರಿಸಿದ ದಾಖಲೆಗಳ ಪ್ರಕಾರ: ಹೈದರಾಬಾದ್‌ನ ಸ್ಟಾರ್ಟಪ್ ಸ್ಕೈರೂಟ್ ಏರೋಸ್ಪೇಸ್ ನವೆಂಬರ್ 18, 2022 ರಂದು ಮಿಷನ್ ಪ್ರಾರಂಭ್ ಅಡಿಯಲ್ಲಿ ಭಾರತದ ಮೊದಲ ಖಾಸಗಿ ರಾಕೆಟ್ ವಿಕ್ರಮ್-ಎಸ್ (Vikram-S) ಅನ್ನು ಉಡಾವಣೆ ಮಾಡಿತು."
       };
     }
     return {
@@ -186,10 +286,15 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
   }
 
   // 7. Chandrayaan-4 Lunar Sample Return
-  if (lastUserMsg.includes('chandrayaan-4') || lastUserMsg.includes('चंद्रयान 4') || lastUserMsg.includes('chandrayaan 4') || topFactTitle.includes('chandrayaan-4')) {
+  if (lastUserMsg.includes('chandrayaan-4') || lastUserMsg.includes('चंद्रयान 4') || lastUserMsg.includes('ಚಂದ್ರಯಾನ-4') || topFactTitle.includes('chandrayaan-4')) {
     if (detectedLang === 'hi-IN') {
       return {
         text: "सत्यापित रिकॉर्ड के अनुसार: चंद्रयान-4 इसरो का नियोजित चंद्र नमूना वापसी (लूनर सैंपल रिटर्न) मिशन है, जो चंद्रमा के दक्षिणी ध्रुव से मिट्टी के नमूने एकत्र कर सुरक्षित रूप से पृथ्वी पर वापस लाएगा।"
+      };
+    }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: "ದೃಢೀಕರಿಸಿದ ದಾಖಲೆಗಳ ಪ್ರಕಾರ: ಚಂದ್ರಯಾನ-4 ಇಸ್ರೋದ ಚಂದ್ರನ ಮಾದರಿ ಮರುಪಡೆಯುವಿಕೆ (ಸ್ಯಾಂಪಲ್ ರಿಟರ್ನ್) ಯೋಜನೆಯಾಗಿದ್ದು, ಚಂದ್ರನ ದಕ್ಷಿಣ ಧ್ರುವದಿಂದ ಮಣ್ಣಿನ ಮಾದರಿಗಳನ್ನು ಸಂಗ್ರಹಿಸಿ ಭೂಮಿಗೆ ಸುರಕ್ಷಿತವಾಗಿ ತರಲಿದೆ."
       };
     }
     return {
@@ -198,10 +303,15 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
   }
 
   // 8. Chandrayaan-3 Landing, Date, Time, Rover
-  if (lastUserMsg.includes('चंद्रयान') || lastUserMsg.includes('chandrayaan') || lastUserMsg.includes('landing') || lastUserMsg.includes('लैंडिंग') || lastUserMsg.includes('pragyan') || lastUserMsg.includes('प्रज्ञान') || topFactTitle.includes('chandrayaan-3')) {
+  if (lastUserMsg.includes('ಚಂದ್ರಯಾನ') || lastUserMsg.includes('चंद्रयान') || lastUserMsg.includes('chandrayaan') || lastUserMsg.includes('landing') || lastUserMsg.includes('ಲ್ಯಾಂಡಿಂಗ್') || lastUserMsg.includes('लैंडिंग') || lastUserMsg.includes('pragyan') || lastUserMsg.includes('ಪ್ರಜ್ಞಾನ್') || topFactTitle.includes('chandrayaan-3')) {
     if (detectedLang === 'hi-IN') {
       return {
         text: "सत्यापित रिकॉर्ड के अनुसार: चंद्रयान-3 ने 23 अगस्त 2023 को शाम 6:04 बजे (IST) चंद्रमा के दक्षिणी ध्रुव पर सफल सॉफ्ट लैंडिंग की थी। इसके बाद प्रज्ञान रोवर ने चंद्रमा की सतह पर उतरकर सल्फर और अन्य महत्वपूर्ण खनिजों की उपस्थिति की पुष्टि की।"
+      };
+    }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: "ದೃಢೀಕರಿಸಿದ ದಾಖಲೆಗಳ ಪ್ರಕಾರ: ಚಂದ್ರಯಾನ-3 ರ ವಿಕ್ರಮ್ ಲ್ಯಾಂಡರ್ ಆಗಸ್ಟ್ 23, 2023 ರಂದು ಸಂಜೆ 6:04 ಕ್ಕೆ (IST) ಚಂದ್ರನ ದಕ್ಷಿಣ ಧ್ರುವದಲ್ಲಿ ಯಶಸ್ವಿಯಾಗಿ ಇಳಿಯಿತು. ನಂತರ ಪ್ರಜ್ಞಾನ್ ರೋವರ್ ಚಂದ್ರನ ಮೇಲ್ಮೈಯಲ್ಲಿ ಸಲ್ಫರ್ ಮತ್ತು ಇತರ ಖನಿಜಗಳ ಉಪಸ್ಥಿತಿಯನ್ನು ದೃಢಪಡಿಸಿತು."
       };
     }
     if (detectedLang === 'ta-IN') {
@@ -225,12 +335,14 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
   }
 
   // 9. If story with regional transcript is matched
-  if (stories.length > 0 && stories[0].trans_body && detectedLang === 'hi-IN') {
+  if (stories.length > 0 && stories[0].trans_body) {
     const firstSentence = stories[0].trans_body.split(/[।.\n]/)[0].trim();
     if (firstSentence) {
-      return {
-        text: `सत्यापित रिकॉर्ड के अनुसार: ${firstSentence}। आधिकारिक अपडेट के लिए isro.gov.in देखें।`
-      };
+      if (detectedLang === 'hi-IN') return { text: `सत्यापित रिकॉर्ड के अनुसार: ${firstSentence}। आधिकारिक अपडेट के लिए isro.gov.in देखें।` };
+      if (detectedLang === 'kn-IN') return { text: `ದೃಢೀಕರಿಸಿದ ದಾಖಲೆಗಳ ಪ್ರಕಾರ: ${firstSentence} ಅಧಿಕೃತ ಮಾಹಿತಿಗಾಗಿ isro.gov.in ನೋಡಿ.` };
+      if (detectedLang === 'ta-IN') return { text: `சரிபார்க்கப்பட்ட தகவலின்படி: ${firstSentence} கூடுதல் விவரங்களுக்கு isro.gov.in பார்க்கவும்.` };
+      if (detectedLang === 'te-IN') return { text: `ధృవీకరించబడిన సమాచారం ప్రకారం: ${firstSentence} అధికారిక వివరాలకు isro.gov.in చూడండి.` };
+      if (detectedLang === 'bn-IN') return { text: `যাচাইকৃত তথ্য অনুসারে: ${firstSentence} আনুষ্ঠানিক আপডেটের জন্য isro.gov.in দেখুন।` };
     }
   }
 
@@ -239,6 +351,11 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
     if (detectedLang === 'hi-IN') {
       return {
         text: `सत्यापित रिकॉर्ड के अनुसार: ${topFact.title} — ${topFact.body.slice(0, 200)}। अधिक विवरण के लिए isro.gov.in देखें।`
+      };
+    }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: `ದೃಢೀಕರಿಸಿದ ದಾಖಲೆಗಳ ಪ್ರಕಾರ: ${topFact.title} — ${topFact.body.slice(0, 200)}. ಹೆಚ್ಚಿನ ವಿವರಗಳಿಗಾಗಿ isro.gov.in ನೋಡಿ.`
       };
     }
     return {
@@ -250,6 +367,11 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
   if (detectedLang === 'hi-IN') {
     return {
       text: "भारत का अंतरिक्ष कार्यक्रम लगातार ऐतिहासिक उपलब्धियां हासिल कर रहा है। 23 अगस्त 2023 को चंद्रयान-3 ने चंद्रमा के दक्षिणी ध्रुव पर सफल लैंडिंग की थी। आधिकारिक जानकारी के लिए isro.gov.in देखें।"
+    };
+  }
+  if (detectedLang === 'kn-IN') {
+    return {
+      text: "ಭಾರತದ ಬಾಹ್ಯಾಕಾಶ ಕಾರ್ಯಕ್ರಮವು ನಿರಂತರವಾಗಿ ಐತಿಹಾಸಿಕ ಮೈಲಿಗಲ್ಲುಗಳನ್ನು ಸಾಧಿಸುತ್ತಿದೆ. ಆಗಸ್ಟ್ 23, 2023 ರಂದು ಚಂದ್ರಯಾನ-3 ಯಶಸ್ವಿಯಾಗಿ ಚಂದ್ರನ ದಕ್ಷಿಣ ಧ್ರುವವನ್ನು ತಲುಪಿತು. ಹೆಚ್ಚಿನ ಮಾಹಿತಿಗಾಗಿ isro.gov.in ನೋಡಿ."
     };
   }
 

@@ -31,8 +31,28 @@ export function detectQueryLanguage(text, userSelectedLang = 'en-IN') {
   // Gurmukhi / Punjabi
   if (/[\u0A00-\u0A7F]/.test(clean)) return 'pa-IN';
 
-  // 2. Hinglish / Romanized Hindi patterns
-  const hinglishRegex = /\b(kya|kab|kaise|kaisa|kaisi|kaha|kahan|kyun|kyon|kisne|kisko|kiske|kiska|kiski|batao|bataiye|bata|boliye|bolo|hai|hain|tha|thi|the|hoga|hogi|honge|hona|hua|hui|hue|raha|rahi|rahe|karo|kare|karna|karenge|kitna|kitne|kitni|achha|achhi|namaste|dhanyawad|shukriya|aur|par|pe|se|me|mein|ko|ka|ki|ke|ye|yeh|wo|woh|apna|apni|apne|tum|aap|hum|kuch|koi|kaun|kaunsa|kaunsi|jaise|bhi|toh|wala|wali|wale|bhejo|sunao)\b/i;
+  // 2. Distinct Romanized Indic patterns (ordered before generic English, homographs like 'the', 'me' excluded)
+  const kannadaRomanRegex = /\b(yaavaga|yaava|yaaru|enu|elli|hege|aithu|aagide|aaguttade|helu|heli|namaskara|dhanyavadagalu|bagge|maadi|anthare|ittu|iddare)\b/i;
+  if (kannadaRomanRegex.test(clean)) {
+    return 'kn-IN';
+  }
+
+  const tamilRomanRegex = /\b(eppothu|eppadi|enna|engu|yaar|solla|sollunga|vanakkam|paththi)\b/i;
+  if (tamilRomanRegex.test(clean)) {
+    return 'ta-IN';
+  }
+
+  const teluguRomanRegex = /\b(eppudu|ela|emi|ekkada|evaru|cheppandi|namaskaram|gurinchi)\b/i;
+  if (teluguRomanRegex.test(clean)) {
+    return 'te-IN';
+  }
+
+  const bengaliRomanRegex = /\b(kobe|kivabe|ki|kothay|ke|bolo|bolun|nomoshkar|shomporke)\b/i;
+  if (bengaliRomanRegex.test(clean)) {
+    return 'bn-IN';
+  }
+
+  const hinglishRegex = /\b(kya|kab|kaise|kaisa|kaisi|kaha|kahan|kyun|kyon|kisne|kisko|kiske|kiska|kiski|batao|bataiye|bata|boliye|bolo|hai|hain|tha|thi|hoga|hogi|honge|hona|hua|hui|hue|raha|rahi|rahe|karo|kare|karna|karenge|kitna|kitne|kitni|achha|achhi|namaste|dhanyawad|shukriya|mein|apna|apni|apne|kaun|kaunsa|kaunsi|jaise|bhi|toh|wala|wali|wale|bhejo|sunao)\b/i;
   if (hinglishRegex.test(clean)) {
     return 'hi-IN';
   }
@@ -43,7 +63,7 @@ export function detectQueryLanguage(text, userSelectedLang = 'en-IN') {
     return 'en-IN';
   }
 
-  // 4. If user explicitly chose a non-English language on UI, honor it
+  // 8. If user explicitly chose a non-English language on UI, honor it
   if (userSelectedLang && userSelectedLang !== 'en-IN') {
     return userSelectedLang;
   }
@@ -142,11 +162,12 @@ export async function handleChatTurn({ sessionId, inputType, userText, audioFile
 
 CRITICAL LANGUAGE REQUIREMENT:
 - You MUST reply strictly in ${langMeta.name} (${detectedLang}).
-- If the user asks in Hindi (whether in Devanagari or Romanized Hinglish), you MUST respond entirely in clear, natural Hindi using Devanagari script.
-- If the user asks in Tamil, you MUST respond in Tamil.
-- If the user asks in Telugu, you MUST respond in Telugu.
-- If the user asks in Bengali, you MUST respond in Bengali.
 - If the user asks in English, you MUST respond in English.
+- If the user asks in Hindi (whether in Devanagari or Romanized Hinglish), you MUST respond entirely in clear, natural Hindi using Devanagari script.
+- If the user asks in Tamil, you MUST respond in Tamil using Tamil script.
+- If the user asks in Telugu, you MUST respond in Telugu using Telugu script.
+- If the user asks in Bengali, you MUST respond in Bengali using Bengali script.
+- If the user asks in Kannada (whether in Kannada script or Romanized Kannada), you MUST respond in Kannada using Kannada script.
 - NEVER default to English if the user asked in an Indian language!
 
 HOW TO TALK:

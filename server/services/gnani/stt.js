@@ -26,7 +26,8 @@ export async function transcribeAudio({ audioFilePath, lang = 'en-IN' }) {
   const blob = new Blob([fileBuffer], { type: 'audio/wav' });
   const formData = new FormData();
   formData.append('audio_file', blob, 'audio.wav');
-  formData.append('language_code', lang || 'en-IN');
+  // Use indic-auto to recognize spoken English, Kannada, Hindi, Tamil, Telugu, Bengali, etc. automatically
+  formData.append('language_code', 'indic-auto');
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 12000);

@@ -187,5 +187,43 @@ Multimodal voice note recording and dual response pipeline is 100% operational.
 ### Status:
 Multilingual detection and high-accuracy chat responses are fully operational and verified.
 
+---
+
+## Session 7 — 2026-10-25
+
+**Goal**: Full support for 6 core languages (English, Hindi, Tamil, Telugu, Bengali, Kannada) with universal voice recognition and voice synthesis.
+
+### What was done:
+- ✅ **Universal Spoken Voice Recognition (Gnani Prisma STT)**:
+  - Configured `server/services/gnani/stt.js` to always use `language_code: 'indic-auto'`.
+  - Verified live via API that `indic-auto` transcribes spoken audio automatically across all 6 languages (Kannada, Hindi, Tamil, Telugu, Bengali, English) in under 0.5s without requiring manual language pre-selection.
+- ✅ **Complete 6-Language Support in Chat & Voice Model**:
+  - Kannada (`kn-IN` / ಕನ್ನಡ): Added script detection (`[\u0C80-\u0CFF]`), Romanized Kannada regex (`yaavaga`, `yaaru`, `enu`, `elli`, `hege`, `aithu`, `aagide`, `helu`, etc.), stop-words, and mission expansions in `server/services/rag.js`.
+  - Hindi (`hi-IN` / हिन्दी): Native Devanagari script and Hinglish detection with English homograph disambiguation.
+  - Tamil (`ta-IN` / தமிழ்): Native script and Romanized Tamil detection, stop words, and mission expansions.
+  - Telugu (`te-IN` / తెలుగు): Native script and Romanized Telugu detection, stop words, and mission expansions.
+  - Bengali (`bn-IN` / বাংলা): Native script and Romanized Bengali detection, stop words, and mission expansions.
+  - English (`en-IN` / English): Unambiguous structural keywords and technical specifications.
+- ✅ **Studio Voice Model (Gnani Timbre v3.0)**:
+  - Standardized voice to female voice `Shivani` across all 6 languages.
+  - Added voice validator and fallback in `server/services/gnani/tts.js`.
+- ✅ **Story Content Seeding in 6 Languages**:
+  - Added rich authentic Kannada (`kn-IN`) translations to Story 1 (Chandrayaan-3), Story 2 (Agnikul Cosmos), and Story 3 (LVM3 Heavy Lifter) in `server/db/seed.js`.
+  - Generated and populated 18 verified studio audio narrations and database records.
+- ✅ **End-to-End Multilingual Verification**:
+  - Automated Node test script verified all 6 languages:
+    1. English (`en-IN`): `What is the payload capacity of LVM3 rocket?` -> Response & Audio in English
+    2. Hindi (`hi-IN`): `चंद्रयान 3 की सफल लैंडिंग कब हुई थी?` -> Response & Audio in Hindi
+    3. Tamil (`ta-IN`): `சந்திரயான் 3 நிலவில் எப்போது தரையிறங்கியது?` -> Response & Audio in Tamil
+    4. Telugu (`te-IN`): `చంద్రయాన్ 3 చంద్రుడిపై ఎప్పుడు ల్యాండ్ అయింది?` -> Response & Audio in Telugu
+    5. Bengali (`bn-IN`): `চন্দ্রযান ৩ চাঁদে কবে নেমেছিল?` -> Response & Audio in Bengali
+    6. Kannada (`kn-IN`): `ಚಂದ್ರಯಾನ 3 ಯಾವಾಗ ಲ್ಯಾಂಡಿಂಗ್ ಆಯಿತು?` -> Response & Audio in Kannada
+  - Browser verification subagent successfully demonstrated conversational turn in Kannada with WhatsApp voice note card and citations.
+  - All 12 automated unit and integration tests passing (`npm test`).
+
+### Status:
+All 6 core languages (English, Hindi, Tamil, Telugu, Bengali, Kannada) fully operational across STT voice recognition, chat RAG, and TTS voice synthesis.
+
+
 
 

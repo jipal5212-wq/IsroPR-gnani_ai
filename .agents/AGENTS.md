@@ -24,6 +24,7 @@
 | 7 | 2026-10-25 | Official Vachana AI (Gnani) STT/TTS & Resilient RAG Voice Output | Real studio speech synthesis via X-API-Key-ID, Indic Unicode \p{M} token preservation, dual text + voice note response |
 | 8 | 2026-10-25 | Rebranding to IsroPR & Admin Relocation to Footer | Renamed platform to IsroPR across all surfaces; moved admin access to subtle bottom footer to prevent public distraction; updated official description citing ISRO & indianspaceflight.in |
 | 9 | 2026-10-25 | Multilingual Language Auto-Detection & RAG Precision | Auto-detect query script (Devanagari, Tamil, Telugu, etc.), Hinglish and English syntax; match response language strictly in text and Gnani Timbre voice notes; filter Indic & English stop-words |
+| 10 | 2026-10-25 | 6 Core Languages Support (English, Hindi, Tamil, Telugu, Bengali, Kannada) | Enabled universal voice recognition via Gnani Prisma STT `indic-auto`; automated language detection across native scripts & Romanized syntax; consistent female voice `Shivani` across all 6 languages; seeded Kannada podcast stories |
 
 ---
 
@@ -33,9 +34,9 @@
 - **Web Server**: Express with Helmet (custom CSP), cookie-parser, and express-rate-limit
 - **Database**: SQLite (`better-sqlite3`) with WAL journal mode, FTS5 virtual table, and sync triggers
 - **Speech Stack**:
-  - Text-to-Speech: Gnani Timbre v2.5 (`https://api.vachana.ai/api/v1/tts/inference` in wav container)
-  - Speech-to-Text: Gnani Prisma v2.5 (`https://api.vachana.ai/stt/v3` with FormData)
-  - Conversational AI: OpenAI-compatible LLM adapter with resilient RAG grounded fallback
+  - Text-to-Speech: Gnani Timbre v3.0 (`https://api.vachana.ai/api/v1/tts/inference` in wav container, voice: `Shivani`)
+  - Speech-to-Text: Gnani Prisma v2.5 (`https://api.vachana.ai/stt/v3` with `indic-auto` automatic language recognition)
+  - Conversational AI: OpenAI-compatible LLM adapter with resilient RAG grounded fallback in all 6 languages
 - **Frontend**: Plain HTML5, Vanilla CSS with custom glassmorphism & cosmic theme, ES modules
 
 ---
@@ -48,7 +49,7 @@
 | `server/config.js` | Environment configuration, folder paths, and language metadata |
 | `server/db/schema.sql` | 10 tables, FTS5 index, sync triggers, and performance indexes |
 | `server/db/db.js` | SQLite connection manager with WAL mode and settings initializer |
-| `server/db/seed.js` | Seeding script with 2 rich multilingual stories and verified ISRO facts |
+| `server/db/seed.js` | Seeding script with 3 rich multilingual stories in 6 languages and verified ISRO facts |
 | `server/routes/public.js` | Public library endpoints (`/api/stories`, `/api/languages`) |
 | `server/routes/chat.js` | WhatsApp-style Space Buddy chat (`/api/chat/text`, `/api/chat/voice`) |
 | `server/routes/admin.js` | Protected admin API for stories, translations, audio queue, and settings |
@@ -75,10 +76,11 @@
 | Stories & Multilingual Audio Queue | ✅ Done | Background worker + Gnani Timbre TTS client |
 | WhatsApp-style Space Buddy Chat | ✅ Done | Text + Voice note recording with RAG citations |
 | Admin Console Pages | ✅ Done | Login, Dashboard, Story Editor, Knowledge, Chats, Settings |
-| Sample Content Seeding | ✅ Done | Chandrayaan-3 and Agnikul Cosmos stories seeded in 5 languages |
+| Sample Content Seeding | ✅ Done | Chandrayaan-3, Agnikul Cosmos, LVM3 stories seeded in 6 languages |
 | Automated Test Suite | ✅ Done | 12 tests passing across schema, auth, and CRUD |
 | Gnani AI & OpenAI Integration | ✅ Done | Live Vachana TTS/STT verified; dual text + voice note responses active |
 | Multilingual Auto-Detection & Accuracy | ✅ Done | Auto-detects query language, matches response in same language & audio |
+| 6 Core Languages (inc. Kannada) & Voice Model | ✅ Done | Universal voice recognition (`indic-auto`), 6 languages (EN, HI, TA, TE, BN, KN), female voice `Shivani` |
 
 ---
 

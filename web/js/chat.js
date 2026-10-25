@@ -103,12 +103,20 @@ function setupComposer() {
       if (!text) return;
 
       input.value = '';
-      if (/[\u0900-\u097F]/.test(text)) {
+      if (/[\u0C80-\u0CFF]/.test(text)) {
+        currentLang = 'kn-IN';
+      } else if (/[\u0900-\u097F]/.test(text)) {
         currentLang = 'hi-IN';
-        setActiveLang(currentLang);
-        const langSelect = document.getElementById('chat-lang-select');
-        if (langSelect) langSelect.value = currentLang;
+      } else if (/[\u0B80-\u0BFF]/.test(text)) {
+        currentLang = 'ta-IN';
+      } else if (/[\u0C00-\u0C7F]/.test(text)) {
+        currentLang = 'te-IN';
+      } else if (/[\u0980-\u09FF]/.test(text)) {
+        currentLang = 'bn-IN';
       }
+      setActiveLang(currentLang);
+      const langSelect = document.getElementById('chat-lang-select');
+      if (langSelect) langSelect.value = currentLang;
 
       addUserBubble({ text, inputType: 'text' });
       showTypingIndicator();

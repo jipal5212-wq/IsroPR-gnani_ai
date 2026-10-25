@@ -37,8 +37,10 @@ export async function synthesizeSpeech({ text, lang, voice = 'Shivani', targetPa
   const endpoint = `${ENV.GNANI_BASE_URL}/api/v1/tts/inference`;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 18000); // 18s timeout
-
   try {
+    const validVoices = ['Avinash', 'Shivani', 'Lakshmi', 'Kalpana', 'Shubham', 'Prakash', 'Devansh', 'Yashraj', 'Chetana', 'Vasudha', 'Harshad', 'Riyaa', 'Tarika'];
+    const selectedVoice = validVoices.includes(voice) ? voice : 'Shivani';
+
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -47,7 +49,7 @@ export async function synthesizeSpeech({ text, lang, voice = 'Shivani', targetPa
       },
       body: JSON.stringify({
         text,
-        voice: voice || 'Shivani',
+        voice: selectedVoice,
         model: model || 'timbre-v3.0',
         language: lang,
         speed: 1,
