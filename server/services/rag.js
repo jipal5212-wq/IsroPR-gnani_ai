@@ -1,13 +1,51 @@
 import { getDb } from '../db/db.js';
 
+const MISSION_EXPANSIONS = {
+  'चंद्रयान': ['Chandrayaan'],
+  'chandrayaan': ['Chandrayaan'],
+  'गगनयान': ['Gaganyaan'],
+  'gaganyaan': ['Gaganyaan'],
+  'आदित्य': ['Aditya'],
+  'aditya': ['Aditya'],
+  'इसरो': ['ISRO'],
+  'isro': ['ISRO'],
+  'प्रज्ञान': ['Pragyan'],
+  'pragyan': ['Pragyan'],
+  'विक्रम': ['Vikram'],
+  'vikram': ['Vikram'],
+  'अग्निकुल': ['Agnikul'],
+  'agnikul': ['Agnikul'],
+  'अग्निबाण': ['Agnibaan'],
+  'agnibaan': ['Agnibaan'],
+  'स्काईरूट': ['Skyroot'],
+  'skyroot': ['Skyroot'],
+  'पिक्सेल': ['Pixxel'],
+  'pixxel': ['Pixxel'],
+  'लैंडिंग': ['landing', 'touchdown'],
+  'landing': ['touchdown'],
+  'लॉन्च': ['launch', 'LVM3'],
+  'रॉकेट': ['rocket', 'LVM3'],
+  'rocket': ['LVM3', 'Agnibaan']
+};
+
 export function retrieveContext(query, limit = 4) {
   if (!query || typeof query !== 'string') {
     return { knowledge: [], stories: [] };
   }
 
   const db = getDb();
-  // Extract alphanumeric tokens for safe FTS5 query
-  const tokens = query.replace(/[^\p{L}\p{N}\s]/gu, ' ').trim().split(/\s+/).filter(t => t.length > 1);
+  // Extract alphanumeric tokens preserving Unicode letters (\p{L}), Indic vowels/marks (\p{M}), and numbers (\p{N})
+  let tokens = query.replace(/[^\p{L}\p{M}\p{N}\s]/gu, ' ').trim().split(/\s+/).filter(t => t.length > 1);
+
+  // Expand with transliterated / synonymous keywords
+  const expanded = [];
+  for (const t of tokens) {
+    const lower = t.toLowerCase();
+    if (MISSION_EXPANSIONS[lower]) {
+      expanded.push(...MISSION_EXPANSIONS[lower]);
+    }
+  }
+  tokens = Array.from(new Set([...tokens, ...expanded]));
 
   if (tokens.length === 0) {
     return { knowledge: [], stories: [] };

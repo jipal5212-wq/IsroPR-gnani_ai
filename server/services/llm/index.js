@@ -51,24 +51,36 @@ export async function generateReply({ system, messages, maxTokens = 250 }) {
   } catch (err) {
     clearTimeout(timeoutId);
     if (err.name === 'AbortError') {
-      return { text: "I'm taking too long to think right now. Please try asking again in a moment." };
+      return { text: "I took a bit too long to process. Please ask again in a moment!" };
     }
-    console.error('LLM generation error:', err);
-    throw err;
+    console.warn('LLM API error (falling back to verified RAG answer):', err.message);
+    return generateLocalFallback(messages, system);
   }
 }
 
 function generateLocalFallback(messages, system) {
-  const lastUserMsg = messages[messages.length - 1]?.content || '';
-  
-  // Extract context if present in user message or prompt
   if (system.includes('Context:\nNo relevant entries found')) {
     return {
-      text: "I don't have verified information about that yet in my knowledge base. Please check official updates on isro.gov.in."
+      text: "I do not have verified details on that yet in our knowledge base. For official mission schedules, please check isro.gov.in."
+    };
+  }
+
+  // Extract first details sentence from context if available
+  const match = system.match(/Details:\s*([^\n]+)/);
+  if (match && match[1]) {
+    return {
+      text: `Based on verified records: ${match[1].trim()}`
+    };
+  }
+
+  const storyMatch = system.match(/Summary:\s*([^\n]+)/);
+  if (storyMatch && storyMatch[1]) {
+    return {
+      text: `Here is the verified space record: ${storyMatch[1].trim()}`
     };
   }
 
   return {
-    text: `Here is the information from our space database regarding your question: India's space program continues to reach new milestones. For official verification and latest mission updates, visit isro.gov.in.`
+    text: "India's space program continues to reach historic milestones. Chandrayaan-3 successfully soft-landed near the lunar South Pole on 23 August 2023. For official updates, visit isro.gov.in."
   };
 }

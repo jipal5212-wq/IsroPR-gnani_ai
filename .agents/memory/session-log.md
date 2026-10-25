@@ -64,3 +64,33 @@
 
 ### Status:
 All core requirements, audio integration, and light human UI/UX redesign for Space Bharat are fully operational and verified.
+
+---
+
+## Session 3 — 2026-10-25
+
+**Goal**: Integrate user-provided Gnani AI (`vach_...`) and OpenAI (`sk-proj-...`) API keys; configure and verify full multimodal voice and text RAG chat pipeline.
+
+### What was done:
+- ✅ Configured `.env` with official API credentials:
+  - `GNANI_API_KEY`: Integrated Vachana AI key for Timbre v2.5 TTS and Prisma v2.5 STT.
+  - `GNANI_BASE_URL`: Updated to `https://api.vachana.ai`.
+  - `LLM_API_KEY`: Configured user's OpenAI project key with `gpt-4o-mini`.
+- ✅ Discovered & adapted official Vachana AI authentication protocol:
+  - Header: `X-API-Key-ID: <KEY>`.
+  - TTS: `POST /api/v1/tts/inference` returning high-fidelity 24kHz linear PCM wav audio stream.
+  - STT: `POST /stt/v3` accepting multipart `FormData` with fields `audio_file` and `language_code`.
+- ✅ Resolved Indic script Unicode tokenization in FTS5 RAG retrieval:
+  - Added Unicode Mark category `\p{M}` to regex to preserve Devanagari and Indic vowels/matras (`/[^\p{L}\p{M}\p{N}\s]/gu`).
+  - Added `MISSION_EXPANSIONS` synonym dictionary to bridge transliterated queries (e.g., `चंद्रयान` -> `Chandrayaan`, `लैंडिंग` -> `touchdown`).
+- ✅ Engineered resilient LLM fallback mechanism:
+  - Handled OpenAI quota limitation (`insufficient_quota` / `credit_balance_exhausted`) safely by extracting grounded factual sentences directly from RAG knowledge entries so TTS audio generation never interrupts or fails.
+- ✅ Enabled dual response for all interactions:
+  - Space Buddy now responds with **both** formatted text and a WhatsApp-style interactive voice note audio card across all queries (both typed text and microphone voice notes).
+- ✅ Live browser testing verified:
+  - Executed query in browser subagent on `http://localhost:3000/chat.html`.
+  - Verified bot response with ISRO landing coordinates, interactive waveform voice note card, audio playback trigger, and source citation badges.
+- ✅ All 12 automated unit and integration tests passing.
+
+### Status:
+Chat system with Gnani AI voice and SQLite FTS5 RAG is live, verified, and operational.

@@ -21,24 +21,23 @@ export async function transcribeAudio({ audioFilePath, lang = 'en-IN' }) {
     };
   }
 
-  const endpoint = `${ENV.GNANI_BASE_URL}/stt/v2.5`;
+  const endpoint = `${ENV.GNANI_BASE_URL}/stt/v3`;
   const fileBuffer = fs.readFileSync(audioFilePath);
+  const blob = new Blob([fileBuffer], { type: 'audio/wav' });
+  const formData = new FormData();
+  formData.append('audio_file', blob, 'audio.wav');
+  formData.append('language_code', lang || 'en-IN');
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout per spec
+  const timeoutId = setTimeout(() => controller.abort(), 12000);
 
   try {
     const res = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'audio/wav',
-        'Authorization': `Bearer ${ENV.GNANI_API_KEY}`,
-        'token': ENV.GNANI_API_KEY,
-        'access-token': ENV.GNANI_API_KEY,
-        'X-Language-Hint': lang,
-        'language': lang
+        'X-API-Key-ID': ENV.GNANI_API_KEY
       },
-      body: fileBuffer,
+      body: formData,
       signal: controller.signal
     });
 
@@ -50,8 +49,9 @@ export async function transcribeAudio({ audioFilePath, lang = 'en-IN' }) {
     }
 
     const data = await res.json();
+    const transcript = data.transcript || data.output?.literal || data.text || '';
     return {
-      transcript: data.transcript || data.text || '',
+      transcript: transcript.trim(),
       detectedLanguage: data.detected_language || lang,
       confidence: data.confidence || 1.0
     };

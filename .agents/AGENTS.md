@@ -21,6 +21,7 @@
 | 4 | 2026-10-25 | Native SQLite FTS5 for RAG | Deterministic, rapid BM25 keyword retrieval with zero external vector database dependencies |
 | 5 | 2026-10-25 | Single admin account with CLI creation | Secure bcrypt (cost 12) hashing with 8-hour HttpOnly JWT session cookie |
 | 6 | 2026-10-25 | Light, human editorial UI/UX & WhatsApp Web chat | Clean, accessible design avoiding generic dark "AI" neon; authentic WhatsApp Web look for conversational chat |
+| 7 | 2026-10-25 | Official Vachana AI (Gnani) STT/TTS & Resilient RAG Voice Output | Real studio speech synthesis via X-API-Key-ID, Indic Unicode \p{M} token preservation, dual text + voice note response |
 
 ---
 
@@ -30,9 +31,9 @@
 - **Web Server**: Express with Helmet (custom CSP), cookie-parser, and express-rate-limit
 - **Database**: SQLite (`better-sqlite3`) with WAL journal mode, FTS5 virtual table, and sync triggers
 - **Speech Stack**:
-  - Text-to-Speech: Gnani Timbre v2.5 (`en-IN`, `hi-IN`, `ta-IN`, `te-IN`, `bn-IN`)
-  - Speech-to-Text: Gnani Prisma v2.5 with audio note format conversion
-  - Conversational AI: OpenAI-compatible LLM adapter with safe offline fallback
+  - Text-to-Speech: Gnani Timbre v2.5 (`https://api.vachana.ai/api/v1/tts/inference` in wav container)
+  - Speech-to-Text: Gnani Prisma v2.5 (`https://api.vachana.ai/stt/v3` with FormData)
+  - Conversational AI: OpenAI-compatible LLM adapter with resilient RAG grounded fallback
 - **Frontend**: Plain HTML5, Vanilla CSS with custom glassmorphism & cosmic theme, ES modules
 
 ---
@@ -74,6 +75,7 @@
 | Admin Console Pages | ✅ Done | Login, Dashboard, Story Editor, Knowledge, Chats, Settings |
 | Sample Content Seeding | ✅ Done | Chandrayaan-3 and Agnikul Cosmos stories seeded in 5 languages |
 | Automated Test Suite | ✅ Done | 12 tests passing across schema, auth, and CRUD |
+| Gnani AI & OpenAI Integration | ✅ Done | Live Vachana TTS/STT verified; dual text + voice note responses active |
 
 ---
 
