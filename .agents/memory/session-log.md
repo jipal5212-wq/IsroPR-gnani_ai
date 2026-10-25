@@ -90,7 +90,14 @@ All core requirements, audio integration, and light human UI/UX redesign for Spa
 - ✅ Live browser testing verified:
   - Executed query in browser subagent on `http://localhost:3000/chat.html`.
   - Verified bot response with ISRO landing coordinates, interactive waveform voice note card, audio playback trigger, and source citation badges.
+- ✅ Configured Shivani female voice across chat responses:
+  - Enabled Gnani `timbre-v3.0` supporting warm, patient, empathetic female voice `Shivani` across all Indic and English languages (`en-IN`, `hi-IN`, `ta-IN`, `te-IN`, `bn-IN`, `kn-IN`, etc.).
+  - Updated Space Buddy persona prompt to embody Shivani's warm, patient, empathy-first tone.
+  - Updated WhatsApp chat header status to display `online · Voiced by Shivani (Gnani AI)`.
+  - Added Shivani as selectable studio voice in admin story editor.
+  - Verified live in browser with real audio synthesis and playback.
 - ✅ All 12 automated unit and integration tests passing.
 
 ### Status:
-Chat system with Gnani AI voice and SQLite FTS5 RAG is live, verified, and operational.
+Chat system with Gnani AI Shivani female voice and SQLite FTS5 RAG is live, verified, and operational.
+

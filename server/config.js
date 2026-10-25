@@ -45,17 +45,17 @@ for (const dir of Object.values(DIRS)) {
 
 // Master Language Definitions (All Gnani-supported Indian languages enabled)
 export const ALL_LANGUAGES = [
-  { code: 'en-IN', name: 'English', nativeName: 'English', defaultVoice: 'Pranav', chatInput: true, listening: true },
-  { code: 'hi-IN', name: 'Hindi', nativeName: 'हिन्दी', defaultVoice: 'Nalini', chatInput: true, listening: true },
-  { code: 'ta-IN', name: 'Tamil', nativeName: 'தமிழ்', defaultVoice: 'Asmita', chatInput: true, listening: true },
-  { code: 'te-IN', name: 'Telugu', nativeName: 'తెలుగు', defaultVoice: 'Suhana', chatInput: true, listening: true },
-  { code: 'bn-IN', name: 'Bengali', nativeName: 'বাংলা', defaultVoice: 'Kirra', chatInput: true, listening: true },
-  { code: 'kn-IN', name: 'Kannada', nativeName: 'ಕನ್ನಡ', defaultVoice: 'Saanvi', chatInput: true, listening: true },
-  { code: 'ml-IN', name: 'Malayalam', nativeName: 'മലയാളം', defaultVoice: 'Reshma', chatInput: true, listening: true },
-  { code: 'mr-IN', name: 'Marathi', nativeName: 'मराठी', defaultVoice: 'Zahira', chatInput: true, listening: true },
-  { code: 'gu-IN', name: 'Gujarati', nativeName: 'ગુજરાતી', defaultVoice: 'Falak', chatInput: true, listening: true },
-  { code: 'pa-IN', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', defaultVoice: 'Mehuli', chatInput: true, listening: true },
-  { code: 'hi-en', name: 'Hinglish', nativeName: 'Hinglish', defaultVoice: 'Poorvi', chatInput: true, listening: true }
+  { code: 'en-IN', name: 'English', nativeName: 'English', defaultVoice: 'Shivani', chatInput: true, listening: true },
+  { code: 'hi-IN', name: 'Hindi', nativeName: 'हिन्दी', defaultVoice: 'Shivani', chatInput: true, listening: true },
+  { code: 'ta-IN', name: 'Tamil', nativeName: 'தமிழ்', defaultVoice: 'Shivani', chatInput: true, listening: true },
+  { code: 'te-IN', name: 'Telugu', nativeName: 'తెలుగు', defaultVoice: 'Shivani', chatInput: true, listening: true },
+  { code: 'bn-IN', name: 'Bengali', nativeName: 'বাংলা', defaultVoice: 'Shivani', chatInput: true, listening: true },
+  { code: 'kn-IN', name: 'Kannada', nativeName: 'ಕನ್ನಡ', defaultVoice: 'Shivani', chatInput: true, listening: true },
+  { code: 'ml-IN', name: 'Malayalam', nativeName: 'മലയാളം', defaultVoice: 'Shivani', chatInput: true, listening: true },
+  { code: 'mr-IN', name: 'Marathi', nativeName: 'मराठी', defaultVoice: 'Shivani', chatInput: true, listening: true },
+  { code: 'gu-IN', name: 'Gujarati', nativeName: 'ગુજરાતી', defaultVoice: 'Shivani', chatInput: true, listening: true },
+  { code: 'pa-IN', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', defaultVoice: 'Shivani', chatInput: true, listening: true },
+  { code: 'hi-en', name: 'Hinglish', nativeName: 'Hinglish', defaultVoice: 'Shivani', chatInput: true, listening: true }
 ];
 
 export const CATEGORIES = [

@@ -3,12 +3,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ENV, DIRS } from '../../config.js';
 
-export function computeAudioHash(text, voice, lang, model = 'timbre-v2.5') {
+export function computeAudioHash(text, voice, lang, model = 'timbre-v3.0') {
   return crypto.createHash('sha256').update(`${text}|${voice}|${lang}|${model}`).digest('hex');
 }
 
-export async function synthesizeSpeech({ text, lang, voice, targetPath }) {
-  const hash = computeAudioHash(text, voice, lang);
+export async function synthesizeSpeech({ text, lang, voice = 'Shivani', targetPath, model = 'timbre-v3.0' }) {
+  const hash = computeAudioHash(text, voice, lang, model);
   const finalPath = targetPath || path.join(DIRS.AUDIO_CHAT, `${hash}.wav`);
 
   // Check if audio already exists in cache
@@ -47,8 +47,8 @@ export async function synthesizeSpeech({ text, lang, voice, targetPath }) {
       },
       body: JSON.stringify({
         text,
-        voice: voice || 'Pranav',
-        model: 'timbre-v2.5',
+        voice: voice || 'Shivani',
+        model: model || 'timbre-v3.0',
         language: lang,
         speed: 1,
         audio_config: {

@@ -8,11 +8,11 @@ let translationsMap = {};
 let activeLangTab = 'en-IN';
 
 const LANGUAGES = [
-  { code: 'en-IN', name: 'English', defaultVoice: 'Pranav' },
-  { code: 'hi-IN', name: 'Hindi', defaultVoice: 'Nalini' },
-  { code: 'ta-IN', name: 'Tamil', defaultVoice: 'Asmita' },
-  { code: 'te-IN', name: 'Telugu', defaultVoice: 'Suhana' },
-  { code: 'bn-IN', name: 'Bengali', defaultVoice: 'Kirra' }
+  { code: 'en-IN', name: 'English', defaultVoice: 'Shivani' },
+  { code: 'hi-IN', name: 'Hindi', defaultVoice: 'Shivani' },
+  { code: 'ta-IN', name: 'Tamil', defaultVoice: 'Shivani' },
+  { code: 'te-IN', name: 'Telugu', defaultVoice: 'Shivani' },
+  { code: 'bn-IN', name: 'Bengali', defaultVoice: 'Shivani' }
 ];
 
 document.addEventListener('DOMContentLoaded', async () => {
