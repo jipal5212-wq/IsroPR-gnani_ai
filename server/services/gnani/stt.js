@@ -33,7 +33,10 @@ export async function transcribeAudio({ audioFilePath, lang = 'en-IN' }) {
       headers: {
         'Content-Type': 'audio/wav',
         'Authorization': `Bearer ${ENV.GNANI_API_KEY}`,
-        'X-Language-Hint': lang
+        'token': ENV.GNANI_API_KEY,
+        'access-token': ENV.GNANI_API_KEY,
+        'X-Language-Hint': lang,
+        'language': lang
       },
       body: fileBuffer,
       signal: controller.signal

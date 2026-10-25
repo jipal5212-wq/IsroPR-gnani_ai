@@ -10,13 +10,13 @@ export const ENV = {
   DATA_DIR: path.resolve(process.cwd(), process.env.DATA_DIR || './data'),
   PUBLIC_BASE_URL: process.env.PUBLIC_BASE_URL || 'http://localhost:3000',
 
-  GNANI_API_KEY: process.env.GNANI_API_KEY || '',
+  GNANI_API_KEY: process.env.GNANI_API_KEY || process.env.GNANI_KEY || '',
   GNANI_BASE_URL: process.env.GNANI_BASE_URL || 'https://api.vachana.ai',
 
   LLM_PROVIDER: process.env.LLM_PROVIDER || 'openai-compatible',
-  LLM_API_KEY: process.env.LLM_API_KEY || '',
+  LLM_API_KEY: process.env.LLM_API_KEY || process.env.OPENAI_API_KEY || '',
   LLM_MODEL: process.env.LLM_MODEL || 'gpt-4o-mini',
-  LLM_BASE_URL: process.env.LLM_BASE_URL || '',
+  LLM_BASE_URL: process.env.LLM_BASE_URL || 'https://api.openai.com/v1',
 
   JWT_SECRET: process.env.JWT_SECRET || 'space-bharat-default-secret-change-in-production',
   ADMIN_SESSION_HOURS: parseInt(process.env.ADMIN_SESSION_HOURS || '8', 10),
@@ -43,19 +43,19 @@ for (const dir of Object.values(DIRS)) {
   }
 }
 
-// Master Language Definitions
+// Master Language Definitions (All Gnani-supported Indian languages enabled)
 export const ALL_LANGUAGES = [
   { code: 'en-IN', name: 'English', nativeName: 'English', defaultVoice: 'Pranav', chatInput: true, listening: true },
   { code: 'hi-IN', name: 'Hindi', nativeName: 'हिन्दी', defaultVoice: 'Nalini', chatInput: true, listening: true },
   { code: 'ta-IN', name: 'Tamil', nativeName: 'தமிழ்', defaultVoice: 'Asmita', chatInput: true, listening: true },
   { code: 'te-IN', name: 'Telugu', nativeName: 'తెలుగు', defaultVoice: 'Suhana', chatInput: true, listening: true },
   { code: 'bn-IN', name: 'Bengali', nativeName: 'বাংলা', defaultVoice: 'Kirra', chatInput: true, listening: true },
-  { code: 'kn-IN', name: 'Kannada', nativeName: 'ಕನ್ನಡ', defaultVoice: 'Saanvi', chatInput: false, listening: false },
-  { code: 'ml-IN', name: 'Malayalam', nativeName: 'മലയാളം', defaultVoice: 'Reshma', chatInput: false, listening: false },
-  { code: 'mr-IN', name: 'Marathi', nativeName: 'मराठी', defaultVoice: 'Zahira', chatInput: false, listening: false },
-  { code: 'gu-IN', name: 'Gujarati', nativeName: 'ગુજરાતી', defaultVoice: 'Falak', chatInput: false, listening: false },
-  { code: 'pa-IN', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', defaultVoice: 'Mehuli', chatInput: false, listening: false },
-  { code: 'hi-en', name: 'Hinglish', nativeName: 'Hinglish', defaultVoice: 'Poorvi', chatInput: false, listening: false }
+  { code: 'kn-IN', name: 'Kannada', nativeName: 'ಕನ್ನಡ', defaultVoice: 'Saanvi', chatInput: true, listening: true },
+  { code: 'ml-IN', name: 'Malayalam', nativeName: 'മലയാളം', defaultVoice: 'Reshma', chatInput: true, listening: true },
+  { code: 'mr-IN', name: 'Marathi', nativeName: 'मराठी', defaultVoice: 'Zahira', chatInput: true, listening: true },
+  { code: 'gu-IN', name: 'Gujarati', nativeName: 'ગુજરાતી', defaultVoice: 'Falak', chatInput: true, listening: true },
+  { code: 'pa-IN', name: 'Punjabi', nativeName: 'ਪੰਜਾਬੀ', defaultVoice: 'Mehuli', chatInput: true, listening: true },
+  { code: 'hi-en', name: 'Hinglish', nativeName: 'Hinglish', defaultVoice: 'Poorvi', chatInput: true, listening: true }
 ];
 
 export const CATEGORIES = [

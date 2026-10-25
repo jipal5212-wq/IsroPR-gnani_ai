@@ -125,24 +125,24 @@ ${contextBlock}`;
 
   const replyText = rawReply.replace(/[*#_~`]/g, '').trim();
 
-  // 5. If voice input, synthesize TTS voice note
+  // 5. Synthesize TTS voice note for user response
   let audioUrl = null;
   let audioHash = null;
 
-  if (inputType === 'voice') {
-    try {
-      const voice = langMeta.defaultVoice || 'Pranav';
-      const ttsResult = await synthesizeSpeech({
-        text: replyText,
-        lang: detectedLang,
-        voice
-      });
+  try {
+    const voice = langMeta.defaultVoice || 'Pranav';
+    const ttsResult = await synthesizeSpeech({
+      text: replyText,
+      lang: detectedLang,
+      voice
+    });
 
+    if (ttsResult && ttsResult.filePath) {
       audioHash = ttsResult.hash;
       audioUrl = `/media/audio/chat/${path.basename(ttsResult.filePath)}`;
-    } catch (err) {
-      console.warn('Voice reply synthesis failed, continuing with text only:', err.message);
     }
+  } catch (err) {
+    console.warn('Voice reply synthesis failed, continuing with text response:', err.message);
   }
 
   // Save Assistant reply to database

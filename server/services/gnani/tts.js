@@ -43,13 +43,16 @@ export async function synthesizeSpeech({ text, lang, voice, targetPath }) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ENV.GNANI_API_KEY}`
+        'Authorization': `Bearer ${ENV.GNANI_API_KEY}`,
+        'token': ENV.GNANI_API_KEY,
+        'access-token': ENV.GNANI_API_KEY
       },
       body: JSON.stringify({
         text,
         language: lang,
         voice,
-        format: 'mp3'
+        format: 'mp3',
+        speed: 1.0
       }),
       signal: controller.signal
     });

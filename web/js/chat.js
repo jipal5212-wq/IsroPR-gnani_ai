@@ -7,14 +7,30 @@ let currentLang = 'en-IN';
 
 export async function initChat() {
   currentLang = getActiveLang();
-  setupLanguageSelector();
+  await setupLanguageSelector();
   setupComposer();
   await loadHistory();
 }
 
-function setupLanguageSelector() {
+async function setupLanguageSelector() {
   const select = document.getElementById('chat-lang-select');
   if (!select) return;
+
+  try {
+    const data = await apiFetch('/api/languages');
+    if (data.languages && data.languages.length > 0) {
+      select.innerHTML = '';
+      for (const lang of data.languages) {
+        const opt = document.createElement('option');
+        opt.value = lang.code;
+        opt.textContent = `${lang.nativeName} (${lang.name})`;
+        if (lang.code === currentLang) opt.selected = true;
+        select.appendChild(opt);
+      }
+    }
+  } catch (err) {
+    console.warn('Could not load dynamic languages list:', err);
+  }
 
   select.value = currentLang;
   select.addEventListener('change', (e) => {
@@ -100,6 +116,7 @@ function setupComposer() {
         hideTypingIndicator();
         addBotBubble({
           text: res.replyText,
+          audioUrl: res.audioUrl,
           sources: res.sources
         });
         saveToSessionStorage();

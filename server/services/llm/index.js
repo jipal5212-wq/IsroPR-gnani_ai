@@ -6,7 +6,10 @@ export async function generateReply({ system, messages, maxTokens = 250 }) {
     return generateLocalFallback(messages, system);
   }
 
-  const endpoint = ENV.LLM_BASE_URL || 'https://api.openai.com/v1/chat/completions';
+  let endpoint = ENV.LLM_BASE_URL || 'https://api.openai.com/v1/chat/completions';
+  if (!endpoint.endsWith('/chat/completions')) {
+    endpoint = endpoint.replace(/\/+$/, '') + '/chat/completions';
+  }
 
   const body = {
     model: ENV.LLM_MODEL || 'gpt-4o-mini',
