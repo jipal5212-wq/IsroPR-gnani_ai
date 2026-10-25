@@ -1,7 +1,7 @@
-# 🛰️ Space Bharat (ISRO PR Platform)
+# 🛰️ IsroPR (Official Public Relations & Outreach Platform)
 
-> A lightweight, sovereign web platform making every Indian citizen space-aware.
-> Features multilingual audio storytelling powered by **Gnani Timbre v2.5** and an interactive WhatsApp-style conversational AI assistant (**Space Buddy**) with RAG over official ISRO knowledge.
+> Dedicated to public space awareness and education across India.
+> Multilingual Voice Narration powered by [Gnani AI](https://gnani.ai/) · Official facts cited from [ISRO](https://isro.gov.in/) and [indianspaceflight.in](https://www.indianspaceflight.in/).
 
 ---
 

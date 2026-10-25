@@ -1,8 +1,8 @@
 {
-  "name": "space-bharat",
+  "name": "isro-pr",
   "version": "1.0.0",
   "type": "module",
-  "description": "Space Bharat — Making every Indian citizen space-aware",
+  "description": "IsroPR — Dedicated to public space awareness and education across India",
   "main": "server/index.js",
   "scripts": {
     "dev": "node --watch server/index.js",

@@ -101,3 +101,30 @@ All core requirements, audio integration, and light human UI/UX redesign for Spa
 ### Status:
 Chat system with Gnani AI Shivani female voice and SQLite FTS5 RAG is live, verified, and operational.
 
+---
+
+## Session 4 — 2026-10-25
+
+**Goal**: Rebrand platform name from Space Bharat to **IsroPR** across all files, relocate admin portal access to subtle bottom footer, and update footer description citing Gnani AI, ISRO, and indianspaceflight.in.
+
+### What was done:
+- ✅ Renamed platform to **IsroPR** across all user-facing and backend surfaces:
+  - Header branding and badges: `IsroPR • Official Outreach`.
+  - HTML page titles and metadata: `IsroPR — Making Every Citizen Space-Aware`, `Story Player — IsroPR`, `About IsroPR`, and admin console headers.
+  - Script banners, `package.json` (`name: "isro-pr"`, description), `README.md`, and backup script manifest.
+- ✅ Shifted Admin section to very low in the website:
+  - Completely removed the `Admin` button from the top header navigation across `index.html` and `about.html`.
+  - Placed a discreet, low-opacity (35%) `Admin Access` link at the bottom of the footer across all public pages (`index.html`, `story.html`, `chat.html`, `about.html`).
+- ✅ Updated official description and citations across all footers and docs:
+  - `"IsroPR — Dedicated to public space awareness and education across India."`
+  - `"Multilingual Voice Narration powered by Gnani AI · Official facts cited from ISRO and indianspaceflight.in"`
+- ✅ Verified live via browser automation:
+  - Confirmed top header shows `IsroPR` without any Admin button.
+  - Confirmed footer displays the exact requested description and citations.
+  - Confirmed clicking discreet `Admin Access` link navigates to `/admin/login.html` showing `IsroPR Admin`.
+- ✅ All 12 automated test cases passing.
+
+### Status:
+Platform successfully rebranded to IsroPR with discreet admin placement.
+
+

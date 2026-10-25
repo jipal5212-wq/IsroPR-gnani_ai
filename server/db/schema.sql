@@ -1,4 +1,4 @@
--- Space Bharat SQLite Database Schema
+-- IsroPR SQLite Database Schema
 -- ISRO PR & Public Awareness Platform
 
 PRAGMA foreign_keys = ON;

@@ -41,7 +41,7 @@ async function loadStoryDetails(storyId, lang) {
 }
 
 function renderStoryHeader(story, availableLangs, currentLang) {
-  document.title = `${story.title} — Space Bharat`;
+  document.title = `${story.title} — IsroPR`;
 
   const titleEl = document.getElementById('story-title');
   const summaryEl = document.getElementById('story-summary');
@@ -147,8 +147,8 @@ function renderAudioPlayer(translation, story) {
   if ('mediaSession' in navigator) {
     navigator.mediaSession.metadata = new MediaMetadata({
       title: story.title,
-      artist: 'Space Bharat (ISRO Outreach)',
-      album: 'Space Bharat Audio Stories'
+      artist: 'IsroPR (Official Outreach)',
+      album: 'IsroPR Audio Stories'
     });
 
     navigator.mediaSession.setActionHandler('play', () => audio.play());

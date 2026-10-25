@@ -1,4 +1,4 @@
-// Space Bharat — Knowledge Base Manager
+// IsroPR — Knowledge Base Manager
 import { apiFetch, formatDate } from './common.js';
 
 let editingId = null;

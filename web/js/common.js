@@ -1,8 +1,8 @@
-// Space Bharat — Common Frontend Utilities
+// IsroPR — Common Frontend Utilities
 
 export const STORAGE_KEYS = {
-  LANG: 'space_bharat_lang',
-  PLAYBACK_SPEED: 'space_bharat_speed'
+  LANG: 'isro_pr_lang',
+  PLAYBACK_SPEED: 'isro_pr_speed'
 };
 
 // Get current active language code or fallback

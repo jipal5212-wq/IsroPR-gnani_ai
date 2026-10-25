@@ -1,4 +1,4 @@
-// Space Bharat — Admin Dashboard Handler
+// IsroPR — Admin Dashboard Handler
 import { apiFetch, formatDate } from './common.js';
 
 document.addEventListener('DOMContentLoaded', async () => {

@@ -31,7 +31,7 @@ function prompt(question) {
 }
 
 async function main() {
-  console.log('🚀 Space Bharat — Create Admin Account');
+  console.log('🚀 IsroPR — Create Admin Account');
   console.log('--------------------------------------');
 
   const args = parseArgs();

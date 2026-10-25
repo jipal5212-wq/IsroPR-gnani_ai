@@ -94,7 +94,7 @@ if (isDirectRun) {
   app.listen(ENV.PORT, () => {
     console.log(`
 🛰️  ======================================================
-    SPACE BHARAT — ISRO PR & Outreach Platform
+    IsroPR — Official ISRO PR & Outreach Platform
     Server running on: ${ENV.PUBLIC_BASE_URL} (Port ${ENV.PORT})
     Environment: ${ENV.NODE_ENV}
 ======================================================`);

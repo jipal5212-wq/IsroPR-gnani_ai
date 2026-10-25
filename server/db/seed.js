@@ -4,7 +4,7 @@ import path from 'node:path';
 import { DIRS } from '../config.js';
 
 export async function seedDatabase() {
-  console.log('🌱 Seeding rich Space Bharat stories and comprehensive ISRO knowledge base...');
+  console.log('🌱 Seeding rich IsroPR stories and comprehensive ISRO knowledge base...');
   const db = getDb();
 
   // ============================================================

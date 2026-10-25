@@ -1,4 +1,4 @@
-// Space Bharat — Audio Recorder Helper (MediaRecorder API)
+// IsroPR — Audio Recorder Helper (MediaRecorder API)
 
 export class AudioRecorder {
   constructor({ onStart, onTick, onStop, onError }) {

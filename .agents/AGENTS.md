@@ -1,10 +1,10 @@
-# ISRO's PR (Space Bharat) — Project Intelligence File
+# IsroPR — Project Intelligence File
 
 > This file is automatically loaded every conversation. It serves as persistent memory for the AI agent.
 
 ## 🏷️ Project Identity
 
-- **Project Name**: Space Bharat (ISRO Public Relations & Outreach Platform)
+- **Project Name**: IsroPR (ISRO Public Relations & Outreach Platform)
 - **Owner**: Ashish Kumar Pal
 - **Created**: 2026-10-25
 - **Status**: 🟢 Active Development — Full Stack Operational
@@ -22,6 +22,7 @@
 | 5 | 2026-10-25 | Single admin account with CLI creation | Secure bcrypt (cost 12) hashing with 8-hour HttpOnly JWT session cookie |
 | 6 | 2026-10-25 | Light, human editorial UI/UX & WhatsApp Web chat | Clean, accessible design avoiding generic dark "AI" neon; authentic WhatsApp Web look for conversational chat |
 | 7 | 2026-10-25 | Official Vachana AI (Gnani) STT/TTS & Resilient RAG Voice Output | Real studio speech synthesis via X-API-Key-ID, Indic Unicode \p{M} token preservation, dual text + voice note response |
+| 8 | 2026-10-25 | Rebranding to IsroPR & Admin Relocation to Footer | Renamed platform to IsroPR across all surfaces; moved admin access to subtle bottom footer to prevent public distraction; updated official description citing ISRO & indianspaceflight.in |
 
 ---
 

@@ -1,4 +1,4 @@
-// Space Bharat — Admin Login Handler
+// IsroPR — Admin Login Handler
 import { apiFetch } from './common.js';
 
 document.addEventListener('DOMContentLoaded', () => {

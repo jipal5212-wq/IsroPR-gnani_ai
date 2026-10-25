@@ -1,4 +1,4 @@
-// Space Bharat — Story & Translation Editor
+// IsroPR — Story & Translation Editor
 import { apiFetch } from './common.js';
 
 let isNew = true;

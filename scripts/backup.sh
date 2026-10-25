@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Space Bharat — Database & Audio Backup Script
+# IsroPR — Database & Audio Backup Script
 # Usage: ./scripts/backup.sh [destination_directory]
 
 set -e
@@ -8,7 +8,7 @@ TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_DIR="${1:-./backups}/backup_${TIMESTAMP}"
 DATA_DIR="${DATA_DIR:-./data}"
 
-echo "🚀 Starting Space Bharat backup..."
+echo "🚀 Starting IsroPR backup..."
 echo "Source: $DATA_DIR"
 echo "Destination: $BACKUP_DIR"
 
@@ -33,13 +33,13 @@ fi
 
 # 3. Create manifest
 cat << EOF > "$BACKUP_DIR/manifest.txt"
-Space Bharat Backup Manifest
+IsroPR Backup Manifest
 Timestamp: $TIMESTAMP
 Date: $(date)
-Included: spacebharat.db, audio/
+Included: isropr.db, audio/
 To restore:
 1. Stop the application server: npm stop or kill process
-2. Copy $BACKUP_DIR/spacebharat.db into data/spacebharat.db
+2. Copy $BACKUP_DIR/isropr.db into data/spacebharat.db
 3. Copy $BACKUP_DIR/audio into data/audio
 4. Restart the application: npm start
 EOF
