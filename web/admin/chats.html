@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Activity — Space Bharat Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+</head>
+<body>
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <a href="/admin/dashboard.html" class="admin-brand">
+        <div class="admin-brand-logo">🛰️</div>
+        <div>
+          <div class="admin-brand-title">Space Bharat</div>
+          <div style="font-size: 0.68rem; color: var(--admin-accent); font-weight: 700; text-transform: uppercase;">Admin Console</div>
+        </div>
+      </a>
+
+      <ul class="sidebar-nav">
+        <li class="nav-item"><a href="/admin/dashboard.html">📊 Dashboard</a></li>
+        <li class="nav-item"><a href="/admin/story-edit.html">✍️ Story Editor</a></li>
+        <li class="nav-item"><a href="/admin/knowledge.html">📚 Knowledge Base</a></li>
+        <li class="nav-item active"><a href="/admin/chats.html">💬 Chat Activity</a></li>
+        <li class="nav-item"><a href="/admin/settings.html">⚙️ Settings</a></li>
+        <li class="nav-item" style="margin-top: 1.5rem;"><a href="/" target="_blank">🌐 View Public Site ↗</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Citizen Chat Activity</h1>
+          <p class="page-description">Anonymous session logs to inspect questions asked, languages used, and bot answers.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <!-- Sessions List -->
+        <div>
+          <h3 style="font-family: var(--font-heading); margin-bottom: 1rem;">Recent Chat Sessions</h3>
+          <div class="table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Session ID</th>
+                  <th>Lang</th>
+                  <th>Msgs</th>
+                  <th>Last Active</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="chat-sessions-tbody">
+                <tr><td colspan="5" style="text-align: center; color: var(--text-dim);">Loading chat sessions...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Session Message Drilldown -->
+        <div>
+          <h3 style="font-family: var(--font-heading); margin-bottom: 1rem;">Conversation Messages</h3>
+          <div id="messages-viewer" style="background: var(--admin-card); border: 1px solid var(--admin-border); border-radius: var(--radius-md); padding: 1.25rem; min-height: 400px; max-height: 600px; overflow-y: auto;">
+            <div style="text-align: center; color: var(--text-dim); padding-top: 5rem;">
+              Select a session on the left to review its conversation transcript and citations.
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { apiFetch, formatDate } from '/js/common.js';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadSessions();
+    });
+
+    async function loadSessions() {
+      const tbody = document.getElementById('chat-sessions-tbody');
+      if (!tbody) return;
+
+      try {
+        const data = await apiFetch('/api/admin/chats');
+        const sessions = data.sessions || [];
+
+        if (sessions.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-dim);">No chats recorded yet.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = sessions.map(s => `
+          <tr>
+            <td><code>${s.id.slice(0, 10)}...</code></td>
+            <td>${s.lang_pref}</td>
+            <td>${s.message_count}</td>
+            <td>${formatDate(s.last_seen_at)}</td>
+            <td>
+              <button class="btn-secondary btn-view-chat" data-id="${s.id}" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">View</button>
+            </td>
+          </tr>
+        `).join('');
+
+        document.querySelectorAll('.btn-view-chat').forEach(btn => {
+          btn.onclick = () => loadMessages(btn.dataset.id);
+        });
+      } catch (err) {
+        console.error('Failed to load sessions:', err);
+      }
+    }
+
+    async function loadMessages(sessionId) {
+      const viewer = document.getElementById('messages-viewer');
+      if (!viewer) return;
+
+      viewer.innerHTML = '<div style="color: var(--text-dim);">Loading conversation...</div>';
+
+      try {
+        const data = await apiFetch(`/api/admin/chats/${sessionId}`);
+        const msgs = data.messages || [];
+
+        if (msgs.length === 0) {
+          viewer.innerHTML = '<div style="color: var(--text-dim);">No messages in this session.</div>';
+          return;
+        }
+
+        viewer.innerHTML = msgs.map(m => `
+          <div style="margin-bottom: 1rem; padding: 0.75rem; border-radius: var(--radius-sm); background: ${m.role === 'user' ? 'rgba(79, 70, 229, 0.15)' : 'rgba(255, 255, 255, 0.04)'}; border-left: 3px solid ${m.role === 'user' ? 'var(--admin-primary)' : 'var(--admin-accent)'};">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.35rem;">
+              <span><strong>${m.role.toUpperCase()}</strong> (${m.input_type})</span>
+              <span>${m.created_at}</span>
+            </div>
+            <div style="font-size: 0.9rem; color: var(--text-main);">${m.text}</div>
+            ${m.audio_path ? `<div style="margin-top: 0.5rem;"><audio controls src="${m.audio_path}" style="height: 30px;"></audio></div>` : ''}
+          </div>
+        `).join('');
+      } catch (err) {
+        viewer.innerHTML = `<div style="color: var(--admin-danger);">Failed to load messages: ${err.message}</div>`;
+      }
+    }
+  </script>
+</body>
+</html>

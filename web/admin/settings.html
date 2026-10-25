@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — Space Bharat Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+</head>
+<body>
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <a href="/admin/dashboard.html" class="admin-brand">
+        <div class="admin-brand-logo">🛰️</div>
+        <div>
+          <div class="admin-brand-title">Space Bharat</div>
+          <div style="font-size: 0.68rem; color: var(--admin-accent); font-weight: 700; text-transform: uppercase;">Admin Console</div>
+        </div>
+      </a>
+
+      <ul class="sidebar-nav">
+        <li class="nav-item"><a href="/admin/dashboard.html">📊 Dashboard</a></li>
+        <li class="nav-item"><a href="/admin/story-edit.html">✍️ Story Editor</a></li>
+        <li class="nav-item"><a href="/admin/knowledge.html">📚 Knowledge Base</a></li>
+        <li class="nav-item"><a href="/admin/chats.html">💬 Chat Activity</a></li>
+        <li class="nav-item active"><a href="/admin/settings.html">⚙️ Settings</a></li>
+        <li class="nav-item" style="margin-top: 1.5rem;"><a href="/" target="_blank">🌐 View Public Site ↗</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">System Settings & Voice Config</h1>
+          <p class="page-description">Manage active regional languages, LLM models, and chat constraints.</p>
+        </div>
+        <div>
+          <button type="submit" form="settings-form" class="btn-primary">Save Settings</button>
+        </div>
+      </div>
+
+      <form id="settings-form">
+        <!-- Languages & Voices Configuration -->
+        <div style="background: var(--admin-card); border: 1px solid var(--admin-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
+          <h3 style="font-family: var(--font-heading); margin-bottom: 0.5rem;">Regional Language & Voice Enablement</h3>
+          <p style="font-size: 0.82rem; color: var(--text-dim); margin-bottom: 1.25rem;">
+            Configure which Indian languages are active for story narration and conversational chat input.
+          </p>
+
+          <div id="languages-config-list" style="display: flex; flex-direction: column; gap: 0.85rem;">
+            <!-- Rendered by settings script -->
+          </div>
+        </div>
+
+        <!-- LLM & Chat Parameters -->
+        <div style="background: var(--admin-card); border: 1px solid var(--admin-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
+          <h3 style="font-family: var(--font-heading); margin-bottom: 1.25rem;">Chat & Safety Limits</h3>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
+            <div class="form-group">
+              <label class="form-label" for="setting-llm-model">LLM Model</label>
+              <input type="text" id="setting-llm-model" class="form-control" value="gpt-4o-mini" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="setting-max-audio-sec">Max Voice Note (seconds)</label>
+              <input type="number" id="setting-max-audio-sec" class="form-control" value="30" min="5" max="60" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="setting-retention-days">Chat Retention (days)</label>
+              <input type="number" id="setting-retention-days" class="form-control" value="30" min="1" max="365" />
+            </div>
+          </div>
+
+          <div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
+            <div style="font-size: 0.85rem; font-weight: 600; color: #a5b4fc; margin-bottom: 0.25rem;">🔒 Secure Environment Keys</div>
+            <p style="font-size: 0.8rem; color: var(--text-dim);">
+              API keys (<code>GNANI_API_KEY</code>, <code>LLM_API_KEY</code>, <code>JWT_SECRET</code>) are managed strictly through server environment variables in <code>.env</code> and are never exposed or editable from the browser.
+            </p>
+          </div>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script type="module">
+    import { apiFetch } from '/js/common.js';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const data = await apiFetch('/api/admin/settings');
+      renderLanguages(data.allLanguages || [], data.settings?.enabled_languages || []);
+
+      if (data.settings?.llm_model) {
+        document.getElementById('setting-llm-model').value = data.settings.llm_model;
+      }
+      if (data.settings?.chat_max_audio_sec) {
+        document.getElementById('setting-max-audio-sec').value = data.settings.chat_max_audio_sec;
+      }
+      if (data.settings?.chat_retention_days) {
+        document.getElementById('setting-retention-days').value = data.settings.chat_retention_days;
+      }
+
+      document.getElementById('settings-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const checkedLangs = Array.from(document.querySelectorAll('.lang-checkbox:checked')).map(cb => cb.value);
+        const payload = {
+          enabled_languages: checkedLangs,
+          llm_model: document.getElementById('setting-llm-model').value.trim(),
+          chat_max_audio_sec: parseInt(document.getElementById('setting-max-audio-sec').value, 10),
+          chat_retention_days: parseInt(document.getElementById('setting-retention-days').value, 10)
+        };
+
+        await apiFetch('/api/admin/settings', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        alert('Settings saved successfully!');
+      };
+    });
+
+    function renderLanguages(allLangs, enabledList) {
+      const container = document.getElementById('languages-config-list');
+      if (!container) return;
+
+      container.innerHTML = allLangs.map(l => `
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); border: 1px solid var(--admin-border);">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <input type="checkbox" id="lang-cb-${l.code}" class="lang-checkbox" value="${l.code}" ${enabledList.includes(l.code) ? 'checked' : ''} />
+            <label for="lang-cb-${l.code}" style="cursor: pointer;">
+              <strong>${l.nativeName} (${l.name})</strong> · Code: <code>${l.code}</code>
+            </label>
+          </div>
+          <div style="font-size: 0.82rem; color: var(--text-dim);">
+            Default Voice: <span class="badge badge-queued">${l.defaultVoice}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "name": "space-bharat",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Space Bharat — Making every Indian citizen space-aware",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "node --watch server/index.js",
+    "start": "node server/index.js",
+    "admin:create": "node server/cli/create-admin.js",
+    "seed": "node server/db/seed.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "isro",
+    "space-bharat",
+    "podcast",
+    "chat",
+    "multilingual"
+  ],
+  "author": "Ashish Kumar Pal",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^13.0.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.5.0",
+    "zod": "^4.6.7"
+  }
+}

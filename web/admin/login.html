@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login — Space Bharat</title>
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+</head>
+<body style="background: radial-gradient(circle at center, #111827 0%, #070913 100%);">
+
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="width: 48px; height: 48px; margin: 0 auto 1rem; border-radius: var(--radius-md); background: linear-gradient(135deg, var(--admin-accent), var(--admin-primary)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+          🛰️
+        </div>
+        <h2 style="font-family: var(--font-heading); font-size: 1.5rem;">Space Bharat Admin</h2>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">Sign in to author stories and manage voice audio</p>
+      </div>
+
+      <div id="login-error" class="badge badge-failed" style="display: none; width: 100%; margin-bottom: 1.25rem; padding: 0.6rem; text-align: center; justify-content: center;"></div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="email">Admin Email</label>
+          <input type="email" id="email" class="form-control" placeholder="you@isropr.in" required autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-control" placeholder="••••••••••••" required autocomplete="current-password" />
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 0.75rem;">
+          Sign In to Console
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.78rem; color: var(--text-dim);">
+        Admin accounts are created via CLI: <code>npm run admin:create</code>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/js/admin-login.js"></script>
+</body>
+</html>

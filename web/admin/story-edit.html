@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Editor — Space Bharat Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+</head>
+<body>
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <a href="/admin/dashboard.html" class="admin-brand">
+        <div class="admin-brand-logo">🛰️</div>
+        <div>
+          <div class="admin-brand-title">Space Bharat</div>
+          <div style="font-size: 0.68rem; color: var(--admin-accent); font-weight: 700; text-transform: uppercase;">Admin Console</div>
+        </div>
+      </a>
+
+      <ul class="sidebar-nav">
+        <li class="nav-item"><a href="/admin/dashboard.html">📊 Dashboard</a></li>
+        <li class="nav-item active"><a href="/admin/story-edit.html">✍️ Story Editor</a></li>
+        <li class="nav-item"><a href="/admin/knowledge.html">📚 Knowledge Base</a></li>
+        <li class="nav-item"><a href="/admin/chats.html">💬 Chat Activity</a></li>
+        <li class="nav-item"><a href="/admin/settings.html">⚙️ Settings</a></li>
+        <li class="nav-item" style="margin-top: 1.5rem;"><a href="/" target="_blank">🌐 View Public Site ↗</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title" id="page-heading">Story Editor</h1>
+          <p class="page-description">Author high-fidelity space stories with multilingual narration scripts.</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button type="button" id="btn-delete-story" class="btn-logout" style="display: none; border: 1px solid rgba(239, 68, 68, 0.4); padding: 0.6rem 1rem;">Delete Story</button>
+          <a href="/admin/dashboard.html" class="btn-secondary">Cancel</a>
+          <button type="submit" form="story-form" class="btn-primary">Save Story</button>
+        </div>
+      </div>
+
+      <div id="form-alert" style="display: none; margin-bottom: 1.5rem; padding: 0.75rem 1rem;"></div>
+
+      <form id="story-form">
+        <!-- Story Metadata Card -->
+        <div style="background: var(--admin-card); border: 1px solid var(--admin-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
+          <h3 style="font-family: var(--font-heading); margin-bottom: 1.25rem;">1. Story Metadata</h3>
+
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem;">
+            <div class="form-group">
+              <label class="form-label" for="story-title">Story Title</label>
+              <input type="text" id="story-title" class="form-control" placeholder="e.g. Chandrayaan-3: India Conquers the Lunar South Pole" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="story-slug">Unique Slug</label>
+              <input type="text" id="story-slug" class="form-control" placeholder="chandrayaan-3-lunar-south-pole" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="story-summary">Short Summary (Library card teaser)</label>
+            <textarea id="story-summary" class="form-control" style="min-height: 80px;" placeholder="A concise 2-sentence summary of the mission or startup..." required></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem;">
+            <div class="form-group">
+              <label class="form-label" for="story-category">Category</label>
+              <select id="story-category" class="form-control">
+                <option value="isro">ISRO Missions</option>
+                <option value="startup">Space Startups</option>
+                <option value="legacy">ISRO Legacy</option>
+                <option value="explainer">Explainers</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="story-facts-as-of">Facts As Of Date</label>
+              <input type="date" id="story-facts-as-of" class="form-control" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="story-duration">Duration Hint (min)</label>
+              <input type="number" id="story-duration" class="form-control" min="0" value="3" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="story-sources">Official Sources (one URL per line)</label>
+            <textarea id="story-sources" class="form-control" style="min-height: 60px;" placeholder="https://www.isro.gov.in/Chandrayaan3.html"></textarea>
+          </div>
+
+          <div style="display: flex; gap: 2rem; margin-top: 1rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
+              <input type="checkbox" id="story-pinned" />
+              <span>Feature this story (Pinned to top)</span>
+            </label>
+
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
+              <input type="checkbox" id="story-published" />
+              <span><strong>Publish to Public Library</strong></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Translations & Audio Generation Card -->
+        <div style="background: var(--admin-card); border: 1px solid var(--admin-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+            <h3 style="font-family: var(--font-heading);">2. Spoken Script Translations</h3>
+            <span id="word-count-badge" class="badge badge-queued">0 words · 0 chars</span>
+          </div>
+
+          <!-- Language Tabs -->
+          <div class="lang-tabs" id="lang-tabs">
+            <!-- Rendered by admin-story.js -->
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="trans-body">Spoken Narration Script</label>
+            <textarea id="trans-body" class="form-control" style="min-height: 220px; font-size: 0.95rem; line-height: 1.6;" placeholder="Write conversational, vivid narration text for Gnani TTS..."></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+            <div class="form-group">
+              <label class="form-label" for="trans-voice">Gnani Timbre Voice</label>
+              <select id="trans-voice" class="form-control">
+                <option value="Pranav">Pranav (English Default)</option>
+                <option value="Nalini">Nalini (Hindi Default)</option>
+                <option value="Asmita">Asmita (Tamil Default)</option>
+                <option value="Suhana">Suhana (Telugu Default)</option>
+                <option value="Kirra">Kirra (Bengali Default)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="trans-review-note">Reviewer Note</label>
+              <input type="text" id="trans-review-note" class="form-control" placeholder="Verified pronunciation of telemetry terms" />
+            </div>
+          </div>
+
+          <div style="margin-bottom: 1.5rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.88rem;">
+              <input type="checkbox" id="trans-reviewed" />
+              <span>Mark this translation as reviewed by native speaker</span>
+            </label>
+          </div>
+
+          <!-- Audio Status & Actions -->
+          <div id="audio-actions-panel" style="display: none; padding-top: 1.25rem; border-top: 1px solid var(--admin-border);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Audio Status:</span>
+                <span id="tab-audio-status"></span>
+              </div>
+
+              <div style="display: flex; gap: 0.75rem;">
+                <button type="button" id="btn-generate-audio-lang" class="btn-primary" style="font-size: 0.85rem;">
+                  🎧 Generate Audio for Tab
+                </button>
+                <button type="button" id="btn-generate-audio-all" class="btn-secondary" style="font-size: 0.85rem;">
+                  🎧 Generate All Languages
+                </button>
+              </div>
+            </div>
+
+            <!-- In-page audio player preview -->
+            <div id="tab-audio-player-wrap" style="display: none; margin-top: 1.25rem; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-md);">
+              <span style="font-size: 0.8rem; color: var(--admin-success); display: block; margin-bottom: 0.5rem;">Audio Preview:</span>
+              <audio controls style="width: 100%;"></audio>
+            </div>
+          </div>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script type="module" src="/js/admin-story.js"></script>
+</body>
+</html>

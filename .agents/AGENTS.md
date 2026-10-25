@@ -1,13 +1,13 @@
-# ISRO's PR — Project Intelligence File
+# ISRO's PR (Space Bharat) — Project Intelligence File
 
 > This file is automatically loaded every conversation. It serves as persistent memory for the AI agent.
 
 ## 🏷️ Project Identity
 
-- **Project Name**: ISRO's PR (Public Relations / Publicity & Outreach Platform)
+- **Project Name**: Space Bharat (ISRO Public Relations & Outreach Platform)
 - **Owner**: Ashish Kumar Pal
 - **Created**: 2026-10-25
-- **Status**: 🟡 Planning Phase
+- **Status**: 🟢 Active Development — Full Stack Operational
 
 ---
 
@@ -16,32 +16,23 @@
 | # | Date | Decision | Rationale |
 |---|------|----------|-----------|
 | 1 | 2026-10-25 | Project initialized with persistent memory system | Long-term context preservation across sessions |
-| 2 | 2026-10-25 | Adopted 3-layer memory architecture | Layer 1: static AGENTS.md (auto-loaded), Layer 2: dynamic session logs, Layer 3: agentmemory MCP server |
-| 3 | 2026-10-25 | Installed `agentmemory` (rohitg00/agentmemory, ⭐29.9k) | Best-in-class open-source memory with MCP, BM25 search, knowledge graphs |
-| 4 | 2026-10-25 | Git initialized (local only) | Version control for all project files including memory |
+| 2 | 2026-10-25 | Adopted 3-layer memory architecture | Layer 1: static AGENTS.md, Layer 2: dynamic session logs, Layer 3: agentmemory MCP server |
+| 3 | 2026-10-25 | Full Stack Implementation per `plan.md` | Node.js 20+, Express, SQLite (`better-sqlite3` with WAL & FTS5), Gnani AI (Timbre v2.5 TTS & Prisma v2.5 STT), Vanilla ES modules |
+| 4 | 2026-10-25 | Native SQLite FTS5 for RAG | Deterministic, rapid BM25 keyword retrieval with zero external vector database dependencies |
+| 5 | 2026-10-25 | Single admin account with CLI creation | Secure bcrypt (cost 12) hashing with 8-hour HttpOnly JWT session cookie |
 
 ---
 
 ## 🏗️ Architecture Overview
 
-- **Stack**: TBD (to be decided with user)
-- **Hosting**: TBD
-- **Database**: TBD
-
-### Memory Architecture (3-Layer)
-```
-Layer 1 (Static/Auto-loaded):
-  └── .agents/AGENTS.md, .agents/rules/*.md
-
-Layer 2 (Dynamic/On-demand):
-  └── .agents/memory/session-log.md
-  └── .agents/memory/tech-decisions.md
-  └── .agents/memory/project-index.json
-
-Layer 3 (MCP Deep Search):
-  └── agentmemory server (BM25 + vector search)
-  └── Knowledge graph + cross-session recall
-```
+- **Runtime**: Node.js 24 (ESM)
+- **Web Server**: Express with Helmet (custom CSP), cookie-parser, and express-rate-limit
+- **Database**: SQLite (`better-sqlite3`) with WAL journal mode, FTS5 virtual table, and sync triggers
+- **Speech Stack**:
+  - Text-to-Speech: Gnani Timbre v2.5 (`en-IN`, `hi-IN`, `ta-IN`, `te-IN`, `bn-IN`)
+  - Speech-to-Text: Gnani Prisma v2.5 with audio note format conversion
+  - Conversational AI: OpenAI-compatible LLM adapter with safe offline fallback
+- **Frontend**: Plain HTML5, Vanilla CSS with custom glassmorphism & cosmic theme, ES modules
 
 ---
 
@@ -49,38 +40,24 @@ Layer 3 (MCP Deep Search):
 
 | File/Folder | Purpose |
 |-------------|---------|
-| `plan.md` | Project planning document (empty — needs user input) |
-| `.agents/AGENTS.md` | This file — persistent AI memory (auto-loaded) |
-| `.agents/rules/project-rules.md` | Coding standards & project rules (auto-loaded) |
-| `.agents/memory/session-log.md` | Detailed chronological session logs |
-| `.agents/memory/tech-decisions.md` | Architecture Decision Records (ADRs) |
-| `.agents/memory/memory-config.md` | Memory system configuration docs |
-| `.agents/memory/project-index.json` | Machine-readable file map |
-| `.gitignore` | Git ignore rules |
-
----
-
-## 🧩 Installed Extensions
-
-| Extension | Source | Purpose |
-|-----------|--------|---------|
-| agentmemory | `rohitg00/agentmemory` (⭐29.9k) | MCP-based persistent memory with search & knowledge graphs |
-
----
-
-## 🚨 Important Notes & Gotchas
-
-- Project is brand new (as of 2026-10-25), currently in planning phase.
-- User prefers the AI to remember everything long-term and avoid confusion.
-- agentmemory needs to be started with `npx @agentmemory/agentmemory` before use.
-- Run `npx @agentmemory/agentmemory connect antigravity` to wire it to this IDE.
-
----
-
-## 🔗 External Links & Resources
-
-- GitHub: Not yet connected (local repo only)
-- agentmemory docs: https://agent-memory.dev
+| `server/index.js` | Express app entrypoint, Helmet CSP, media streaming, retention cleanup |
+| `server/config.js` | Environment configuration, folder paths, and language metadata |
+| `server/db/schema.sql` | 10 tables, FTS5 index, sync triggers, and performance indexes |
+| `server/db/db.js` | SQLite connection manager with WAL mode and settings initializer |
+| `server/db/seed.js` | Seeding script with 2 rich multilingual stories and verified ISRO facts |
+| `server/routes/public.js` | Public library endpoints (`/api/stories`, `/api/languages`) |
+| `server/routes/chat.js` | WhatsApp-style Space Buddy chat (`/api/chat/text`, `/api/chat/voice`) |
+| `server/routes/admin.js` | Protected admin API for stories, translations, audio queue, and settings |
+| `server/middleware/` | Auth check (`requireAdmin`), rate limiters, Multer file uploads |
+| `server/services/` | RAG retrieval, LLM adapter, Gnani STT/TTS clients, audio helpers |
+| `server/cli/create-admin.js` | Admin user creation CLI (`npm run admin:create`) |
+| `web/index.html` | Public library homepage with category & language filters |
+| `web/story.html` | Audio story player with speed controls, 15s skipping, and transcript |
+| `web/chat.html` | WhatsApp-style Space Buddy conversational voice & text chat |
+| `web/about.html` | Mission overview, Gnani AI voice stack attribution, and principles |
+| `web/admin/` | Admin console (Login, Dashboard, Story Editor, Knowledge Base, Chats, Settings) |
+| `scripts/backup.sh` | Shell backup script with timestamped database & audio snapshots |
+| `tests/` | Automated test suite (DB, Auth, Stories CRUD, RAG retrieval) |
 
 ---
 
@@ -88,12 +65,14 @@ Layer 3 (MCP Deep Search):
 
 | Task | Status | Notes |
 |------|--------|-------|
-| Set up persistent memory | ✅ Done | 3-layer system created |
-| Install agentmemory | ✅ Done | `npx @agentmemory/agentmemory@latest` installed |
-| Connect agentmemory to IDE | 🔄 In Progress | Run `connect antigravity` |
-| Define project scope | ⬜ Pending | Need user input on what "ISRO's PR" will be |
-| Choose tech stack | ⬜ Pending | Waiting for requirements |
-| Fill out plan.md | ⬜ Pending | Needs project scope first |
+| Set up persistent memory | ✅ Done | 3-layer system operational |
+| Database & Schema | ✅ Done | SQLite WAL + FTS5 full-text search with triggers |
+| Auth & Admin CLI | ✅ Done | `admin:create` with bcrypt cost 12 & HttpOnly JWT |
+| Stories & Multilingual Audio Queue | ✅ Done | Background worker + Gnani Timbre TTS client |
+| WhatsApp-style Space Buddy Chat | ✅ Done | Text + Voice note recording with RAG citations |
+| Admin Console Pages | ✅ Done | Login, Dashboard, Story Editor, Knowledge, Chats, Settings |
+| Sample Content Seeding | ✅ Done | Chandrayaan-3 and Agnikul Cosmos stories seeded in 5 languages |
+| Automated Test Suite | ✅ Done | 12 tests passing across schema, auth, and CRUD |
 
 ---
 
@@ -101,7 +80,7 @@ Layer 3 (MCP Deep Search):
 
 ### Always:
 - Read this file at session start
-- Update session-log.md after significant work
+- Update `session-log.md` after significant work
 - Use conventional commit messages
 
 ### Ask First:
@@ -109,6 +88,6 @@ Layer 3 (MCP Deep Search):
 - Before changing architecture decisions
 
 ### Never:
-- Commit secrets, API keys, or .env files
+- Commit secrets, API keys, or `.env` files
 - Delete memory files without explicit permission
-- Guess project requirements — ask the user
+- Guess project requirements — check `plan.md` or ask the user

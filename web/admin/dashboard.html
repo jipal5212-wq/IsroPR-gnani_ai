@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Space Bharat</title>
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+</head>
+<body>
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <a href="/admin/dashboard.html" class="admin-brand">
+        <div class="admin-brand-logo">🛰️</div>
+        <div>
+          <div class="admin-brand-title">Space Bharat</div>
+          <div style="font-size: 0.68rem; color: var(--admin-accent); font-weight: 700; text-transform: uppercase;">Admin Console</div>
+        </div>
+      </a>
+
+      <ul class="sidebar-nav">
+        <li class="nav-item active"><a href="/admin/dashboard.html">📊 Dashboard</a></li>
+        <li class="nav-item"><a href="/admin/story-edit.html">✍️ New Story</a></li>
+        <li class="nav-item"><a href="/admin/knowledge.html">📚 Knowledge Base</a></li>
+        <li class="nav-item"><a href="/admin/chats.html">💬 Chat Activity</a></li>
+        <li class="nav-item"><a href="/admin/settings.html">⚙️ Settings</a></li>
+        <li class="nav-item" style="margin-top: 1.5rem;"><a href="/" target="_blank">🌐 View Public Site ↗</a></li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="admin-user-info" id="admin-email-label">admin@isropr.in</div>
+        <button id="btn-admin-logout" class="btn-logout" title="Sign out">Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Mission Overview</h1>
+          <p class="page-description">Real-time status of published stories, audio generation pipelines, and chat outreach.</p>
+        </div>
+        <div>
+          <a href="/admin/story-edit.html" class="btn-primary">+ Create New Story</a>
+        </div>
+      </div>
+
+      <!-- Warning Banner if API keys are unconfigured -->
+      <div id="api-warning-banner" class="badge badge-queued" style="display: none; width: 100%; padding: 0.85rem 1.25rem; font-size: 0.85rem; margin-bottom: 2rem;"></div>
+
+      <!-- KPI Stats -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-title">Stories</span>
+          <span class="stat-value" id="stat-stories-total">0</span>
+          <span class="stat-subtext" id="stat-stories-published">0 published</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-title">Audio Tracks Ready</span>
+          <span class="stat-value" id="stat-audio-ready">0</span>
+          <span class="stat-subtext" id="stat-audio-queued">0 queued / generating</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-title">Verified Knowledge Facts</span>
+          <span class="stat-value" id="stat-knowledge-count">0</span>
+          <span class="stat-subtext">RAG database entries</span>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-title">Chat Conversations</span>
+          <span class="stat-value" id="stat-chats-count">0</span>
+          <span class="stat-subtext">Unique sessions last 7 days</span>
+        </div>
+      </section>
+
+      <!-- Stories Overview -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <h3 style="font-family: var(--font-heading);">All Stories</h3>
+      </div>
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Title & Slug</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Translations</th>
+              <th>Last Updated</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="stories-table-tbody">
+            <tr><td colspan="6" style="text-align: center; color: var(--text-dim);">Loading stories...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Recent Audio Jobs Queue -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <h3 style="font-family: var(--font-heading);">Recent Background Audio Jobs</h3>
+      </div>
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Job ID</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Created At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="recent-jobs-tbody">
+            <tr><td colspan="5" style="text-align: center; color: var(--text-dim);">Loading audio jobs...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/js/admin-dashboard.js"></script>
+</body>
+</html>

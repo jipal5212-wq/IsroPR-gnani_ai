@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Bharat — Making Every Citizen Space-Aware</title>
+  <meta name="description" content="Discover India's space odyssey. Listen to captivating stories about ISRO missions, pioneers, and space startups in your mother tongue.">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="/" class="brand-logo" id="header-brand">
+        <div class="brand-icon">🛰️</div>
+        <div>
+          <span class="brand-text">SPACE BHARAT</span>
+          <span class="brand-badge">ISRO PR</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/" class="nav-link active">Library</a></li>
+          <li><a href="/chat.html" class="nav-link">Space Buddy Chat</a></li>
+          <li><a href="/about.html" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Language Selector -->
+        <div class="lang-select-wrapper">
+          <select id="lang-select" class="lang-select" aria-label="Select Content Language">
+            <option value="en-IN">English</option>
+            <option value="hi-IN">हिन्दी (Hindi)</option>
+            <option value="ta-IN">தமிழ் (Tamil)</option>
+            <option value="te-IN">తెలుగు (Telugu)</option>
+            <option value="bn-IN">বাংলা (Bengali)</option>
+          </select>
+        </div>
+
+        <a href="/admin/login.html" class="btn-read" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" title="Admin Portal">
+          Admin
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="hero">
+      <div class="hero-pill">
+        <span>🇮🇳</span> Making India's Space Odyssey Accessible To All
+      </div>
+      <h1 class="hero-title">
+        Hear the Cosmos in <span>Your Own Voice</span>
+      </h1>
+      <p class="hero-subtitle">
+        Immerse yourself in high-definition audio narrations about Chandrayaan, Gaganyaan, Aditya-L1, and India’s rising commercial space startups—in multiple Indian languages powered by Gnani AI.
+      </p>
+    </section>
+
+    <!-- Filters & Search -->
+    <section class="filter-bar">
+      <div class="category-tabs" role="tablist">
+        <button class="cat-tab active" data-category="all" role="tab">All Stories</button>
+        <button class="cat-tab" data-category="isro" role="tab">ISRO Missions</button>
+        <button class="cat-tab" data-category="startup" role="tab">Space Startups</button>
+        <button class="cat-tab" data-category="legacy" role="tab">ISRO Legacy</button>
+        <button class="cat-tab" data-category="explainer" role="tab">Explainers</button>
+      </div>
+
+      <div class="search-input-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" class="search-input" placeholder="Search missions, rockets, startups..." aria-label="Search stories" />
+      </div>
+    </section>
+
+    <!-- Stories Grid -->
+    <section class="stories-container">
+      <div id="stories-grid" class="stories-grid">
+        <!-- Dynamically populated by library.js -->
+      </div>
+
+      <div id="empty-state" class="empty-state" style="display: none;">
+        <div class="empty-icon">🚀</div>
+        <h3>No space stories found matching your filter</h3>
+        <p style="margin-top: 0.5rem; color: var(--text-muted);">Try selecting another category or searching for different keywords.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating Space Buddy Chat Launcher -->
+  <a href="/chat.html" class="chat-launcher" id="chat-floating-btn" title="Ask Space Buddy AI">
+    <span class="chat-launcher-badge"></span>
+    <span>Ask Space Buddy</span>
+    <span style="font-size: 1.2rem;">💬</span>
+  </a>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>Space Bharat — Dedicated to public space awareness and education across India.</p>
+    <p style="margin-top: 0.5rem;">
+      Multilingual Voice Narration powered by <a href="https://gnani.ai" target="_blank" rel="noopener">Gnani AI</a> · Official facts cited from <a href="https://isro.gov.in" target="_blank" rel="noopener">ISRO</a>
+    </p>
+  </footer>
+
+  <script type="module" src="/js/library.js"></script>
+</body>
+</html>

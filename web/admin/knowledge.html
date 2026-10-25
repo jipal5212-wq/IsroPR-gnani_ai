@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Knowledge Base — Space Bharat Admin</title>
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+</head>
+<body>
+
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <a href="/admin/dashboard.html" class="admin-brand">
+        <div class="admin-brand-logo">🛰️</div>
+        <div>
+          <div class="admin-brand-title">Space Bharat</div>
+          <div style="font-size: 0.68rem; color: var(--admin-accent); font-weight: 700; text-transform: uppercase;">Admin Console</div>
+        </div>
+      </a>
+
+      <ul class="sidebar-nav">
+        <li class="nav-item"><a href="/admin/dashboard.html">📊 Dashboard</a></li>
+        <li class="nav-item"><a href="/admin/story-edit.html">✍️ Story Editor</a></li>
+        <li class="nav-item active"><a href="/admin/knowledge.html">📚 Knowledge Base</a></li>
+        <li class="nav-item"><a href="/admin/chats.html">💬 Chat Activity</a></li>
+        <li class="nav-item"><a href="/admin/settings.html">⚙️ Settings</a></li>
+        <li class="nav-item" style="margin-top: 1.5rem;"><a href="/" target="_blank">🌐 View Public Site ↗</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Verified Knowledge Base</h1>
+          <p class="page-description">Manage authoritative facts used by Space Buddy AI for RAG text and voice answers.</p>
+        </div>
+      </div>
+
+      <!-- Add / Edit Fact Form -->
+      <div style="background: var(--admin-card); border: 1px solid var(--admin-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
+        <h3 style="font-family: var(--font-heading); margin-bottom: 1rem;">Add / Edit Space Fact</h3>
+        <p style="font-size: 0.82rem; color: var(--text-dim); margin-bottom: 1.25rem;">
+          Guidance: Write one fact per entry. Keep it short. Add the official source URL. Update the "as of" date whenever verified.
+        </p>
+
+        <form id="kb-form">
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem;">
+            <div class="form-group">
+              <label class="form-label" for="kb-title">Fact Headline / Topic</label>
+              <input type="text" id="kb-title" class="form-control" placeholder="e.g. Gaganyaan Crew Module Orbital Parameters" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="kb-category">Category</label>
+              <input type="text" id="kb-category" class="form-control" placeholder="human-spaceflight" value="missions" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="kb-body">Fact Details (1 to 2 paragraphs max)</label>
+            <textarea id="kb-body" class="form-control" placeholder="The Gaganyaan orbital module comprises a crew module and service module designed to host 3 astronauts in a 400 km circular low Earth orbit..." required></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem;">
+            <div class="form-group">
+              <label class="form-label" for="kb-source-url">Official Source URL</label>
+              <input type="url" id="kb-source-url" class="form-control" placeholder="https://www.isro.gov.in/Gaganyaan.html" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="kb-as-of">Verified As Of Date</label>
+              <input type="date" id="kb-as-of" class="form-control" required />
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
+            <button type="submit" id="btn-save-kb" class="btn-primary">Save Fact</button>
+            <button type="button" id="btn-cancel-edit" class="btn-secondary" style="display: none;">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Live FTS5 Search Preview -->
+      <div style="background: var(--admin-card); border: 1px solid var(--admin-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
+        <h3 style="font-family: var(--font-heading); margin-bottom: 0.5rem;">Test RAG Retrieval (SQLite FTS5)</h3>
+        <p style="font-size: 0.82rem; color: var(--text-dim); margin-bottom: 1rem;">
+          Type a test citizen question below to see what Space Buddy AI retrieves from the database.
+        </p>
+
+        <input type="text" id="kb-search-input" class="form-control" placeholder="Type a search query or citizen question e.g. when was Chandrayaan 3 launched..." />
+        <div id="kb-search-results" style="display: none; margin-top: 1rem; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); border: 1px solid var(--admin-border);"></div>
+      </div>
+
+      <!-- Knowledge Base Table -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <h3 style="font-family: var(--font-heading);">All Knowledge Facts</h3>
+      </div>
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Title & Details</th>
+              <th>Category</th>
+              <th>Source URL</th>
+              <th>Verified As Of</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="knowledge-tbody">
+            <tr><td colspan="5" style="text-align: center; color: var(--text-dim);">Loading knowledge base...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="/js/admin-knowledge.js"></script>
+</body>
+</html>

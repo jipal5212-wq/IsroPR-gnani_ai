@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Player — Space Bharat</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+  <style>
+    .story-page-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.5rem 4rem;
+    }
+    .story-header-box {
+      margin-bottom: 2rem;
+    }
+    .story-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+    /* Player Box Styling */
+    .space-player-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-glow);
+      margin-bottom: 2.5rem;
+      backdrop-filter: blur(16px);
+    }
+    .player-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .player-btn-main {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #4f46e5);
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 20px var(--primary-glow);
+      transition: transform 0.2s;
+    }
+    .player-btn-main:hover {
+      transform: scale(1.06);
+    }
+    .player-btn-secondary {
+      background: none;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .player-btn-secondary:hover {
+      color: var(--text-main);
+      border-color: var(--primary);
+    }
+    .player-timeline {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      min-width: 220px;
+    }
+    .seek-slider {
+      flex-grow: 1;
+      height: 6px;
+      border-radius: var(--radius-full);
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    .time-label {
+      font-family: monospace;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+    }
+    .speed-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .transcript-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      line-height: 1.8;
+      font-size: 1.05rem;
+      margin-bottom: 3rem;
+    }
+    .transcript-p {
+      margin-bottom: 1.25rem;
+      color: #e2e8f0;
+    }
+    .up-next-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+    .up-next-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      text-decoration: none;
+      display: block;
+      transition: all 0.2s;
+    }
+    .up-next-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="/" class="brand-logo">
+        <div class="brand-icon">🛰️</div>
+        <div>
+          <span class="brand-text">SPACE BHARAT</span>
+          <span class="brand-badge">ISRO PR</span>
+        </div>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/" class="nav-link">← Back to Library</a></li>
+          <li><a href="/chat.html" class="nav-link">Space Buddy Chat</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <select id="story-lang-select" class="lang-select" aria-label="Switch Story Language">
+          <!-- Populated by player.js -->
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="story-page-container" id="player-content">
+    <section class="story-header-box">
+      <div class="story-meta-row" id="story-meta-bar">
+        <!-- Badges & Sources -->
+      </div>
+      <h1 id="story-title" class="hero-title" style="font-size: 2.4rem; text-align: left; margin-bottom: 0.75rem;">
+        Loading Space Story...
+      </h1>
+      <p id="story-summary" class="hero-subtitle" style="text-align: left; margin-bottom: 1.5rem;">
+        Please wait while audio and transcript are loaded.
+      </p>
+    </section>
+
+    <!-- Audio Player Mount Point -->
+    <section id="audio-player-container">
+      <!-- Player rendered by player.js -->
+    </section>
+
+    <!-- Transcript Section -->
+    <section style="margin-bottom: 3rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <h3 style="font-family: var(--font-heading);">Read Transcript</h3>
+        <button id="btn-toggle-transcript" class="btn-read" style="font-size: 0.8rem; padding: 0.35rem 0.8rem;">
+          Hide Transcript
+        </button>
+      </div>
+      <div id="transcript-wrapper">
+        <div id="transcript-container" class="transcript-box">
+          <!-- Text rendered by player.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Up Next Section -->
+    <section>
+      <h3 style="font-family: var(--font-heading); margin-bottom: 0.5rem;">Up Next in this Category</h3>
+      <div id="up-next-grid" class="up-next-grid">
+        <!-- Rendered by player.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>Space Bharat — Dedicated to public space awareness and education across India.</p>
+  </footer>
+
+  <script type="module" src="/js/player.js"></script>
+</body>
+</html>
