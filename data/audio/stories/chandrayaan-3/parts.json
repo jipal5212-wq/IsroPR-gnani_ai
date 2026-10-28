@@ -1,0 +1,42 @@
+[
+  {
+    "part": 1,
+    "title": "Part 1: The Launch from Sriharikota",
+    "title_hi": "भाग 1: श्रीहरिकोटा से उड़ान",
+    "src": "/media/audio/stories/chandrayaan-3/part1.wav",
+    "duration_sec": 40.75,
+    "start_sec": 0
+  },
+  {
+    "part": 2,
+    "title": "Part 2: 15 Minutes of Terror & Descent",
+    "title_hi": "भाग 2: 23 अगस्त का अवतरण",
+    "src": "/media/audio/stories/chandrayaan-3/part2.wav",
+    "duration_sec": 37.1,
+    "start_sec": 40.75
+  },
+  {
+    "part": 3,
+    "title": "Part 3: Soft Landing & Pragyan Rover",
+    "title_hi": "भाग 3: दक्षिण ध्रुव पर लैंडिंग और प्रज्ञान",
+    "src": "/media/audio/stories/chandrayaan-3/part3.wav",
+    "duration_sec": 32.04,
+    "start_sec": 77.85
+  },
+  {
+    "part": 4,
+    "title": "Part 4: Today the Moon, Tomorrow Mars",
+    "title_hi": "भाग 4: आज चाँद, कल मंगल",
+    "src": "/media/audio/stories/chandrayaan-3/part4.wav",
+    "duration_sec": 27.64,
+    "start_sec": 109.88999999999999
+  },
+  {
+    "part": 5,
+    "title": "Part 5: Lessons Learned & Inspiring the Future",
+    "title_hi": "भाग 5: असफलता से सीख और प्रेरणा",
+    "src": "/media/audio/stories/chandrayaan-3/part5.wav",
+    "duration_sec": 42.56,
+    "start_sec": 137.52999999999997
+  }
+]

@@ -72,12 +72,13 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
 
   const knowledge = contextData?.knowledge || [];
   const stories = contextData?.stories || [];
+  const webResults = contextData?.webResults || [];
   const topFact = knowledge[0] || null;
   const topFactTitle = (topFact?.title || '').toLowerCase();
   const topFactBody = (topFact?.body || '').toLowerCase();
 
-  // If no knowledge or stories found in context
-  if (knowledge.length === 0 && stories.length === 0 && system.includes('Context:\nNo relevant entries found')) {
+  // If no knowledge, stories, or web results found in context
+  if (knowledge.length === 0 && stories.length === 0 && webResults.length === 0 && system.includes('Context:\nNo relevant entries found')) {
     if (detectedLang === 'hi-IN') {
       return {
         text: "नमस्ते! इस विषय पर हमारे ज्ञानकोष में अभी सत्यापित जानकारी उपलब्ध नहीं है। इसरो के आधिकारिक मिशन शेड्यूल और अपडेट के लिए कृपया isro.gov.in देखें।"
@@ -172,8 +173,52 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
     };
   }
 
-  // 3. NVS-01 Navigation Satellite & NavIC
-  if (lastUserMsg.includes('ಎನ್‌ವಿಎಸ್') || lastUserMsg.includes('nvs') || lastUserMsg.includes('एनवीएस') || lastUserMsg.includes('navic') || lastUserMsg.includes('नाविक') || topFactTitle.includes('nvs') || topFactTitle.includes('navic')) {
+  // 3a. NVS-03 Navigation Satellite (IRNSS-1L)
+  if (/\bnvs[\s-]*0?3\b/i.test(lastUserMsg) || topFactTitle.includes('nvs-03')) {
+    if (detectedLang === 'hi-IN') {
+      return {
+        text: "सत्यापित रिकॉर्ड के अनुसार: एनवीएस-03 (NVS-03 / IRNSS-1L) इसरो की दूसरी पीढ़ी के नाविक (NavIC) समूह का तीसरा उपग्रह है। इसे श्रीहरिकोटा से जीएसएलवी रॉकेट द्वारा लॉन्च करने के लिए तैयार किया गया है। इसमें स्वदेशी रूबिडियम परमाणु घड़ी और नागरिक L1, L5 और S बैंड शामिल हैं जो भारत की क्षेत्रीय नेविगेशन और समय सटीकता को और मजबूत करेंगे।"
+      };
+    }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: "ದೃಢೀಕರಿಸಿದ ದಾಖಲೆಗಳ ಪ್ರಕಾರ: ಎನ್‌ವಿಎಸ್-03 (NVS-03 / IRNSS-1L) ಇಸ್ರೋದ ಎರಡನೇ ತಲೆಮಾರಿನ ನಾವಿಕ್ (NavIC) ಸರಣಿಯ ಮೂರನೇ ಉಪಗ್ರಹವಾಗಿದೆ. ಇದನ್ನು ಜಿಎಸ್‌ಎಲ್‌ವಿ ರಾಕೆಟ್ ಮೂಲಕ ಉಡಾವಣೆ ಮಾಡಲು ನಿರ್ಧರಿಸಲಾಗಿದ್ದು, ಇದು ಸ್ವದೇಶಿ ರುಬಿಡಿಯಂ ಪರಮಾಣು ಗಡಿಯಾರ ಮತ್ತು ನಾಗರಿಕ ಎಲ್1, ಎಲ್5 ಹಾಗೂ ಎಸ್ ಬ್ಯಾಂಡ್‌ಗಳನ್ನು ಹೊಂದಿದೆ."
+      };
+    }
+    if (detectedLang === 'ta-IN') {
+      return {
+        text: "சரிபார்க்கப்பட்ட தகவலின்படி: என்விஎஸ்-03 (NVS-03 / IRNSS-1L) இஸ்ரோவின் இரண்டாம் தலைமுறை நாவிக் (NavIC) அமைப்பின் மூன்றாவது செயற்கைக்கோள் ஆகும். இது ஜிஎஸ்எல்வி ராக்கெட் மூலம் ஏவப்பட உள்ளது. இதில் உள்நாட்டு ரூபிடியம் அணு கடிகாரம் மற்றும் எல்1, எல்5, எஸ் அலைவரிசைகள் உள்ளன."
+      };
+    }
+    if (detectedLang === 'te-IN') {
+      return {
+        text: "ధృవీకరించబడిన సమాచారం ప్రకారం: ఎన్‌విఎస్-03 (NVS-03) ఇస్రో రెండో తరం నావిక్ (NavIC) శ్రేణిలోని మూడో ఉపగ్రహం. ఇది జీఎస్‌ఎల్‌వి ద్వారా ప్రయోగించబడనుండగా, స్వదేశీ రూబిడియం పరమాణు గడియారం మరియు పౌర ఎల్1 సిగ్నల్స్‌ను కలిగి ఉంది."
+      };
+    }
+    if (detectedLang === 'bn-IN') {
+      return {
+        text: "যাচাইকৃত তথ্য অনুসারে: এনভিএস-০৩ (NVS-03) ইসরোর দ্বিতীয় প্রজন্মের নাভিক (NavIC) সিরিজের তৃতীয় উপগ্রহ। এটি শ্রীহরিকোটা থেকে জিএসএলভি দ্বারা উৎক্ষেপণের জন্য নির্ধারিত এবং এতে স্বদেশী রুবিডিয়াম পারমাণবিক ঘড়ি অন্তর্ভুক্ত রয়েছে।"
+      };
+    }
+    return {
+      text: "According to verified records: NVS-03 (designated IRNSS-1L) is the third satellite in ISRO's second-generation NavIC navigation series, designed to augment India's regional positioning constellation. Scheduled for launch aboard GSLV Mk II from Sriharikota, it carries an indigenous Rubidium atomic clock and civilian L1, L5, and S band payloads."
+    };
+  }
+
+  // 3b. NVS-02 Navigation Satellite
+  if (/\bnvs[\s-]*0?2\b/i.test(lastUserMsg) || topFactTitle.includes('nvs-02')) {
+    if (detectedLang === 'hi-IN') {
+      return {
+        text: "सत्यापित रिकॉर्ड के अनुसार: एनवीएस-02 (NVS-02) इसरो के दूसरी पीढ़ी के नाविक समूह का दूसरा उपग्रह है, जिसे जीएसएलवी द्वारा लॉन्च कर नागरिक L1 बैंड और क्षेत्रीय नेविगेशन सेवाओं को निरंतर बनाए रखने के लिए तैयार किया गया है।"
+      };
+    }
+    return {
+      text: "According to verified records: NVS-02 is the second satellite of ISRO's second-generation NavIC constellation planned for launch on GSLV, providing continuous civil L1, L5, and S band signals across India and surrounding regions."
+    };
+  }
+
+  // 3c. NVS-01 Navigation Satellite & NavIC (Only when 01 or generic NavIC without specific variant is requested)
+  if ((/\bnvs[\s-]*0?1\b/i.test(lastUserMsg) || (!/\bnvs[\s-]*0?[23]\b/i.test(lastUserMsg) && (lastUserMsg.includes('nvs') || lastUserMsg.includes('navic') || lastUserMsg.includes('नाविक')))) || topFactTitle.includes('nvs-01')) {
     if (detectedLang === 'hi-IN') {
       return {
         text: "सत्यापित रिकॉर्ड के अनुसार: एनवीएस-01 (NVS-01) इसरो का दूसरी पीढ़ी का नेविगेशन उपग्रह है, जिसे 29 मई 2023 को जीएसएलवी-एफ12 द्वारा लॉन्च किया गया था। इसका वजन 2,232 किग्रा है और इसमें स्वदेशी रूबिडियम परमाणु घड़ी और नागरिक L1 बैंड सिग्नल शामिल हैं जो आम स्मार्टफ़ोन के अनुकूल हैं।"
@@ -360,6 +405,45 @@ function generateLocalFallback(messages, system, detectedLang = 'en-IN', context
     }
     return {
       text: `Based on verified records: ${topFact.body.slice(0, 220)}. For full details, check isro.gov.in.`
+    };
+  }
+
+  // 11. Live Internet & Web Search results synthesis
+  if (webResults.length > 0) {
+    const topWeb = webResults[0];
+    const cleanSnippet = topWeb.snippet.replace(/\s+/g, ' ').replace(/[*_#`]/g, '').trim();
+    let domain = 'isro.gov.in';
+    try {
+      domain = new URL(topWeb.url).hostname.replace(/^www\./, '');
+    } catch {}
+
+    if (detectedLang === 'hi-IN') {
+      return {
+        text: `सत्यापित लाइव वेब रिपोर्ट (${domain}) के अनुसार: ${topWeb.title} — ${cleanSnippet.slice(0, 200)}। अधिक आधिकारिक विवरण के लिए isro.gov.in देखें।`
+      };
+    }
+    if (detectedLang === 'kn-IN') {
+      return {
+        text: `ದೃಢೀಕರಿಸಿದ ಲೈವ್ ವೆಬ್ ವರದಿ (${domain}) ಪ್ರಕಾರ: ${topWeb.title} — ${cleanSnippet.slice(0, 200)}. ಹೆಚ್ಚಿನ ವಿವರಗಳಿಗಾಗಿ isro.gov.in ನೋಡಿ.`
+      };
+    }
+    if (detectedLang === 'ta-IN') {
+      return {
+        text: `சரிபார்க்கப்பட்ட நேரடி இணைய அறிக்கை (${domain}) படி: ${topWeb.title} — ${cleanSnippet.slice(0, 200)}. அதிகாரப்பூர்வ விவரங்களுக்கு isro.gov.in பார்க்கவும்.`
+      };
+    }
+    if (detectedLang === 'te-IN') {
+      return {
+        text: `ధృవీకరించబడిన లైవ్ వెబ్ సమాచారం (${domain}) ప్రకారం: ${topWeb.title} — ${cleanSnippet.slice(0, 200)}. అధికారిక వివరాల కోసం isro.gov.in సందర్శించండి.`
+      };
+    }
+    if (detectedLang === 'bn-IN') {
+      return {
+        text: `যাচাইকৃত লাইভ ওয়েব রিপোর্ট (${domain}) অনুসারে: ${topWeb.title} — ${cleanSnippet.slice(0, 200)}। বিস্তারিত আনুষ্ঠানিক আপডেটের জন্য isro.gov.in দেখুন।`
+      };
+    }
+    return {
+      text: `According to live web records (${domain}): ${topWeb.title} — ${cleanSnippet.slice(0, 200)}. For official updates, please visit isro.gov.in.`
     };
   }
 

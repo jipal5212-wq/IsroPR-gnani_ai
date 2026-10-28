@@ -34,7 +34,8 @@ export const DIRS = {
   AUDIO_STORIES: path.join(ENV.DATA_DIR, 'audio', 'stories'),
   AUDIO_CHAT: path.join(ENV.DATA_DIR, 'audio', 'chat'),
   UPLOADS: path.join(ENV.DATA_DIR, 'uploads'),
-  COVERS: path.join(ENV.DATA_DIR, 'covers')
+  COVERS: path.join(ENV.DATA_DIR, 'covers'),
+  GALLERY: path.join(ENV.DATA_DIR, 'gallery')
 };
 
 for (const dir of Object.values(DIRS)) {

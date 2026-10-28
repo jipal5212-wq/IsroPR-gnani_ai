@@ -7,6 +7,10 @@ export async function seedDatabase() {
   console.log('🌱 Seeding rich IsroPR stories and comprehensive ISRO knowledge base...');
   const db = getDb();
 
+  // Ensure only Chandrayaan-3 is retained per user request
+  db.prepare("DELETE FROM story_translations WHERE story_id != 'chandrayaan-3'").run();
+  db.prepare("DELETE FROM stories WHERE id != 'chandrayaan-3'").run();
+
   // ============================================================
   // 1. STORY: Chandrayaan-3 (ISRO Mission)
   // ============================================================
@@ -17,20 +21,22 @@ export async function seedDatabase() {
     category: 'isro',
     facts_as_of: '2023-08-23',
     sources: JSON.stringify(['https://www.isro.gov.in/Chandrayaan3.html']),
-    duration_hint_min: 4,
+    cover_path: 'chandrayaan-3-cover.jpg',
+    duration_hint_min: 3,
     pinned: 1,
     published: 1
   };
 
   db.prepare(`
-    INSERT INTO stories (id, title, summary, category, facts_as_of, sources, duration_hint_min, pinned, published)
-    VALUES (@id, @title, @summary, @category, @facts_as_of, @sources, @duration_hint_min, @pinned, @published)
+    INSERT INTO stories (id, title, summary, category, facts_as_of, sources, cover_path, duration_hint_min, pinned, published)
+    VALUES (@id, @title, @summary, @category, @facts_as_of, @sources, @cover_path, @duration_hint_min, @pinned, @published)
     ON CONFLICT(id) DO UPDATE SET
       title = excluded.title,
       summary = excluded.summary,
       category = excluded.category,
       facts_as_of = excluded.facts_as_of,
       sources = excluded.sources,
+      cover_path = excluded.cover_path,
       duration_hint_min = excluded.duration_hint_min,
       pinned = excluded.pinned,
       published = excluded.published
@@ -40,20 +46,38 @@ export async function seedDatabase() {
     {
       lang: 'en-IN',
       voice: 'Shivani',
-      body: `Picture this: August 23, 2023. In the mission operations complex in Bengaluru, scientists sat in pin-drop silence. Millions across the nation held their breath. Four years earlier, Chandrayaan-2 had crashed into the lunar surface at the final second. This time, there was zero room for error.
+      body: `Part 1: The Launch from Sriharikota
+Have you ever looked up at the night sky and wondered what lies beyond? For centuries, humanity has asked this very question. In ancient times we navigated by the stars, then telescopes expanded our vision, and today we send spacecraft to other worlds. It is human nature never to stay content in one place—we strive forward to discover new horizons. From this very aspiration came the story of Chandrayaan-3. In July 2023, a launch vehicle roared into the skies from the launchpad of Sriharikota, carrying Chandrayaan-3 and the dreams of over a billion people.
 
-At exactly 17:44 Indian Standard Time, the Vikram lander fired its four throttleable engines 30 kilometers above the Moon. This was the famous fifteen minutes of terror. Vikram was flying completely on its own, guided by laser Doppler velocimeters and hazard avoidance cameras. Step by step, it killed horizontal velocity, transitioned to vertical descent, hovered gently over cratered shadows, and touched down like a feather on the lunar South Pole!
+Part 2: The 15 Minutes of Terror & Descent
+Hardly anyone in mission operations slept that night. A single question resonated: could we land where no nation had ever ventured before? The voyage was daunting. For weeks, the spacecraft gradually adjusted its orbits, drawing ever closer to the lunar surface while the ground control team tracked every pulse. Then arrived the pivotal moment—the evening of August 23, 2023. The Vikram lander descended towards the lunar terrain, its throttleable engines firing to steadily bleed off velocity.
 
-Within hours, the ramp slid open. Pragyan, the six-wheeled rover, rolled down onto the lunar dust, permanently stamping the Ashoka Lion and ISRO's logo into the regolith. Its lasers beamed back scientific proof of sulphur, aluminum, calcium, and iron. India had not just reached the Moon; India was the very first nation to touch down at the lunar South Pole!`
+Part 3: Soft Landing & Pragyan Rover
+Every second demanded precision; a single miscalculation could end everything. And then, Vikram touched the lunar dust! India became the first country in history to soft-land near the Moon's South Pole. This was not merely the triumph of a machine—it was the victory of countless dedicated scientists who poured years of their lives into this endeavor. Soon, the ramp descended and Pragyan, the six-wheeled rover, rolled onto the lunar regolith, conducting in-situ experiments and confirming the presence of sulphur.
+
+Part 4: Today the Moon, Tomorrow Mars
+The scientific data transmitted back will serve generations of researchers. Yet this milestone transcends the Moon; it is part of a larger human voyage to comprehend the cosmos. Earth is our cradle, but humanity cannot remain confined to one haven forever. Today the Moon, tomorrow Mars, and beyond that, unfathomable worlds and stars! Every new destination presents fresh frontiers to explore.
+
+Part 5: Lessons from Failure & Inspiring the Future
+Chandrayaan-3 teaches us a profound lesson: dream boldly, but build with meticulous foresight. By learning from the setbacks of Chandrayaan-2, the ISRO team achieved the unprecedented. Failure is indeed a great teacher when we have the humility to learn. Most beautifully, this journey sparked curiosity in millions of young minds who gazed at the stars and dreamed, "One day, I will become a space scientist." That is the true victory. The Moon is not merely a sight in the night sky—it is an open doorway reminding us that our collective journey has only just begun.`
     },
     {
       lang: 'hi-IN',
       voice: 'Shivani',
-      body: `23 अगस्त 2023 की वो ऐतिहासिक शाम, जिसे कोई भी भारतवासी कभी नहीं भूल सकता। बेंगलुरु के मिशन कंट्रोल रूम में सुई गिरने जैसी शांति थी। चार साल पहले चंद्रयान-2 की लैंडिंग में आई रुकावट के बाद, इस बार वैज्ञानिकों ने लैंडर के पैरों से लेकर सॉफ्टवेयर तक हर चीज को अभेद्य बनाया था।
+      body: `भाग 1: श्रीहरिकोटा से उड़ान
+क्या आपने कभी रात के आसमान को देखकर सोचा है कि उसके उस पार क्या होगा? इंसान सदियों से यही सवाल पूछता आया है। पहले लोग तारों को देखकर रास्ता ढूंढते थे, फिर दूरबीन आई। और आज हम दूसरे ग्रहों तक अपने यान भेज रहे हैं। इंसान की असली फितरत यही है कि वो एक ही जगह बैठकर संतुष्ट नहीं होता। वो हमेशा आगे देखना चाहता है और नए रास्ते खोजना चाहता है। इसी सोच से निकली है चंद्रयान-3 की कहानी। जुलाई 2023 की बात है, श्रीहरिकोटा के लॉन्च पैड से एक रॉकेट ने उड़ान भरी। उसके अंदर था चंद्रयान-3 और उसके साथ थे करोड़ों लोगों के सपने।
 
-शाम 5 बजकर 44 मिनट पर चंद्रमा से 30 किलोमीटर ऊपर विक्रम लैंडर के इंजनों ने फायर किया। यह वही दिल की धड़कनें थाम देने वाले '15 मिनट्स ऑफ टेरर' थे। लैंडर पूरी तरह अपने ऑन-बोर्ड कंप्यूटर के दम पर नीचे आ रहा था। उसने एक-एक करके अपनी रफ्तार कम की, गड्ढों से बचते हुए जगह चुनी, और 6 बजकर 4 मिनट पर चंद्रमा के दक्षिणी ध्रुव पर तिरंगा लहरा दिया!
+भाग 2: 23 अगस्त का अवतरण
+वहाँ बैठे साइंटिस्ट में से शायद ही किसी को उस रात ठीक से नींद आई हो। सबके मन में बस एक सवाल था: क्या हम वहाँ लैंड कर पाएंगे जहाँ अब तक कोई नहीं पहुँचा? सफर आसान नहीं था। यान कई हफ़्तों तक धीरे-धीरे अपना ऑर्बिट बदलता रहा, जैसे कोई धीरे-धीरे किसी अपने के करीब आ रहा हो। और ज़मीन पर बैठी टीम हर पल उसकी खबर लेती रही। फिर आया वो पल, 23 अगस्त 2023, शाम का वक्त। विक्रम नाम का लैंडर चाँद की सरफेस की तरफ बढ़ रहा था। उसके इंजन चले और उसने अपनी स्पीड धीरे-धीरे कम की।
 
-इसके बाद जब प्रज्ञान रोवर बाहर निकला, तो उसने चांद की धूल पर भारत के राष्ट्रीय प्रतीक अशोक स्तंभ और इसरो का निशान हमेशा-हमेशा के लिए अंकित कर दिया। चंद्रयान-3 ने साबित कर दिया कि जब हौसले बुलंद हों, तो चांद भी दूर नहीं होता!`
+भाग 3: दक्षिण ध्रुव पर लैंडिंग और प्रज्ञान रोवर
+हर सेकंड एक फैसला था, एक भी गलती और सब कुछ खत्म हो सकता था। और फिर लैंडर ने चाँद को छू लिया! भारत चाँद के साउथ पोल के पास उतरने वाला पहला देश बन गया। ये सिर्फ एक मशीन की जीत नहीं थी, ये उन हाथों की जीत थी जिन्होंने सालों तक मेहनत की थी। लैंडर खुलने के बाद उसके अंदर से निकला प्रज्ञान—एक छोटा सा रोवर, जो अपने छह पहियों के सहारे धीरे-धीरे चाँद की मिट्टी पर चला। उसने वहाँ की मिट्टी को परखा और उसमें सल्फर की मौजूदगी पकड़ी।
+
+भाग 4: आज चाँद, कल मंगल
+ऐसी जानकारियाँ भेजीं, जो आने वाली पीढ़ियों के काम आएंगी। ये कदम सिर्फ चाँद तक का नहीं है, ये इंसान के उस बड़े सपने का हिस्सा है कि हम अपने ग्रह से बाहर जाकर ब्रह्मांड को समझें। धरती हमारा घर है, पर इंसान को सिर्फ इसी एक जगह तक सीमित नहीं रहना है। आज चाँद, कल मंगल और उसके आगे न जाने कितने ग्रह और तारे! हर नई मंज़िल एक नया सवाल लेकर आती है।
+
+भाग 5: असफलता से सीख और नई पीढ़ी की प्रेरणा
+मिशन हमें एक बात सिखाता है: सपने बड़े हों पर कदम सोच समझ कर रखे जाएँ। चंद्रयान-2 की कमियों से सीखकर ही टीम ने वो कर दिखाया जो पहले नहीं हुआ था। असफलता भी एक शिक्षक होती है अगर हम उससे सीखने को तैयार हों। और सबसे खूबसूरत बात, इस मिशन ने लाखों बच्चों की आँखों में सवाल जगा दिए। किसी ने पूछा, "चाँद की मिट्टी तक ये सब कैसे पहुँचा?" किसी ने सोचा, "मैं भी एक दिन साइंटिस्ट बनूँगा।" शायद यही असली कामयाबी है। तो अगली बार जब रात को चाँद दिखे, तो उसे सिर्फ एक खूबसूरत नज़ारा मत समझिएगा। वो एक दरवाज़ा है जो बताता है कि इंसान का सफर अभी शुरू हुआ है, और वो सफर हम सबका है।`
     },
     {
       lang: 'ta-IN',
@@ -88,6 +112,9 @@ Within hours, the ramp slid open. Pragyan, the six-wheeled rover, rolled down on
   // ============================================================
   // 2. STORY: Agnikul Cosmos (Startups)
   // ============================================================
+  // Flag to seed additional stories when user requests them later
+  const SEED_ADDITIONAL_STORIES = false;
+
   const story2 = {
     id: 'agnikul-cosmos-suborbital',
     title: 'Agnikul Cosmos: 3D-Printing Rocket Engines in Days',
@@ -100,19 +127,21 @@ Within hours, the ramp slid open. Pragyan, the six-wheeled rover, rolled down on
     published: 1
   };
 
-  db.prepare(`
-    INSERT INTO stories (id, title, summary, category, facts_as_of, sources, duration_hint_min, pinned, published)
-    VALUES (@id, @title, @summary, @category, @facts_as_of, @sources, @duration_hint_min, @pinned, @published)
-    ON CONFLICT(id) DO UPDATE SET
-      title = excluded.title,
-      summary = excluded.summary,
-      category = excluded.category,
-      facts_as_of = excluded.facts_as_of,
-      sources = excluded.sources,
-      duration_hint_min = excluded.duration_hint_min,
-      pinned = excluded.pinned,
-      published = excluded.published
-  `).run(story2);
+  if (SEED_ADDITIONAL_STORIES) {
+    db.prepare(`
+      INSERT INTO stories (id, title, summary, category, facts_as_of, sources, duration_hint_min, pinned, published)
+      VALUES (@id, @title, @summary, @category, @facts_as_of, @sources, @duration_hint_min, @pinned, @published)
+      ON CONFLICT(id) DO UPDATE SET
+        title = excluded.title,
+        summary = excluded.summary,
+        category = excluded.category,
+        facts_as_of = excluded.facts_as_of,
+        sources = excluded.sources,
+        duration_hint_min = excluded.duration_hint_min,
+        pinned = excluded.pinned,
+        published = excluded.published
+    `).run(story2);
+  }
 
   const story2Translations = [
     {
@@ -170,19 +199,21 @@ That audacity gave birth to Agnilet, the world's very first single-piece 3D-prin
     published: 1
   };
 
-  db.prepare(`
-    INSERT INTO stories (id, title, summary, category, facts_as_of, sources, duration_hint_min, pinned, published)
-    VALUES (@id, @title, @summary, @category, @facts_as_of, @sources, @duration_hint_min, @pinned, @published)
-    ON CONFLICT(id) DO UPDATE SET
-      title = excluded.title,
-      summary = excluded.summary,
-      category = excluded.category,
-      facts_as_of = excluded.facts_as_of,
-      sources = excluded.sources,
-      duration_hint_min = excluded.duration_hint_min,
-      pinned = excluded.pinned,
-      published = excluded.published
-  `).run(story3);
+  if (SEED_ADDITIONAL_STORIES) {
+    db.prepare(`
+      INSERT INTO stories (id, title, summary, category, facts_as_of, sources, duration_hint_min, pinned, published)
+      VALUES (@id, @title, @summary, @category, @facts_as_of, @sources, @duration_hint_min, @pinned, @published)
+      ON CONFLICT(id) DO UPDATE SET
+        title = excluded.title,
+        summary = excluded.summary,
+        category = excluded.category,
+        facts_as_of = excluded.facts_as_of,
+        sources = excluded.sources,
+        duration_hint_min = excluded.duration_hint_min,
+        pinned = excluded.pinned,
+        published = excluded.published
+    `).run(story3);
+  }
 
   const story3Translations = [
     {
@@ -237,21 +268,36 @@ At liftoff, two gigantic S200 solid strap-on boosters ignite, generating tremend
   `);
 
   for (const t of story1Translations) {
-    const audioFilePath = path.join(DIRS.AUDIO_STORIES, 'chandrayaan-3', `${t.lang}.mp3`);
-    await synthesizeSpeech({ text: t.body, lang: t.lang, voice: t.voice, targetPath: audioFilePath });
-    insertTrans.run('chandrayaan-3', t.lang, t.body, t.voice, `/media/audio/stories/chandrayaan-3/${t.lang}.mp3`, 160);
+    const wavPath = path.join(DIRS.AUDIO_STORIES, 'chandrayaan-3', `${t.lang}.wav`);
+    const defaultWavPath = path.join(DIRS.AUDIO_STORIES, 'chandrayaan-3', 'hi-IN.wav');
+    let audioUrl = `/media/audio/stories/chandrayaan-3/${t.lang}.wav`;
+    let duration = 180;
+
+    if (!fs.existsSync(wavPath)) {
+      if (fs.existsSync(defaultWavPath)) {
+        audioUrl = `/media/audio/stories/chandrayaan-3/hi-IN.wav`;
+      } else {
+        const audioFilePath = path.join(DIRS.AUDIO_STORIES, 'chandrayaan-3', `${t.lang}.mp3`);
+        await synthesizeSpeech({ text: t.body, lang: t.lang, voice: t.voice, targetPath: audioFilePath });
+        audioUrl = `/media/audio/stories/chandrayaan-3/${t.lang}.mp3`;
+        duration = 160;
+      }
+    }
+    insertTrans.run('chandrayaan-3', t.lang, t.body, t.voice, audioUrl, duration);
   }
 
-  for (const t of story2Translations) {
-    const audioFilePath = path.join(DIRS.AUDIO_STORIES, 'agnikul-cosmos-suborbital', `${t.lang}.mp3`);
-    await synthesizeSpeech({ text: t.body, lang: t.lang, voice: t.voice, targetPath: audioFilePath });
-    insertTrans.run('agnikul-cosmos-suborbital', t.lang, t.body, t.voice, `/media/audio/stories/agnikul-cosmos-suborbital/${t.lang}.mp3`, 140);
-  }
+  if (SEED_ADDITIONAL_STORIES) {
+    for (const t of story2Translations) {
+      const audioFilePath = path.join(DIRS.AUDIO_STORIES, 'agnikul-cosmos-suborbital', `${t.lang}.mp3`);
+      await synthesizeSpeech({ text: t.body, lang: t.lang, voice: t.voice, targetPath: audioFilePath });
+      insertTrans.run('agnikul-cosmos-suborbital', t.lang, t.body, t.voice, `/media/audio/stories/agnikul-cosmos-suborbital/${t.lang}.mp3`, 140);
+    }
 
-  for (const t of story3Translations) {
-    const audioFilePath = path.join(DIRS.AUDIO_STORIES, 'lvm3-heavy-lifter', `${t.lang}.mp3`);
-    await synthesizeSpeech({ text: t.body, lang: t.lang, voice: t.voice, targetPath: audioFilePath });
-    insertTrans.run('lvm3-heavy-lifter', t.lang, t.body, t.voice, `/media/audio/stories/lvm3-heavy-lifter/${t.lang}.mp3`, 170);
+    for (const t of story3Translations) {
+      const audioFilePath = path.join(DIRS.AUDIO_STORIES, 'lvm3-heavy-lifter', `${t.lang}.mp3`);
+      await synthesizeSpeech({ text: t.body, lang: t.lang, voice: t.voice, targetPath: audioFilePath });
+      insertTrans.run('lvm3-heavy-lifter', t.lang, t.body, t.voice, `/media/audio/stories/lvm3-heavy-lifter/${t.lang}.mp3`, 170);
+    }
   }
 
   // ============================================================
@@ -262,28 +308,42 @@ At liftoff, two gigantic S200 solid strap-on boosters ignite, generating tremend
       title: 'LVM3 Launch Vehicle Specifications & Capacity',
       body: 'LVM3 (Launch Vehicle Mark-3, formerly GSLV Mk III) is a three-stage heavy lift vehicle developed by ISRO. It has a lift-off mass of 640 tonnes, height of 43.5 meters, and can launch up to 4,000 kg satellites into Geosynchronous Transfer Orbit (GTO) and 8,000 kg into Low Earth Orbit (LEO). It features two solid S200 strap-on boosters, an L110 twin-Vikas liquid stage, and a cryogenic C25 stage with the CE-20 engine.',
       category: 'launch-vehicles',
-      source_url: 'https://www.isro.gov.in/LaunchVehicles.html',
+      source_url: 'https://www.isro.gov.in/Launchers.html',
       as_of: '2024-03-15'
     },
     {
       title: 'LVM3 Commercial Track Record & Human Rating (HLVM3)',
       body: 'LVM3 achieved a 100% mission success rate including launching Chandrayaan-2, Chandrayaan-3, and 72 commercial OneWeb satellites across two dedicated commercial launches. A human-rated variant, HLVM3, featuring enhanced safety margins and a Crew Escape System, is designated to carry the Gaganyaan crew module into orbit.',
       category: 'launch-vehicles',
-      source_url: 'https://www.isro.gov.in/LVM3_Overview.html',
+      source_url: 'https://www.isro.gov.in/Launchers.html',
       as_of: '2024-03-15'
     },
     {
       title: 'NVS-01 Second Generation Navigation Satellite Specifications',
       body: 'NVS-01 is the first of ISRO\'s second-generation NavIC (Navigation with Indian Constellation) satellites, successfully launched on May 29, 2023, aboard GSLV-F12. Weighing 2,232 kg, it operates in Geosynchronous transfer orbit and incorporates an indigenous Rubidium atomic clock developed by Space Applications Centre (SAC), Ahmedabad, as well as the civilian L1 frequency band (1575.42 MHz) compatible with consumer smartphones.',
       category: 'navigation-satellites',
-      source_url: 'https://www.isro.gov.in/GSLV-F12_NVS-01_Mission.html',
+      source_url: 'https://www.isro.gov.in/GSLV_F12_Landingpage.html',
       as_of: '2023-05-29'
+    },
+    {
+      title: 'NVS-03 Navigation Satellite (IRNSS-1L) Specifications & Role',
+      body: 'NVS-03 (designated IRNSS-1L) is the third satellite in ISRO\'s second-generation NavIC series, built to augment and fortify India\'s regional satellite navigation system. Scheduled for launch aboard GSLV Mk II from Sriharikota, it incorporates an indigenous space-qualified Rubidium atomic clock developed by SAC Ahmedabad, broadcasting interoperable signals in civilian L1, L5, and S bands.',
+      category: 'navigation-satellites',
+      source_url: 'https://www.isro.gov.in/SatelliteNavigationServices.html',
+      as_of: '2024-10-01'
+    },
+    {
+      title: 'NVS-02 Navigation Satellite Constellation Overview',
+      body: 'NVS-02 is the second satellite in ISRO\'s second-generation NavIC constellation planned to expand continuous regional navigation, positioning, and timing coverage across the Indian subcontinent and up to 1,500 km beyond its land borders with civil L1 band signals.',
+      category: 'navigation-satellites',
+      source_url: 'https://www.isro.gov.in/SatelliteNavigationServices.html',
+      as_of: '2024-06-01'
     },
     {
       title: 'NavIC Constellation Architecture & Civil L1 Signals',
       body: 'NavIC is India\'s independent regional navigation satellite system providing accurate position information service to users across India and up to 1,500 km around its borders. The NVS constellation replaces older IRNSS satellites and broadcasts interoperable signals in L1, L5, and S bands with real-time positioning accuracy under 5 meters for civil users.',
       category: 'navigation-satellites',
-      source_url: 'https://www.isro.gov.in/NavIC.html',
+      source_url: 'https://www.isro.gov.in/SatelliteNavigationServices.html',
       as_of: '2024-01-15'
     },
     {
@@ -297,7 +357,7 @@ At liftoff, two gigantic S200 solid strap-on boosters ignite, generating tremend
       title: 'Vyommitra Spacefaring Humanoid Robot',
       body: 'Vyommitra is a female half-humanoid robot developed by ISRO for uncrewed Gaganyaan test flights. Equipped to monitor environmental control life support systems, operate switch panels, and simulate human physiological parameters, she provides telemetry to ensure crew module safety before crewed flights.',
       category: 'human-spaceflight',
-      source_url: 'https://www.isro.gov.in/Vyommitra.html',
+      source_url: 'https://www.isro.gov.in/Gaganyaan.html',
       as_of: '2024-02-27'
     },
     {
@@ -332,7 +392,7 @@ At liftoff, two gigantic S200 solid strap-on boosters ignite, generating tremend
       title: 'Pixxel Hyperspectral Satellite Constellation',
       body: 'Bengaluru and Los Angeles-based startup Pixxel builds commercial hyperspectral imaging satellites. Their satellites (including Shakuntala and Anand) capture over 50 narrow spectral bands across electromagnetic wavelengths, diagnosing crop health, soil biodiversity, greenhouse gas emissions, and mining reserves.',
       category: 'startups',
-      source_url: 'https://www.pixxel.space/',
+      source_url: 'https://en.wikipedia.org/wiki/Pixxel',
       as_of: '2024-05-12'
     }
   ];

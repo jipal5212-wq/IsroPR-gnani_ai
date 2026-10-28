@@ -33,6 +33,9 @@ test.before(async () => {
 });
 
 test.after(async () => {
+  const db = getDb();
+  db.prepare("DELETE FROM story_translations WHERE story_id IN ('chandrayaan-3-lunar-landing', 'draft-no-trans')").run();
+  db.prepare("DELETE FROM stories WHERE id IN ('chandrayaan-3-lunar-landing', 'draft-no-trans')").run();
   if (server) {
     await new Promise((resolve) => server.close(resolve));
   }
@@ -156,7 +159,7 @@ test('Knowledge base CRUD and FTS5 retrieval works', async () => {
   assert.equal(kbRes.status, 201);
 
   // RAG retrieval test
-  const retrieved = retrieveContext('Aditya solar observatory');
+  const retrieved = await retrieveContext('Aditya solar observatory');
   assert.ok(retrieved.knowledge.length > 0);
   assert.equal(retrieved.knowledge[0].title, 'Aditya-L1 Solar Mission');
 });

@@ -1,11 +1,13 @@
 import { apiFetch, getActiveLang, setActiveLang, formatDuration } from './common.js';
 import { AudioRecorder } from './recorder.js';
+import { initGlobalPlayer } from './spotify-player.js';
 
 let isRecording = false;
 let recorder = null;
 let currentLang = 'en-IN';
 
 export async function initChat() {
+  initGlobalPlayer();
   currentLang = getActiveLang();
   await setupLanguageSelector();
   setupComposer();
@@ -58,7 +60,7 @@ async function loadHistory() {
     } else {
       // Welcome message
       addBotBubble({
-        text: "Namaste! I am Space Buddy, your AI companion for ISRO and Indian space missions. You can type or tap the microphone to ask me anything about Chandrayaan, Gaganyaan, Aditya-L1, or Indian space startups!",
+        text: "Namaste! I am Space Chat, your verified outreach desk for ISRO and Indian space missions. You can type or tap the microphone to ask anything about Chandrayaan, Gaganyaan, Aditya-L1, or Indian space tech startups.",
         sources: []
       });
     }
@@ -206,7 +208,7 @@ function setupComposer() {
           const userBubbles = document.querySelectorAll('.wa-bubble-user .msg-text');
           if (userBubbles.length > 0 && data.transcript) {
             const lastUserText = userBubbles[userBubbles.length - 1];
-            lastUserText.textContent = `🎙️ "${data.transcript}"`;
+            lastUserText.textContent = `"${data.transcript}"`;
           }
 
           addBotBubble({
@@ -342,7 +344,7 @@ function addUserBubble({ text, inputType, audioUrl }) {
   const textEl = document.createElement('div');
   textEl.className = 'msg-text';
   textEl.style.lineHeight = '1.45';
-  textEl.textContent = (inputType === 'voice' ? '🎙️ ' : '') + text;
+  textEl.textContent = text;
   innerBubble.appendChild(textEl);
 
   const timeEl = document.createElement('div');
@@ -364,14 +366,14 @@ function addBotBubble({ text, audioUrl, sources = [] }) {
 
   const avatar = document.createElement('div');
   avatar.className = 'bot-avatar';
-  avatar.style.cssText = 'width: 28px; height: 28px; border-radius: 50%; background: #008069; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0;';
-  avatar.textContent = '🛰️';
+  avatar.style.cssText = 'width: 28px; height: 28px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 1px solid #d1d7db;';
+  avatar.innerHTML = '<img src="/images/isropr-logo.jpg" alt="Space Chat" style="width: 100%; height: 100%; object-fit: cover;">';
   bubble.appendChild(avatar);
 
   const innerBubble = document.createElement('div');
   innerBubble.className = 'wa-bubble msg-bubble wa-bubble-bot msg-bubble-bot';
 
-  // If there's an audio note from Space Buddy, render WhatsApp voice player!
+  // If there's an audio note from Space Chat, render WhatsApp voice player!
   if (audioUrl) {
     innerBubble.appendChild(createWaVoicePlayer(audioUrl));
   }
@@ -415,7 +417,9 @@ function showTypingIndicator() {
   indicator.id = 'typing-indicator';
   indicator.className = 'wa-msg-row msg-row wa-bot msg-bot';
   indicator.innerHTML = `
-    <div style="width: 28px; height: 28px; border-radius: 50%; background: #008069; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0;">🛰️</div>
+    <div style="width: 28px; height: 28px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 1px solid #d1d7db;">
+      <img src="/images/isropr-logo.jpg" alt="Space Chat" style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
     <div class="wa-bubble msg-bubble wa-bubble-bot typing-dots" style="padding: 0.6rem 0.85rem;">
       <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#64748b; margin:0 2px;"></span>
       <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#64748b; margin:0 2px;"></span>

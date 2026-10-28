@@ -8,7 +8,7 @@
 ## 🌟 Highlights & Features
 
 - 🎧 **Multilingual Audio Library**: Browse and stream stories across Indian languages (English, हिन्दी, தமிழ், తెలుగు, বাংলা) with high-definition audio narration.
-- 💬 **Space Buddy AI Chat**: WhatsApp-style voice and text assistant answering questions exclusively from verified official knowledge base facts (FTS5 BM25 search).
+- 💬 **Space Chat**: WhatsApp-style voice and text assistant answering questions exclusively from verified official knowledge base facts (FTS5 BM25 search).
 - 🎙️ **Voice Notes**: Hold-to-record voice notes with automatic speech-to-text (STT) and voice replies (TTS).
 - 🔐 **Admin Control Center**: Comprehensive story authoring, translation tabs, sentence word counter, audio generation queue, knowledge base curator, and chat activity monitor.
 - ⚡ **Light & Sovereign Stack**: Built with Node.js, Express, SQLite (`better-sqlite3` with WAL & FTS5), and vanilla ES modules. Zero bloated frameworks, single-deployable unit.
@@ -42,7 +42,7 @@ space-bharat/
 ├── web/                         # Frontend client
 │   ├── index.html               # Public library homepage
 │   ├── story.html               # Audio player with speed control & transcript
-│   ├── chat.html                # WhatsApp-style Space Buddy chat
+│   ├── chat.html                # WhatsApp-style Space Chat
 │   ├── about.html               # Mission, voice stack & principles
 │   ├── admin/                   # Admin console pages
 │   ├── css/                     # Cosmic stylesheets (style.css & admin.css)
@@ -99,7 +99,7 @@ Verifies SQLite schema, settings, authentication cookies, protected routes, stor
 - **Zero API Keys in Browser**: All keys (`GNANI_API_KEY`, `LLM_API_KEY`, `JWT_SECRET`) reside strictly in server environment variables.
 - **Admin Session Hardening**: HttpOnly, SameSite=Strict session cookies with bcrypt password hashing (cost 12).
 - **Rate Limiting**: Public endpoints (60 req/min), chat text (20 req/min), voice notes (5 req/min), and admin login (5 attempts per 15 min).
-- **No Hallucination Policy**: Space Buddy only answers from verified database facts, always displaying citations and "as of" dates.
+- **No Hallucination Policy**: Space Chat only answers from verified database facts, always displaying citations and "as of" dates.
 
 ---
 

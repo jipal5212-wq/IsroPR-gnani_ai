@@ -64,7 +64,11 @@
       "status": "active"
     },
     "server/services/rag.js": {
-      "purpose": "Retrieval Augmented Generation over SQLite FTS5 and stories",
+      "purpose": "Retrieval Augmented Generation over SQLite FTS5, stories, and live web search",
+      "status": "active"
+    },
+    "server/services/websearch.js": {
+      "purpose": "Multi-provider web search (DDG Lite, Wikipedia, Tavily) with Indic query reformulation and TTL cache",
       "status": "active"
     },
     "server/services/chat.js": {
@@ -145,6 +149,10 @@
     },
     "tests/stories.test.js": {
       "purpose": "Tests for story CRUD, publishing rules, and FTS5 retrieval",
+      "status": "active"
+    },
+    "tests/rag-internet.test.js": {
+      "purpose": "Tests for Indic query reformulation, live internet search, RAG integration, and web citations",
       "status": "active"
     }
   }

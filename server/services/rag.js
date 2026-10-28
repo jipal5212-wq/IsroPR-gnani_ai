@@ -141,11 +141,17 @@ const MISSION_EXPANSIONS = {
   'सूर्य': ['Sun', 'Solar', 'Aditya-L1'],
   'sun': ['Sun', 'Solar', 'Aditya-L1'],
 
-  // Navigation
-  'एनवीएस': ['NVS-01', 'NavIC', 'atomic clock', 'Rubidium', 'L1'],
-  'nvs': ['NVS-01', 'NavIC', 'atomic clock', 'Rubidium', 'L1'],
-  'नाविक': ['NavIC', 'NVS-01', 'constellation', 'navigation'],
-  'navic': ['NavIC', 'NVS-01', 'constellation', 'navigation'],
+  // Navigation & NavIC
+  'एनवीएस': ['NVS', 'NavIC', 'navigation satellite'],
+  'nvs': ['NVS', 'NavIC', 'navigation satellite'],
+  'nvs-01': ['NVS-01', 'GSLV-F12', 'NavIC'],
+  'nvs01': ['NVS-01', 'GSLV-F12', 'NavIC'],
+  'nvs-02': ['NVS-02', 'NavIC'],
+  'nvs02': ['NVS-02', 'NavIC'],
+  'nvs-03': ['NVS-03', 'IRNSS-1L', 'NavIC'],
+  'nvs03': ['NVS-03', 'IRNSS-1L', 'NavIC'],
+  'नाविक': ['NavIC', 'navigation constellation'],
+  'navic': ['NavIC', 'navigation constellation'],
 
   // Startups
   'अग्निकुल': ['Agnikul', 'Agnibaan', 'Agnilet', '3D', 'printed', 'Dhanush'],
@@ -175,7 +181,9 @@ const MISSION_EXPANSIONS = {
   'mangalyaan': ['Mangalyaan', 'Mars Orbiter Mission', 'MOM']
 };
 
-export function retrieveContext(query, limit = 4, lang = 'en-IN') {
+import { searchWebForRag } from './websearch.js';
+
+export function retrieveLocalContext(query, limit = 4, lang = 'en-IN') {
   if (!query || typeof query !== 'string') {
     return { knowledge: [], stories: [] };
   }
@@ -216,7 +224,7 @@ export function retrieveContext(query, limit = 4, lang = 'en-IN') {
       WHERE knowledge_fts MATCH ?
       ORDER BY rank
       LIMIT ?
-    `).all(ftsQuery, limit);
+    `).all(ftsQuery, limit * 2);
   } catch (err) {
     // Fallback to LIKE if FTS expression has syntax quirk
     const primaryToken = contentTokens[0] || allSearchTokens[0];
@@ -225,8 +233,36 @@ export function retrieveContext(query, limit = 4, lang = 'en-IN') {
       FROM knowledge
       WHERE title LIKE ? OR body LIKE ?
       LIMIT ?
-    `).all(`%${primaryToken}%`, `%${primaryToken}%`, limit);
+    `).all(`%${primaryToken}%`, `%${primaryToken}%`, limit * 2);
   }
+
+  // Disambiguation: prioritize specific variant and filter out cross-variant confusion
+  const mentionsNvs3 = /\bnvs[\s-]*0?3\b/i.test(query);
+  const mentionsNvs2 = /\bnvs[\s-]*0?2\b/i.test(query);
+  const mentionsNvs1 = /\bnvs[\s-]*0?1\b/i.test(query);
+  const mentionsCh4 = /\bchandrayaan[\s-]*0?4\b/i.test(query);
+
+  if (mentionsNvs3) {
+    const direct03 = db.prepare("SELECT id, title, body, category, source_url, as_of FROM knowledge WHERE title LIKE '%NVS-03%'").all();
+    knowledgeEntries = [
+      ...direct03,
+      ...knowledgeEntries.filter(k => !k.title.includes('NVS-01') && !k.title.includes('NVS-02') && !k.title.includes('NVS-03') && !k.title.includes('Aditya'))
+    ];
+  } else if (mentionsNvs2) {
+    const direct02 = db.prepare("SELECT id, title, body, category, source_url, as_of FROM knowledge WHERE title LIKE '%NVS-02%'").all();
+    knowledgeEntries = [
+      ...direct02,
+      ...knowledgeEntries.filter(k => !k.title.includes('NVS-01') && !k.title.includes('NVS-03') && !k.title.includes('NVS-02') && !k.title.includes('Aditya'))
+    ];
+  } else if (mentionsNvs1) {
+    knowledgeEntries = knowledgeEntries.filter(k => !k.title.includes('NVS-02') && !k.title.includes('NVS-03') && !k.title.includes('Aditya'));
+  }
+
+  if (mentionsCh4) {
+    knowledgeEntries = knowledgeEntries.filter(k => !k.title.includes('Chandrayaan-3') && !k.title.includes('Chandrayaan-2'));
+  }
+
+  knowledgeEntries = knowledgeEntries.slice(0, limit);
 
   // 2. Query stories table for relevant mission context
   const searchKeywords = allSearchTokens.slice(0, 5);
@@ -258,6 +294,29 @@ export function retrieveContext(query, limit = 4, lang = 'en-IN') {
       facts_as_of: s.facts_as_of,
       sources: JSON.parse(s.sources || '[]')
     }))
+  };
+}
+
+/**
+ * Enhanced RAG Retrieval:
+ * Combines local SQLite FTS5 BM25 knowledge search with live internet search
+ * to provide up-to-date, realistic space context for OpenAI and local fallback.
+ */
+export async function retrieveContext(query, limit = 4, lang = 'en-IN', options = { enableWeb: true }) {
+  const local = retrieveLocalContext(query, limit, lang);
+
+  let webResults = [];
+  if (options.enableWeb !== false) {
+    try {
+      webResults = await searchWebForRag(query, lang, limit);
+    } catch (err) {
+      console.warn('Web search retrieval failed, continuing with local RAG context:', err.message);
+    }
+  }
+
+  return {
+    ...local,
+    webResults
   };
 }
 

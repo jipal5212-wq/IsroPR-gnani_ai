@@ -1,13 +1,15 @@
 import express from 'express';
+import fs from 'node:fs';
+import path from 'node:path';
 import { getDb, getSetting } from '../db/db.js';
-import { ALL_LANGUAGES, CATEGORIES } from '../config.js';
+import { ALL_LANGUAGES, CATEGORIES, DIRS } from '../config.js';
 import { publicLimiter } from '../middleware/rateLimit.js';
 
 const router = express.Router();
 
 // GET /api/languages
 router.get('/languages', publicLimiter, (req, res) => {
-  const enabledCodes = getSetting('enabled_languages', ['en-IN', 'hi-IN', 'ta-IN', 'te-IN', 'bn-IN']);
+  const enabledCodes = getSetting('enabled_languages', ['en-IN', 'hi-IN', 'ta-IN', 'te-IN', 'bn-IN', 'kn-IN']);
   const languages = ALL_LANGUAGES.filter(l => enabledCodes.includes(l.code));
   return res.json({ languages, categories: CATEGORIES });
 });

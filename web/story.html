@@ -3,180 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Story Player — IsroPR</title>
+  <title>Chandrayaan-3 Podcast — IsroPR</title>
+  <meta name="description" content="Listen to the Chandrayaan-3 Moon landing podcast in multiple Indian languages. Pure Spotify-style space storytelling.">
   <link rel="stylesheet" href="/css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
-  <style>
-    .story-page-container {
-      max-width: 860px;
-      margin: 2rem auto;
-      padding: 0 1.5rem 5rem;
-    }
-    .story-header-box {
-      margin-bottom: 2rem;
-    }
-    .story-meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-    .story-meta-row a {
-      color: var(--isro-blue);
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .story-meta-row a:hover {
-      text-decoration: underline;
-    }
-
-    /* Modern Light Podcast Player */
-    .space-player-box {
-      background: #ffffff;
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-lg);
-      padding: 1.75rem;
-      box-shadow: var(--shadow-card);
-      margin-bottom: 2.75rem;
-    }
-    .player-controls-row {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      flex-wrap: wrap;
-    }
-    .player-btn-main {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: var(--isro-blue);
-      color: #ffffff;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(15, 76, 129, 0.3);
-      transition: all 0.2s ease;
-      flex-shrink: 0;
-    }
-    .player-btn-main:hover {
-      background: var(--isro-blue-hover);
-      transform: scale(1.06);
-    }
-    .player-btn-secondary {
-      background: #f8fafc;
-      border: 1px solid var(--border-subtle);
-      color: var(--text-secondary);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      flex-shrink: 0;
-    }
-    .player-btn-secondary:hover {
-      color: var(--isro-blue);
-      border-color: var(--isro-blue);
-      background: #f1f5f9;
-      transform: translateY(-1px);
-    }
-    .player-timeline {
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      min-width: 220px;
-    }
-    .seek-slider {
-      flex-grow: 1;
-      height: 6px;
-      border-radius: var(--radius-full);
-      accent-color: var(--isro-blue);
-      cursor: pointer;
-    }
-    .time-label {
-      font-family: monospace;
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-    .speed-btn {
-      background: #f1f5f9;
-      border: 1px solid var(--border-subtle);
-      color: var(--text-primary);
-      padding: 0.4rem 0.85rem;
-      border-radius: var(--radius-full);
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .speed-btn:hover {
-      background: #e2e8f0;
-      border-color: var(--isro-blue);
-    }
-
-    /* Human Editorial Transcript */
-    .transcript-box {
-      background: #ffffff;
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-lg);
-      padding: 2.25rem;
-      line-height: 1.85;
-      font-size: 1.05rem;
-      margin-bottom: 3.5rem;
-      box-shadow: var(--shadow-sm);
-    }
-    .transcript-p {
-      margin-bottom: 1.35rem;
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-    .transcript-p strong {
-      color: var(--text-primary);
-    }
-
-    /* Up Next Grid */
-    .up-next-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.25rem;
-      margin-top: 1rem;
-    }
-    .up-next-card {
-      background: #ffffff;
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-md);
-      padding: 1.35rem;
-      text-decoration: none;
-      display: block;
-      transition: all 0.2s ease;
-      box-shadow: var(--shadow-sm);
-    }
-    .up-next-card:hover {
-      border-color: var(--isro-blue);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-card-hover);
-    }
-    .up-next-card h4 {
-      color: var(--text-primary);
-      font-size: 1.05rem;
-      margin-bottom: 0.35rem;
-    }
-    .up-next-card p {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      line-height: 1.45;
-    }
-  </style>
+  <link rel="icon" type="image/jpeg" href="/images/isropr-logo.jpg">
 </head>
 <body>
 
@@ -184,7 +14,9 @@
   <header class="site-header">
     <div class="header-container">
       <a href="/" class="brand-logo">
-        <div class="brand-icon">🛰️</div>
+        <div class="brand-logo-avatar">
+          <img src="/images/isropr-logo.jpg" alt="IsroPR Bat Mascot Logo" class="brand-logo-img">
+        </div>
         <div>
           <span class="brand-text">IsroPR</span>
           <span class="brand-badge">Official Outreach</span>
@@ -192,58 +24,81 @@
       </a>
       <nav>
         <ul class="nav-links">
-          <li><a href="/" class="nav-link">← Back to Library</a></li>
-          <li><a href="/chat.html" class="nav-link">Space Buddy Chat</a></li>
+          <li><a href="/" class="nav-link">← Library</a></li>
+          <li><a href="/#audio-stories" class="nav-link">Audio Stories</a></li>
+          <li><a href="/chat.html" class="nav-link">Space Chat</a></li>
         </ul>
       </nav>
       <div class="header-actions">
-        <select id="story-lang-select" class="lang-select" aria-label="Switch Story Language">
+        <select id="story-lang-select" class="lang-select" aria-label="Switch Podcast Language">
           <!-- Populated by player.js -->
         </select>
       </div>
     </div>
   </header>
 
+  <!-- Spotify-Style Podcast Episode Main -->
   <main class="story-page-container" id="player-content">
-    <section class="story-header-box">
-      <div class="story-meta-row" id="story-meta-bar">
-        <!-- Badges & Sources -->
+    <div class="spotify-podcast-hero" id="podcast-hero">
+      <!-- Episode Artwork: Authentic ISRO Pragyan Rover NavCam Photograph -->
+      <div class="podcast-cover-box">
+        <img id="story-cover-img" src="/media/covers/chandrayaan-3-navcam.png?v=navcam_20230827" alt="Chandrayaan-3 Pragyan Rover Lunar Crater NavCam" onerror="this.src='/media/covers/chandrayaan-3-cover.jpg'" />
       </div>
-      <h1 id="story-title" class="hero-title" style="font-size: 2.4rem; text-align: left; margin-bottom: 0.75rem;">
-        Loading Space Story...
-      </h1>
-      <p id="story-summary" class="hero-subtitle" style="text-align: left; margin-bottom: 1.5rem;">
-        Please wait while audio and transcript are loaded.
+
+      <!-- Badges -->
+      <div class="podcast-badges-row" id="story-badges-row">
+        <span class="podcast-badge podcast-badge-primary">ISRO LUNAR MISSION</span>
+        <span class="podcast-badge podcast-badge-saffron">SPOTLIGHT PODCAST</span>
+        <span class="podcast-badge" style="background: #f1f5f9; color: var(--text-muted); border: 1px solid var(--border-light);">3 MIN CONTINUOUS</span>
+      </div>
+
+      <!-- Title & Summary -->
+      <h1 id="story-title" class="podcast-title">Chandrayaan-3: 15 Minutes of Terror & The South Pole Triumph</h1>
+      <p id="story-summary" class="podcast-summary">
+        Relive India's historic lunar touchdown narrated in studio Indian voice. Hear how ISRO turned failure into victory at the Moon's rugged south pole.
       </p>
-    </section>
 
-    <!-- Audio Player Mount Point -->
-    <section id="audio-player-container">
-      <!-- Player rendered by player.js -->
-    </section>
+      <!-- Spotlight Controls Dock -->
+      <div class="podcast-player-dock" id="podcast-player-dock">
+        <div class="podcast-controls-row">
+          <button id="btn-skip-back" class="btn-podcast-sec" title="Skip back 15s" aria-label="Skip back 15 seconds">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 19l-9-7 9-7v14zM22 19l-9-7 9-7v14z"/><text x="11.5" y="16" font-size="7.5" fill="currentColor">15</text></svg>
+          </button>
 
-    <!-- Transcript Section -->
-    <section style="margin-bottom: 3rem;">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
-        <h3 style="font-family: var(--font-heading);">Read Transcript</h3>
-        <button id="btn-toggle-transcript" class="btn-read" style="font-size: 0.8rem; padding: 0.35rem 0.8rem;">
-          Hide Transcript
-        </button>
-      </div>
-      <div id="transcript-wrapper">
-        <div id="transcript-container" class="transcript-box">
-          <!-- Text rendered by player.js -->
+          <button id="btn-play-pause" class="btn-podcast-main" title="Play or Pause" aria-label="Play">
+            <svg id="icon-play" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="icon-pause" width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+
+          <button id="btn-skip-forward" class="btn-podcast-sec" title="Skip forward 15s" aria-label="Skip forward 15 seconds">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 19l9-7-9-7v14zM2 19l9-7-9-7v14z"/><text x="6" y="16" font-size="7.5" fill="currentColor">15</text></svg>
+          </button>
+        </div>
+
+        <div class="podcast-timeline">
+          <span id="player-current-time" class="podcast-time">0:00</span>
+          <input type="range" id="player-seek" min="0" max="100" value="0" step="0.1" class="podcast-slider" aria-label="Audio progress slider" />
+          <span id="player-total-time" class="podcast-time">3:00</span>
         </div>
       </div>
-    </section>
 
-    <!-- Up Next Section -->
-    <section>
-      <h3 style="font-family: var(--font-heading); margin-bottom: 0.5rem;">Up Next in this Category</h3>
-      <div id="up-next-grid" class="up-next-grid">
-        <!-- Rendered by player.js -->
+      <!-- Action Row Below Dock -->
+      <div class="podcast-actions-bar">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+          <button id="btn-speed" class="sp-speed-pill" style="color: var(--text-primary); border-color: var(--border-subtle); background: #f8fafc;" title="Speed">1x</button>
+          <div class="sp-equalizer-bars" id="story-equalizer" style="color: var(--isro-blue);">
+            <span></span><span></span><span></span>
+          </div>
+          <span id="playback-status-text" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">Tap play to listen</span>
+        </div>
+
+        <div id="story-source-link">
+          <a href="https://isro.gov.in/Chandrayaan3.html" target="_blank" rel="noopener noreferrer" style="font-size: 0.82rem; color: var(--isro-blue); text-decoration: none; font-weight: 600;">
+            Official ISRO Source ↗
+          </a>
+        </div>
       </div>
-    </section>
+    </div>
   </main>
 
   <!-- Footer -->

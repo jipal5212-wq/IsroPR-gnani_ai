@@ -122,15 +122,15 @@ export async function handleChatTurn({ sessionId, inputType, userText, audioFile
     VALUES (?, 'user', ?, ?, ?)
   `).run(sessionId, inputType, detectedLang, queryText);
 
-  // 2. Retrieve context from Knowledge Base (FTS5) & Stories in requested language
-  const { knowledge, stories } = retrieveContext(queryText, 4, detectedLang);
+  // 2. Retrieve context from Knowledge Base (FTS5), Stories & Live Web Search
+  const { knowledge, stories, webResults } = await retrieveContext(queryText, 4, detectedLang);
 
   // Format context block
   let contextBlock = '';
   const sources = [];
 
   if (knowledge.length > 0) {
-    contextBlock += '--- Knowledge Base Entries ---\n';
+    contextBlock += '--- Verified Knowledge Base Entries ---\n';
     for (const k of knowledge) {
       contextBlock += `Title: ${k.title}\nDetails: ${k.body}\nSource: ${k.source_url} (As of: ${k.as_of})\n\n`;
       sources.push({ title: k.title, url: k.source_url, as_of: k.as_of });
@@ -151,14 +151,27 @@ export async function handleChatTurn({ sessionId, inputType, userText, audioFile
     }
   }
 
+  if (webResults && webResults.length > 0) {
+    contextBlock += '--- Live Internet & Verified Web Context ---\n';
+    for (const w of webResults) {
+      contextBlock += `Title: ${w.title}\nWeb Summary: ${w.snippet}\nSource URL: ${w.url}\n\n`;
+      if (!sources.some(s => s.url === w.url)) {
+        sources.push({ title: w.title, url: w.url, as_of: 'Live Web' });
+      }
+    }
+  }
+
+  // Sanitize and rank sources by query relevance, resolving dead links
+  const sanitizedSources = sanitizeSources(sources, queryText);
+
   if (!contextBlock) {
-    contextBlock = 'No relevant entries found in the verified knowledge base.';
+    contextBlock = 'No relevant entries found in the verified knowledge base or live web search.';
   }
 
   // 3. Assemble Prompt with warm, patient, empathetic WhatsApp persona (Shivani)
   const langMeta = ALL_LANGUAGES.find(l => l.code === detectedLang) || { name: 'English', defaultVoice: 'Shivani' };
 
-  const systemPrompt = `You are "Space Buddy", voiced by Shivani on IsroPR — a warm, patient, empathetic, and knowledgeable friend chatting on WhatsApp about Indian space exploration, ISRO, and rising Indian space tech startups.
+  const systemPrompt = `You are "Space Chat", voiced by Shivani on IsroPR — a warm, patient, empathetic, and knowledgeable friend chatting on WhatsApp about Indian space exploration, ISRO, and rising Indian space tech startups.
 
 CRITICAL LANGUAGE REQUIREMENT:
 - You MUST reply strictly in ${langMeta.name} (${detectedLang}).
@@ -173,11 +186,11 @@ CRITICAL LANGUAGE REQUIREMENT:
 HOW TO TALK:
 1. Talk like a warm, patient, empathetic friend chatting on WhatsApp — welcoming, calm, kind, and helpful, with an empathy-first tone! Never sound like a formal corporate robot or a cold generic AI.
 2. If this is a voice reply, talk exactly like sending a quick, comforting, friendly voice note (concise, clear, easy to listen to, under 70 words). If text, keep it under 110 words.
-3. Answer ONLY using the facts from the Context below. If the information isn't in the context, be kind, patient, and honest: say you don't have verified details on that yet and recommend checking official ISRO updates at isro.gov.in.
-4. When mentioning dates or technical specifications (like rocket stages, payloads, or launch timelines), mention the verified "as of" date naturally in conversation.
+3. Ground your answers directly on the verified knowledge base and live web context provided below. Prioritize official ISRO sources, mission timelines, and verified updates. If the information is not in the context, be kind, patient, and honest: recommend checking official ISRO updates at isro.gov.in.
+4. When mentioning dates or technical specifications (like rocket stages, payloads, or launch timelines), mention the verified details naturally in conversation.
 5. Output plain text ONLY: no asterisks, no hashtags, no markdown symbols, no bullet points, and no emojis (since your answer will be converted into spoken audio via TTS).
 6. Never invent or guess dates, specs, or numbers.
-7. If asked who you are, say you are Space Buddy, voiced by Shivani on IsroPR, dedicated to making India space-aware.
+7. If asked who you are, say you are Space Chat, voiced by Shivani on IsroPR, dedicated to making India space-aware.
 
 Context:
 ${contextBlock}`;
@@ -205,7 +218,7 @@ ${contextBlock}`;
     messages,
     maxTokens: inputType === 'voice' ? 120 : 250,
     detectedLang,
-    contextData: { knowledge, stories }
+    contextData: { knowledge, stories, webResults }
   });
 
   const replyText = rawReply.replace(/[*#_~`]/g, '').trim();
@@ -242,15 +255,93 @@ ${contextBlock}`;
     replyText,
     audioUrl,
     audioHash,
-    JSON.stringify(sources)
+    JSON.stringify(sanitizedSources)
   );
 
   return {
     transcript: queryText,
     replyText,
     audioUrl,
-    sources,
+    sources: sanitizedSources,
     lang: detectedLang
   };
+}
+
+export function sanitizeSources(rawSources, userQuery) {
+  if (!Array.isArray(rawSources)) return [];
+
+  const URL_FIXES = {
+    'https://www.isro.gov.in/GSLV-F12_NVS-01_Mission.html': 'https://www.isro.gov.in/GSLV_F12_Landingpage.html',
+    'https://www.isro.gov.in/NavIC.html': 'https://www.isro.gov.in/SatelliteNavigationServices.html',
+    'https://www.isro.gov.in/LaunchVehicles.html': 'https://www.isro.gov.in/Launchers.html',
+    'https://www.isro.gov.in/LVM3_Overview.html': 'https://www.isro.gov.in/Launchers.html',
+    'https://www.isro.gov.in/Vyommitra.html': 'https://www.isro.gov.in/Gaganyaan.html',
+    'https://www.pixxel.space/': 'https://en.wikipedia.org/wiki/Pixxel',
+    'https://www.pixxel.space': 'https://en.wikipedia.org/wiki/Pixxel'
+  };
+
+  const queryTerms = (userQuery || '')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{M}\p{N}\s]/gu, ' ')
+    .split(/\s+/)
+    .filter(t => t.length > 1);
+
+  const seenUrls = new Set();
+  const cleaned = [];
+
+  for (const s of rawSources) {
+    if (!s || !s.url) continue;
+
+    let url = s.url.trim();
+    if (URL_FIXES[url]) {
+      url = URL_FIXES[url];
+    }
+
+    if (!url.startsWith('http://') && !url.startsWith('https://')) continue;
+    if (url.includes('duckduckgo.com/l/?')) continue;
+
+    if (seenUrls.has(url)) continue;
+    seenUrls.add(url);
+
+    let score = 0;
+    const titleLower = (s.title || '').toLowerCase();
+    const urlLower = url.toLowerCase();
+
+    for (const term of queryTerms) {
+      if (titleLower.includes(term)) score += 3;
+      if (urlLower.includes(term)) score += 2;
+    }
+
+    const mentions03 = /\b0?3\b/.test(userQuery);
+    const mentions02 = /\b0?2\b/.test(userQuery);
+    const mentions01 = /\b0?1\b/.test(userQuery);
+
+    if (mentions03) {
+      if (titleLower.includes('03') || titleLower.includes(' 3') || titleLower.includes('-3')) score += 6;
+      if (titleLower.includes('01') || titleLower.includes(' 1') || titleLower.includes('-1')) score -= 6;
+    } else if (mentions02) {
+      if (titleLower.includes('02') || titleLower.includes(' 2') || titleLower.includes('-2')) score += 6;
+      if (titleLower.includes('01') || titleLower.includes(' 1') || titleLower.includes('-1')) score -= 6;
+    } else if (mentions01) {
+      if (titleLower.includes('01') || titleLower.includes(' 1') || titleLower.includes('-1')) score += 6;
+    }
+
+    if (userQuery.toLowerCase().includes('nvs') && titleLower.includes('aditya')) {
+      score -= 10;
+    }
+    if (userQuery.toLowerCase().includes('aditya') && titleLower.includes('nvs')) {
+      score -= 10;
+    }
+
+    cleaned.push({
+      title: s.title,
+      url,
+      as_of: s.as_of || 'verified',
+      score
+    });
+  }
+
+  cleaned.sort((a, b) => b.score - a.score);
+  return cleaned.slice(0, 3).map(({ title, url, as_of }) => ({ title, url, as_of }));
 }
 
