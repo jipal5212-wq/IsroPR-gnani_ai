@@ -219,12 +219,14 @@ function setupEventListeners() {
       e.stopPropagation();
 
       const storyId = playTarget.dataset.storyId || 'chandrayaan-3';
+      const card = playTarget.closest('.story-card');
+      const title = card?.querySelector('.story-title')?.textContent?.trim();
       const audioState = getAudioState();
 
       if (audioState.isPlaying && audioState.storyId === storyId) {
         togglePlay();
       } else {
-        playStory(storyId, getActiveLang());
+        playStory(storyId, getActiveLang(), { title });
       }
     });
   }

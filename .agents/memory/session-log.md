@@ -629,3 +629,18 @@ Project is live globally at **https://isropr.vercel.app**.
 
 
 
+
+---
+
+## Session 25 — 2026-10-29
+
+**Goal**: Generate multilingual realistic Shivani audio for Mangalyaan Mars mission in all languages, seed into database, update dynamic player, and deploy to Vercel production.
+
+### What was done:
+- ✅ Translated user's emotion-tagged Hindi prompt into 5 Indian languages (English, Tamil, Telugu, Bengali, Kannada) strictly preserving emotional expression tags (`<exhales>`, `<slow>`, `<sniffles>`, `<soft>`).
+- ✅ Handled Gnani TTS API request payload length limits by splitting text into ~600-700 character chunks at sentence boundaries, synthesizing each chunk with Timbre v3.0, stripping WAV headers, and concatenating raw PCM buffers with a proper 24kHz 16-bit mono WAV header.
+- ✅ Synthesized all 6 languages in Shivani voice (`hi-IN`, `en-IN`, `ta-IN`, `te-IN`, `bn-IN`, `kn-IN`), outputting ~8.5MB pristine WAV files in `data/audio/stories/mangalyaan/`.
+- ✅ Added Mangalyaan story definition and translations to `server/db/seed.js` and re-seeded SQLite database (`data/spacebharat.db`).
+- ✅ Added authentic Mangalyaan spacecraft cover image (`data/covers/mangalyaan-cover.jpg`).
+- ✅ Upgraded `web/js/spotify-player.js` and `web/js/library.js` to dynamically support multiple stories, metadata titles/subtitles, and proper URL endpoint targeting without audio cache collisions.
+- ✅ Verified all 20 automated tests passing (`npm test`).

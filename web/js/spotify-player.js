@@ -105,7 +105,7 @@ function setupAudioListeners() {
   });
 }
 
-export async function playStory(storyId = 'chandrayaan-3', lang = null) {
+export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata = {}) {
   const activeLang = lang || getActiveLang();
   const langCode = activeLang.includes('-') ? activeLang : `${activeLang}-IN`;
   const audioFile = `${langCode}.wav`;
@@ -113,13 +113,37 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null) {
 
   state.storyId = storyId;
   state.audioSrc = audioUrl;
-  state.title = 'Chandrayaan-3: 15 Minutes of Terror & The South Pole Triumph';
-  state.subtitle = langCode.startsWith('hi') 
-    ? 'इसरो आधिकारिक ऑडियो पॉडकास्ट • 3 मिनट' 
-    : 'ISRO Official Outreach • 3 Min Podcast';
 
-  if (!audio.src || !audio.src.includes(audioFile)) {
+  if (metadata.title) {
+    state.title = metadata.title;
+  } else if (storyId === 'mangalyaan') {
+    state.title = "Mangalyaan: India's First Mission to Mars";
+  } else {
+    state.title = 'Chandrayaan-3: 15 Minutes of Terror & The South Pole Triumph';
+  }
+
+  if (metadata.subtitle) {
+    state.subtitle = metadata.subtitle;
+  } else if (storyId === 'mangalyaan') {
+    state.subtitle = langCode.startsWith('hi') 
+      ? 'इसरो आधिकारिक ऑडियो पॉडकास्ट • मंगलयान' 
+      : 'ISRO Official Outreach • Mars Orbiter Mission';
+  } else {
+    state.subtitle = langCode.startsWith('hi') 
+      ? 'इसरो आधिकारिक ऑडियो पॉडकास्ट • 3 मिनट' 
+      : 'ISRO Official Outreach • 3 Min Podcast';
+  }
+
+  // Update full view link
+  const expandLink = document.querySelector('.sp-expand-link');
+  if (expandLink) {
+    expandLink.href = `/story.html?id=${storyId}`;
+  }
+
+  const targetSuffix = `${storyId}/${audioFile}`;
+  if (!audio.src || !audio.src.endsWith(targetSuffix)) {
     audio.src = audioUrl;
+    audio.currentTime = 0;
   }
 
   try {
