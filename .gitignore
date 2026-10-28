@@ -40,3 +40,5 @@ npm-debug.log*
 # Secrets
 *.pem
 *.key
+
+.vercel

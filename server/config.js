@@ -4,10 +4,13 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const isVercel = Boolean(process.env.VERCEL);
+const defaultDataDir = isVercel ? '/tmp/data' : './data';
+
 export const ENV = {
   PORT: parseInt(process.env.PORT || '3000', 10),
   NODE_ENV: process.env.NODE_ENV || 'development',
-  DATA_DIR: path.resolve(process.cwd(), process.env.DATA_DIR || './data'),
+  DATA_DIR: path.resolve(process.env.DATA_DIR || defaultDataDir),
   PUBLIC_BASE_URL: process.env.PUBLIC_BASE_URL || 'http://localhost:3000',
 
   GNANI_API_KEY: process.env.GNANI_API_KEY || process.env.GNANI_KEY || '',
@@ -30,17 +33,34 @@ export const ENV = {
 export const DIRS = {
   DATA: ENV.DATA_DIR,
   DB_FILE: path.join(ENV.DATA_DIR, 'spacebharat.db'),
-  AUDIO: path.join(ENV.DATA_DIR, 'audio'),
-  AUDIO_STORIES: path.join(ENV.DATA_DIR, 'audio', 'stories'),
+  AUDIO: isVercel ? path.resolve(process.cwd(), 'data/audio') : path.join(ENV.DATA_DIR, 'audio'),
+  AUDIO_STORIES: isVercel ? path.resolve(process.cwd(), 'data/audio', 'stories') : path.join(ENV.DATA_DIR, 'audio', 'stories'),
   AUDIO_CHAT: path.join(ENV.DATA_DIR, 'audio', 'chat'),
   UPLOADS: path.join(ENV.DATA_DIR, 'uploads'),
-  COVERS: path.join(ENV.DATA_DIR, 'covers'),
-  GALLERY: path.join(ENV.DATA_DIR, 'gallery')
+  COVERS: isVercel ? path.resolve(process.cwd(), 'data/covers') : path.join(ENV.DATA_DIR, 'covers'),
+  GALLERY: isVercel ? path.resolve(process.cwd(), 'data/gallery') : path.join(ENV.DATA_DIR, 'gallery')
 };
+
+// On Vercel, copy pre-seeded database to writable /tmp
+if (isVercel) {
+  try {
+    fs.mkdirSync(ENV.DATA_DIR, { recursive: true });
+    const seedDb = path.resolve(process.cwd(), 'data/spacebharat.db');
+    if (!fs.existsSync(DIRS.DB_FILE) && fs.existsSync(seedDb)) {
+      fs.copyFileSync(seedDb, DIRS.DB_FILE);
+    }
+  } catch (err) {
+    console.warn('Vercel /tmp DB init notice:', err.message);
+  }
+}
 
 for (const dir of Object.values(DIRS)) {
   if (dir !== DIRS.DB_FILE && !fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+    try {
+      fs.mkdirSync(dir, { recursive: true });
+    } catch {
+      // Ignored for static read-only paths in serverless
+    }
   }
 }
 
