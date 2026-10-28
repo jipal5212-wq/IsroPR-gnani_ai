@@ -13,10 +13,12 @@ export async function synthesizeSpeech({ text, lang, voice = 'Shivani', targetPa
 
   // Check if audio already exists in cache
   if (fs.existsSync(finalPath) && fs.statSync(finalPath).size > 100) {
+    const audioBuffer = fs.readFileSync(finalPath);
     return {
       filePath: finalPath,
       hash,
-      cached: true
+      cached: true,
+      audioBase64: audioBuffer.toString('base64')
     };
   }
 
@@ -26,11 +28,13 @@ export async function synthesizeSpeech({ text, lang, voice = 'Shivani', targetPa
   // If no Gnani API key, generate a silent or simulated audio placeholder for local dev/testing
   if (!ENV.GNANI_API_KEY) {
     // Write a dummy WAV header byte sequence so player can test
-    fs.writeFileSync(finalPath, Buffer.from([0x52, 0x49, 0x46, 0x46, 0x24, 0x00, 0x00, 0x00, 0x57, 0x41, 0x56, 0x45]));
+    const dummyBuffer = Buffer.from([0x52, 0x49, 0x46, 0x46, 0x24, 0x00, 0x00, 0x00, 0x57, 0x41, 0x56, 0x45]);
+    fs.writeFileSync(finalPath, dummyBuffer);
     return {
       filePath: finalPath,
       hash,
-      simulated: true
+      simulated: true,
+      audioBase64: dummyBuffer.toString('base64')
     };
   }
 
@@ -72,12 +76,14 @@ export async function synthesizeSpeech({ text, lang, voice = 'Shivani', targetPa
     }
 
     const arrayBuffer = await res.arrayBuffer();
-    fs.writeFileSync(finalPath, Buffer.from(arrayBuffer));
+    const audioBuffer = Buffer.from(arrayBuffer);
+    fs.writeFileSync(finalPath, audioBuffer);
 
     return {
       filePath: finalPath,
       hash,
-      cached: false
+      cached: false,
+      audioBase64: audioBuffer.toString('base64')
     };
   } catch (err) {
     clearTimeout(timeoutId);

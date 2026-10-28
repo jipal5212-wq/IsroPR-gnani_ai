@@ -606,5 +606,26 @@ Landing page is ultra-light, clean, and professional. Space Chat branding and em
 ### Status:
 Multilingual audio narration feature highlighted creatively and interactively in the spotlight hero.
 
+---
+
+## Session 17 — 2026-10-29
+
+**Goal**: Prepare full-stack production deployment, create GitHub repository `IsroPR-gnani_ai`, configure unified deployment on Vercel with zero cold starts, and provide public live link.
+
+### What was done:
+- ✅ **GitHub Repository Created & Pushed**:
+  - Initialized and published repository: [`jipal5212-wq/IsroPR-gnani_ai`](https://github.com/jipal5212-wq/IsroPR-gnani_ai).
+  - Pushed all source code, database seed, Pragyan NavCam posters, and multi-language studio narration audios.
+- ✅ **Vercel Unified Serverless + Global CDN Deployment**:
+  - Created [`api/index.js`](file:///c:/Users/ASHISH%20KUMAR%20PAL/OneDrive/Desktop/Isro's%20PR/api/index.js) exporting Express backend for `@vercel/node`.
+  - Configured [`vercel.json`](file:///c:/Users/ASHISH%20KUMAR%20PAL/OneDrive/Desktop/Isro's%20PR/vercel.json) with edge rewrites for `/api/*` and `/media/*` back to the serverless handler and all frontend assets to `/web/$1`.
+  - Upgraded [`server/config.js`](file:///c:/Users/ASHISH%20KUMAR%20PAL/OneDrive/Desktop/Isro's%20PR/server/config.js) to detect Vercel environment and safely initialize the database in `/tmp/data/spacebharat.db`.
+  - Deployed directly to production: **`https://isropr.vercel.app`**.
+  - Synchronized production secrets (`GNANI_API_KEY`, `LLM_API_KEY`, `JWT_SECRET`) to Vercel environment.
+  - Verified live endpoints `/api/languages` and `/api/stories` returning HTTP 200 with full multilingual data.
+
+### Status:
+Project is live globally at **https://isropr.vercel.app**.
+
 
 

@@ -236,15 +236,20 @@ ${contextBlock}`;
       model: 'timbre-v3.0'
     });
 
-    if (ttsResult && ttsResult.filePath) {
+    if (ttsResult) {
       audioHash = ttsResult.hash;
-      audioUrl = `/media/audio/chat/${path.basename(ttsResult.filePath)}`;
+      if (ttsResult.audioBase64) {
+        audioUrl = `data:audio/wav;base64,${ttsResult.audioBase64}`;
+      } else if (ttsResult.filePath) {
+        audioUrl = `/media/audio/chat/${path.basename(ttsResult.filePath)}`;
+      }
     }
   } catch (err) {
     console.warn('Voice reply synthesis failed, continuing with text response:', err.message);
   }
 
-  // Save Assistant reply to database
+  // Save Assistant reply to database (store relative media path in db for lightweight row size)
+  const dbAudioPath = audioHash ? `/media/audio/chat/${audioHash}.wav` : audioUrl;
   db.prepare(`
     INSERT INTO chat_messages (session_id, role, input_type, lang, text, audio_path, audio_hash, sources, status)
     VALUES (?, 'assistant', ?, ?, ?, ?, ?, ?, 'ok')
@@ -253,7 +258,7 @@ ${contextBlock}`;
     inputType,
     detectedLang,
     replyText,
-    audioUrl,
+    dbAudioPath,
     audioHash,
     JSON.stringify(sanitizedSources)
   );

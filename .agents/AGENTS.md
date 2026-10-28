@@ -37,6 +37,7 @@
 | 20 | 2026-10-27 | Anti-"AI Rich" Editorial Dignity & Architectural Grid | Purged generic multi-color neon aurora blur blobs and pulsing halos; implemented subtle scientific grid backdrop; rendered solid deep ISRO navy typography; transformed chatbot banner into dignified ISRO Knowledge Desk |
 | 21 | 2026-10-27 | Space Chat Rebranding & Pure Lightweight Landing Page | Renamed all references from "Space Buddy" to "Space Chat"; eliminated all emojis (mic, headphone, satellite, flag, speech bubble) across HTML and JS; purged heavy bottom knowledge desk teaser card to keep the landing page ultra-light, focused strictly on multilingual audio stories and seamless background playback |
 | 22 | 2026-10-27 | Creative Multilingual Audio Highlight Capsule & Native Chips | Highlighted "Audio Narration across 6 Indian Languages" in an interactive hero capsule featuring a live oscillating soundwave equalizer, 'Studio Voiced' badge, and 6 interactive native script chips (EN, हिन्दी, தமிழ், తెలుగు, বাংলা, ಕನ್ನಡ) that switch narration and sync playback on the fly |
+| 23 | 2026-10-29 | GitHub Repo & Vercel Production Deployment | Published repository to `jipal5212-wq/IsroPR-gnani_ai`; deployed unified full-stack serverless + global Edge CDN on Vercel at `https://isropr.vercel.app` with production secrets synced |
 
 ---
 

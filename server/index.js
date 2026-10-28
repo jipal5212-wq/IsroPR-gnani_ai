@@ -25,7 +25,7 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
       imgSrc: ["'self'", 'data:', 'blob:', 'https://upload.wikimedia.org', 'https://thumb.wikimedia.org'],
-      mediaSrc: ["'self'", 'blob:'],
+      mediaSrc: ["'self'", 'data:', 'blob:'],
       connectSrc: ["'self'"],
     }
   },
@@ -36,6 +36,24 @@ app.use(helmet({
 app.use(cookieParser());
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
+
+// Dynamic Chat Audio Handler (supports serverless /tmp and persistent paths)
+app.get('/media/audio/chat/:filename', (req, res) => {
+  const filename = path.basename(req.params.filename);
+  const candidatePaths = [
+    path.join(DIRS.AUDIO_CHAT, filename),
+    path.join(process.cwd(), 'data/audio/chat', filename),
+    path.join('/tmp/data/audio/chat', filename)
+  ];
+
+  for (const candidate of candidatePaths) {
+    if (fs.existsSync(candidate)) {
+      res.setHeader('Content-Type', 'audio/wav');
+      return res.sendFile(candidate);
+    }
+  }
+  return res.status(404).send('Audio not found');
+});
 
 // Media File Serving (Audio, Covers, and Gallery)
 app.use('/media/audio', express.static(DIRS.AUDIO, {
