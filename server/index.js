@@ -57,8 +57,9 @@ app.get('/media/audio/chat/:filename', (req, res) => {
 
 // Media File Serving (Audio, Covers, and Gallery)
 app.use('/media/audio', express.static(DIRS.AUDIO, {
-  maxAge: '30d',
-  immutable: true
+  maxAge: '1h',
+  etag: true,
+  lastModified: true
 }));
 
 app.use('/media/covers', express.static(DIRS.COVERS, {

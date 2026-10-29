@@ -130,12 +130,15 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
   const activeLang = lang || getActiveLang();
   const langCode = activeLang.includes('-') ? activeLang : `${activeLang}-IN`;
   const audioFile = `${langCode}.wav`;
-  const audioUrl = `/media/audio/stories/${storyId}/${audioFile}`;
+  const audioUrl = `/media/audio/stories/${storyId}/${audioFile}?v=nvs03_v2`;
 
   state.storyId = storyId;
   state.audioSrc = audioUrl;
 
-  const targetDuration = metadata.duration || STORY_DURATIONS[storyId] || 180;
+  const defaultDuration = (storyId === 'nvs-03') 
+    ? (langCode.startsWith('hi') ? 540 : langCode.startsWith('en') ? 510 : 130)
+    : (STORY_DURATIONS[storyId] || 180);
+  const targetDuration = metadata.duration || defaultDuration;
   state.duration = (audio && audio.duration && !isNaN(audio.duration) && audio.duration > 0) ? audio.duration : targetDuration;
   state.currentTime = 0;
   updateTimelineUI();
@@ -159,7 +162,7 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
   } else if (storyId === 'nvs-03') {
     state.subtitle = langCode.startsWith('hi') 
       ? 'इसरो आधिकारिक ऑडियो पॉडकास्ट • 9 मिनट' 
-      : 'ISRO Official Outreach • GSLV-F18 / NavIC';
+      : `ISRO Official Outreach • GSLV-F18 / NavIC (${langCode.split('-')[0].toUpperCase()})`;
   } else {
     state.subtitle = langCode.startsWith('hi') 
       ? 'इसरो आधिकारिक ऑडियो पॉडकास्ट • 3 मिनट' 
@@ -179,8 +182,8 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
     expandLink.href = `/story.html?id=${storyId}`;
   }
 
-  const targetSuffix = `${storyId}/${audioFile}`;
-  if (!audio.src || !audio.src.endsWith(targetSuffix)) {
+  const targetPath = `/${storyId}/${audioFile}`;
+  if (!audio.src || !audio.src.includes(targetPath)) {
     audio.src = audioUrl;
     audio.currentTime = 0;
   }

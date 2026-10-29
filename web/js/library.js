@@ -149,6 +149,19 @@ async function loadLanguages() {
   }
 }
 
+function updateNvsCardLang(code) {
+  const btnText = document.querySelector('#upcoming-btn-play-nvs03 .btn-play-text');
+  if (btnText) {
+    if (code.startsWith('hi')) {
+      btnText.textContent = 'कहानी सुनें (9 min)';
+    } else if (code.startsWith('en')) {
+      btnText.textContent = 'Play Story (8 min)';
+    } else {
+      btnText.textContent = 'Play Story (Podcast)';
+    }
+  }
+}
+
 function setupEventListeners() {
   // Creative Multilingual Audio Highlight Chips
   const heroLangChips = document.querySelectorAll('.mah-chip');
@@ -159,6 +172,7 @@ function setupEventListeners() {
         chip.classList.toggle('active', isActive);
         chip.setAttribute('aria-selected', isActive ? 'true' : 'false');
       });
+      updateNvsCardLang(code);
     };
 
     syncChips(getActiveLang());
@@ -217,9 +231,11 @@ function setupEventListeners() {
       if (audioState.isPlaying && audioState.storyId === 'nvs-03') {
         togglePlay();
       } else {
-        playStory('nvs-03', getActiveLang(), {
+        const lang = getActiveLang();
+        const duration = lang.startsWith('hi') ? 540 : lang.startsWith('en') ? 483 : 130;
+        playStory('nvs-03', lang, {
           title: 'NVS-03: NavIC Constellation & The Pyro Valve Gambit',
-          duration: 540
+          duration
         });
       }
     });
@@ -263,8 +279,11 @@ function setupEventListeners() {
       } else {
         const title = el.querySelector('.station-title, .shelf-card-title')?.textContent?.trim();
         const img = el.querySelector('img')?.getAttribute('src');
-        const durationSec = storyId === 'nvs-03' ? 540 : 180;
-        playStory(storyId, getActiveLang(), { title, coverSrc: img, duration: durationSec });
+        const activeL = getActiveLang();
+        const durationSec = storyId === 'nvs-03' 
+          ? (activeL.startsWith('hi') ? 540 : activeL.startsWith('en') ? 483 : 130)
+          : 180;
+        playStory(storyId, activeL, { title, coverSrc: img, duration: durationSec });
       }
     });
   });

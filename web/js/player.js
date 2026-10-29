@@ -123,9 +123,12 @@ function renderStoryMeta(story, availableLangs, currentLang) {
       const newLang = e.target.value;
       setActiveLang(newLang);
       activeLang = newLang;
+      const expectedDuration = activeStoryId === 'nvs-03'
+        ? (newLang.startsWith('hi') ? 540 : newLang.startsWith('en') ? 483 : 130)
+        : (STORY_DURATIONS[activeStoryId] || 180);
       playStory(activeStoryId, newLang, {
         coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`,
-        duration: STORY_DURATIONS[activeStoryId] || 180
+        duration: expectedDuration
       });
     };
   }
@@ -142,9 +145,12 @@ function setupPodcastControls() {
     playBtn.onclick = () => {
       const st = getAudioState();
       if (!st.isPlaying && st.storyId !== activeStoryId) {
+        const expectedDuration = activeStoryId === 'nvs-03'
+          ? (activeLang.startsWith('hi') ? 540 : activeLang.startsWith('en') ? 483 : 130)
+          : (STORY_DURATIONS[activeStoryId] || 180);
         playStory(activeStoryId, activeLang, {
           coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`,
-          duration: STORY_DURATIONS[activeStoryId] || 180
+          duration: expectedDuration
         });
       } else {
         togglePlay();
@@ -213,7 +219,9 @@ function syncPlayerUI(st) {
   }
 
   if (totalTimeEl) {
-    const expectedSec = STORY_DURATIONS[st.storyId || activeStoryId] || 180;
+    const expectedSec = (st.storyId || activeStoryId) === 'nvs-03'
+      ? (activeLang.startsWith('hi') ? 540 : activeLang.startsWith('en') ? 483 : 130)
+      : (STORY_DURATIONS[st.storyId || activeStoryId] || 180);
     const dur = (st.duration && !isNaN(st.duration) && st.duration > 0) ? st.duration : expectedSec;
     totalTimeEl.textContent = formatDuration(dur);
   }

@@ -592,9 +592,19 @@ A successful NVS-03 restores NavIC to four operational satellites, meeting the b
     }
   ];
 
+  const nvsDurations = {
+    'hi-IN': 540,
+    'en-IN': 483,
+    'ta-IN': 136,
+    'te-IN': 120,
+    'bn-IN': 132,
+    'kn-IN': 123
+  };
+
   for (const t of nvs03Translations) {
     const audioUrl = `/media/audio/stories/nvs-03/${t.lang}.wav`;
-    insertTrans.run('nvs-03', t.lang, t.body, t.voice, audioUrl, 540);
+    const dur = nvsDurations[t.lang] || 180;
+    insertTrans.run('nvs-03', t.lang, t.body, t.voice, audioUrl, dur);
   }
 
   if (SEED_ADDITIONAL_STORIES) {
