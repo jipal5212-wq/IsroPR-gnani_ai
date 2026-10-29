@@ -73,6 +73,16 @@ function syncCardButtons(audioState) {
     }
   }
 
+  // Sync station cards and featured shelf cards
+  document.querySelectorAll('.station-card[data-story-id], .shelf-card, .shelf-play-fab').forEach(el => {
+    const sid = el.dataset.storyId;
+    if (audioState.isPlaying && audioState.storyId === sid) {
+      el.classList.add('playing');
+    } else {
+      el.classList.remove('playing');
+    }
+  });
+
   cards.forEach(card => {
     const cardStoryId = card.dataset.storyId || 'chandrayaan-3';
     const isPlayingThis = audioState.isPlaying && audioState.storyId === cardStoryId;
@@ -237,6 +247,25 @@ function setupEventListeners() {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       scrollToAudioStories();
+    });
+  });
+
+  // Station cards & trending shelf instant play triggers
+  document.querySelectorAll('.station-card[data-story-id], .shelf-play-fab, .shelf-card').forEach(el => {
+    el.addEventListener('click', (e) => {
+      const storyId = el.dataset.storyId;
+      if (!storyId) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const audioState = getAudioState();
+      if (audioState.isPlaying && audioState.storyId === storyId) {
+        togglePlay();
+      } else {
+        const title = el.querySelector('.station-title, .shelf-card-title')?.textContent?.trim();
+        const img = el.querySelector('img')?.getAttribute('src');
+        const durationSec = storyId === 'nvs-03' ? 540 : 180;
+        playStory(storyId, getActiveLang(), { title, coverSrc: img, duration: durationSec });
+      }
     });
   });
 

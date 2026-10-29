@@ -247,6 +247,11 @@ function injectSpotifyBar() {
   }
 
   bar.innerHTML = `
+    <!-- Top Live Progress Bar for Mobile / Mini Mode -->
+    <div class="sp-mini-progress-track" aria-hidden="true">
+      <div class="sp-mini-progress-fill" id="sp-mini-progress-fill" style="width: 0%;"></div>
+    </div>
+
     <!-- Left: Track info -->
     <div class="sp-track-info">
       <a href="/story.html?id=${state.storyId}" class="sp-thumb-wrap" title="View story details">
@@ -373,9 +378,10 @@ function updateBarUI() {
     }
   });
 
-  // Sync card play buttons across the page
-  document.querySelectorAll('.card-play-fab, .btn-listen-instant').forEach(btn => {
-    if (state.isPlaying) {
+  // Sync card and shelf play buttons across the page
+  document.querySelectorAll('.card-play-fab, .btn-listen-instant, .shelf-play-fab, .station-card').forEach(btn => {
+    const btnStoryId = btn.dataset.storyId || btn.closest('[data-story-id]')?.dataset.storyId;
+    if (state.isPlaying && btnStoryId === state.storyId) {
       btn.classList.add('playing');
     } else {
       btn.classList.remove('playing');
@@ -387,13 +393,15 @@ function updateTimelineUI() {
   const curEl = document.getElementById('sp-cur-time');
   const totalEl = document.getElementById('sp-total-time');
   const slider = document.getElementById('sp-seek-slider');
+  const miniFill = document.getElementById('sp-mini-progress-fill');
 
   if (curEl) curEl.textContent = formatDuration(state.currentTime);
   if (totalEl) totalEl.textContent = formatDuration(state.duration);
 
-  if (slider && state.duration > 0) {
+  if (state.duration > 0) {
     const pct = (state.currentTime / state.duration) * 100;
-    slider.value = pct;
+    if (slider) slider.value = pct;
+    if (miniFill) miniFill.style.width = `${pct}%`;
   }
 }
 

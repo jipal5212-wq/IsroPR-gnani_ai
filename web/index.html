@@ -112,6 +112,54 @@
       </div>
     </section>
 
+    <!-- 1.5 QUICK MISSION STATIONS STRIP (Amazon Music / Spotify Mobile Stations Style) -->
+    <section class="quick-stations-section" aria-label="Quick Mission Stations">
+      <div class="quick-stations-scroll">
+        <button class="station-card station-c3" data-story-id="chandrayaan-3" type="button" aria-label="Play Chandrayaan-3">
+          <div class="station-icon-wrap">
+            <img src="/media/covers/chandrayaan-3-cover.jpg" alt="Chandrayaan-3" class="station-thumb" />
+            <span class="station-play-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </div>
+          <div class="station-meta">
+            <span class="station-title">Chandrayaan-3</span>
+            <span class="station-sub">Lunar South Pole • 3 min</span>
+          </div>
+        </button>
+
+        <button class="station-card station-nvs" data-story-id="nvs-03" type="button" aria-label="Play NVS-03">
+          <div class="station-icon-wrap">
+            <img src="/media/covers/nvs-03-cover.jpg" alt="NVS-03" class="station-thumb" />
+            <span class="station-play-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </div>
+          <div class="station-meta">
+            <span class="station-title">NVS-03 NavIC</span>
+            <span class="station-sub">Pyro Valve • 9 min</span>
+          </div>
+        </button>
+
+        <button class="station-card station-mom" data-story-id="mangalyaan" type="button" aria-label="Play Mangalyaan">
+          <div class="station-icon-wrap">
+            <img src="/media/covers/mangalyaan-cover.jpg" alt="Mangalyaan" class="station-thumb" />
+            <span class="station-play-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </div>
+          <div class="station-meta">
+            <span class="station-title">Mangalyaan</span>
+            <span class="station-sub">Mars Orbit • 3 min</span>
+          </div>
+        </button>
+
+        <a href="/chat.html" class="station-card station-chat" aria-label="Ask ISRO AI">
+          <div class="station-icon-wrap station-ai-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="station-meta">
+            <span class="station-title">Space AI Chat</span>
+            <span class="station-sub">ISRO Assistant • Live</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
     <!-- 2. UPCOMING / ONGOING MISSIONS SPOTLIGHT SHOWCASE -->
     <section class="upcoming-missions-section" id="upcoming-missions">
       <div class="upcoming-container">
@@ -157,6 +205,67 @@
                 <span>Mission Briefing →</span>
               </a>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2.5 TRENDING MISSIONS SHELF (Amazon Music "Your Frequent Plays" inspired) -->
+    <section class="trending-shelf-section" id="trending-shelf" aria-label="Trending Missions Shelf">
+      <div class="shelf-header">
+        <div class="shelf-title-wrap">
+          <span class="shelf-badge">FEATURED PODCASTS</span>
+          <h2 class="shelf-heading">Trending Mission Stories</h2>
+        </div>
+        <div class="shelf-scroll-cue">
+          <span>Swipe to explore</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+
+      <div class="trending-shelf-scroll" id="trending-shelf-scroll">
+        <div class="shelf-card" data-story-id="chandrayaan-3">
+          <div class="shelf-card-thumb">
+            <img src="/media/covers/chandrayaan-3-cover.jpg" alt="Chandrayaan-3" />
+            <span class="shelf-duration-tag">3 MIN</span>
+            <button class="shelf-play-fab" data-story-id="chandrayaan-3" aria-label="Play Chandrayaan-3">
+              <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <div class="sp-equalizer-bars"><span></span><span></span><span></span></div>
+            </button>
+          </div>
+          <div class="shelf-card-info">
+            <h3 class="shelf-card-title">Chandrayaan-3</h3>
+            <span class="shelf-card-sub">Lunar South Pole • Vikram Lander</span>
+          </div>
+        </div>
+
+        <div class="shelf-card" data-story-id="nvs-03">
+          <div class="shelf-card-thumb">
+            <img src="/media/covers/nvs-03-cover.jpg" alt="NVS-03" />
+            <span class="shelf-duration-tag shelf-tag-accent">9 MIN</span>
+            <button class="shelf-play-fab" data-story-id="nvs-03" aria-label="Play NVS-03">
+              <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <div class="sp-equalizer-bars"><span></span><span></span><span></span></div>
+            </button>
+          </div>
+          <div class="shelf-card-info">
+            <h3 class="shelf-card-title">NVS-03: NavIC Gambit</h3>
+            <span class="shelf-card-sub">Pyro Valve • GSLV-F18 GPS</span>
+          </div>
+        </div>
+
+        <div class="shelf-card" data-story-id="mangalyaan">
+          <div class="shelf-card-thumb">
+            <img src="/media/covers/mangalyaan-cover.jpg" alt="Mangalyaan" />
+            <span class="shelf-duration-tag">3 MIN</span>
+            <button class="shelf-play-fab" data-story-id="mangalyaan" aria-label="Play Mangalyaan">
+              <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <div class="sp-equalizer-bars"><span></span><span></span><span></span></div>
+            </button>
+          </div>
+          <div class="shelf-card-info">
+            <h3 class="shelf-card-title">Mangalyaan</h3>
+            <span class="shelf-card-sub">India's Mars Orbiter Mission</span>
           </div>
         </div>
       </div>

@@ -2741,15 +2741,648 @@ body:has(#player-content) {
   font-weight: 800 !important;
 }
 
+/* ============================================================
+   MINI TOP PROGRESS BAR ON DOCKED PLAYER
+   ============================================================ */
+.sp-mini-progress-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  z-index: 10;
+}
+
+.sp-mini-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff6b00 0%, #38bdf8 100%);
+  transition: width 0.15s linear;
+}
+
+/* ============================================================
+   QUICK MISSION STATIONS STRIP (Native App / Streaming Style)
+   ============================================================ */
+.quick-stations-section {
+  max-width: 1160px;
+  margin: -1rem auto 2.5rem;
+  padding: 0 1.5rem;
+}
+
+.quick-stations-scroll {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.station-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(30, 41, 59, 0.7) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.station-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 107, 0, 0.45);
+  box-shadow: 0 8px 24px -4px rgba(255, 107, 0, 0.2);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.85) 100%);
+}
+
+.station-card.playing {
+  border-color: #ff6b00;
+  box-shadow: 0 0 20px -2px rgba(255, 107, 0, 0.35);
+  background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(15, 23, 42, 0.9) 100%);
+}
+
+.station-icon-wrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.station-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.station-ai-icon {
+  background: linear-gradient(135deg, #0284c7 0%, #0f4c81 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.station-play-badge {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: #ffffff;
+}
+
+.station-play-badge svg {
+  width: 18px;
+  height: 18px;
+}
+
+.station-card:hover .station-play-badge,
+.station-card.playing .station-play-badge {
+  opacity: 1;
+}
+
+.station-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.station-title {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.station-sub {
+  font-size: 0.74rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.15rem;
+}
+
+/* ============================================================
+   TRENDING MISSIONS SHELF (Horizontal Swipe on Phone)
+   ============================================================ */
+.trending-shelf-section {
+  max-width: 1160px;
+  margin: 0 auto 3.5rem;
+  padding: 0 1.5rem;
+}
+
+.shelf-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.shelf-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.shelf-badge {
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #ffaa5a;
+  text-transform: uppercase;
+}
+
+.shelf-heading {
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.shelf-scroll-cue {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.trending-shelf-scroll {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.shelf-card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  border-radius: 18px;
+  padding: 0.85rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.shelf-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(255, 107, 0, 0.35);
+}
+
+.shelf-card.playing {
+  border-color: #ff6b00;
+  box-shadow: 0 8px 24px rgba(255, 107, 0, 0.2);
+}
+
+.shelf-card-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0.85rem;
+  background: #0f172a;
+}
+
+.shelf-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.shelf-card:hover .shelf-card-thumb img {
+  transform: scale(1.05);
+}
+
+.shelf-duration-tag {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.shelf-tag-accent {
+  background: rgba(255, 107, 0, 0.9);
+  color: #ffffff;
+}
+
+.shelf-play-fab {
+  position: absolute;
+  bottom: 0.6rem;
+  right: 0.6rem;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: #ff6b00;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  z-index: 2;
+}
+
+.shelf-play-fab:hover {
+  transform: scale(1.1);
+  background: #ea580c;
+}
+
+.shelf-play-fab .sp-equalizer-bars {
+  display: none;
+}
+
+.shelf-play-fab.playing {
+  background: #10b981;
+}
+
+.shelf-play-fab.playing .icon-play {
+  display: none;
+}
+
+.shelf-play-fab.playing .sp-equalizer-bars {
+  display: inline-flex;
+}
+
+.shelf-card-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.shelf-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem;
+  line-height: 1.3;
+}
+
+.shelf-card-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* ============================================================
+   PHONE / MOBILE LAYOUT OPTIMIZATION (Streaming App Feel)
+   ============================================================ */
 @media (max-width: 860px) {
+  /* Quick Stations horizontal swipe strip */
+  .quick-stations-section {
+    padding: 0 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .quick-stations-scroll {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.35rem;
+  }
+
+  .quick-stations-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .station-card {
+    flex: 0 0 200px;
+    scroll-snap-align: start;
+    padding: 0.65rem 0.85rem;
+  }
+
+  /* Trending Shelf Horizontal Carousel on Phone (like "Your Frequent Plays") */
+  .trending-shelf-section {
+    padding: 0 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .shelf-heading {
+    font-size: 1.25rem;
+  }
+
+  .trending-shelf-scroll {
+    display: flex;
+    gap: 0.9rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+  }
+
+  .trending-shelf-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shelf-card {
+    flex: 0 0 220px;
+    max-width: 220px;
+    scroll-snap-align: start;
+    padding: 0.75rem;
+  }
+
+  .shelf-card-thumb {
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+  }
+
+  /* Upcoming Showcase Banner on Phone */
+  .upcoming-missions-section {
+    padding: 0 1rem;
+    margin-top: -0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .upcoming-container {
+    padding: 1.25rem;
+    border-radius: 20px;
+  }
+
   .upcoming-spotlight-card {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
+
   .upcoming-img-wrapper {
-    height: 220px;
+    height: 190px;
+    min-height: 190px;
+    border-radius: 14px;
   }
+
   .upcoming-mission-title {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
+    line-height: 1.3;
+  }
+
+  .upcoming-mission-desc {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin-bottom: 1.15rem;
+  }
+
+  .upcoming-action-dock {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .btn-upcoming-play, .btn-upcoming-details {
+    justify-content: center;
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+  }
+
+  /* All Audio Stories as Compact Streaming Rows (like "Songs for You") */
+  .audio-stories-section {
+    padding: 0 1rem 3rem;
+  }
+
+  .stories-tabs-row {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    flex-wrap: nowrap;
+  }
+
+  .stories-tabs-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cat-tab {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .stories-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .story-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.75rem;
+    border-radius: 14px;
+  }
+
+  .story-card-top {
+    width: 72px;
+    height: 72px;
+    min-width: 72px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    margin: 0;
+  }
+
+  .story-top-badges {
+    display: none;
+  }
+
+  .card-play-fab {
+    width: 32px;
+    height: 32px;
+    bottom: 0.35rem;
+    right: 0.35rem;
+  }
+
+  .card-play-fab svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .story-card-content {
+    padding: 0;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .story-card-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin: 0 0 0.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .story-card-summary {
+    display: none;
+  }
+
+  .story-languages-cue {
+    font-size: 0.7rem;
+    margin-bottom: 0.35rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .story-card-footer {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  .story-meta-col {
+    display: none;
+  }
+
+  .story-actions-row {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.6rem;
+  }
+
+  .btn-listen-instant {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+
+  .btn-card-explore {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+  }
+
+  /* Bottom Docked Mini Player on Mobile */
+  .spotify-player-bar {
+    height: 64px;
+    padding: 0 0.85rem;
+    background: rgba(10, 15, 29, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .sp-track-info {
+    flex: 1;
+    min-width: 0;
+    gap: 0.65rem;
+  }
+
+  .sp-thumb-wrap {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 8px;
+  }
+
+  .sp-meta {
+    min-width: 0;
+  }
+
+  .sp-title {
+    font-size: 0.86rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
+
+  .sp-subtitle {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
+
+  .sp-center {
+    width: auto;
+    margin: 0;
+  }
+
+  .sp-controls {
+    gap: 0.5rem;
+  }
+
+  .sp-ctrl-btn {
+    display: none;
+  }
+
+  .sp-play-main {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  .sp-play-main svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .sp-timeline {
+    display: none;
+  }
+
+  .sp-right {
+    display: flex;
+    align-items: center;
+    margin-left: 0.4rem;
+  }
+
+  .sp-speed-toggle {
+    display: none;
+  }
+
+  .sp-expand-link {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
   }
 }
 
