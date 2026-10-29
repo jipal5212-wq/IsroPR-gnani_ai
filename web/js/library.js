@@ -6,6 +6,59 @@ let searchQuery = '';
 let libraryUnsubscribe = null;
 let scrollSpyObserver = null;
 
+const EXISTING_STORIES = [
+  {
+    id: 'chandrayaan-3',
+    title: 'Chandrayaan-3: 15 Minutes of Terror & The South Pole Triumph',
+    cover_path: 'chandrayaan-3-cover.jpg',
+    duration_hint_min: 3
+  },
+  {
+    id: 'nvs-03',
+    title: 'NVS-03: NavIC Constellation & The Pyro Valve Gambit',
+    cover_path: 'nvs-03-cover.jpg',
+    duration_hint_min: 9
+  },
+  {
+    id: 'mangalyaan',
+    title: "Mangalyaan: India's Historic Journey to Mars",
+    cover_path: 'mangalyaan-cover.jpg',
+    duration_hint_min: 3
+  }
+];
+
+let availableStoriesPool = [...EXISTING_STORIES];
+
+export function playRandomStory() {
+  const currentLang = getActiveLang();
+  const audioState = getAudioState();
+
+  const pool = availableStoriesPool && availableStoriesPool.length > 0 ? availableStoriesPool : EXISTING_STORIES;
+
+  // If already playing, pick a DIFFERENT story from the pool so each click gives a fresh mission
+  let candidates = pool;
+  if (audioState.isPlaying && pool.length > 1) {
+    candidates = pool.filter(s => s.id !== audioState.storyId);
+  }
+
+  const chosen = candidates[Math.floor(Math.random() * candidates.length)] || pool[0];
+  if (!chosen) return;
+
+  const durationSec = chosen.id === 'nvs-03'
+    ? (currentLang.startsWith('hi') ? 540 : currentLang.startsWith('en') ? 483 : 130)
+    : (chosen.duration || (chosen.duration_hint_min ? chosen.duration_hint_min * 60 : 180));
+
+  const cover = chosen.cover_path
+    ? (chosen.cover_path.startsWith('/') ? chosen.cover_path : `/media/covers/${chosen.cover_path}`)
+    : (chosen.coverSrc || `/media/covers/${chosen.id}-cover.jpg`);
+
+  playStory(chosen.id, currentLang, {
+    title: chosen.title,
+    coverSrc: cover,
+    duration: durationSec
+  });
+}
+
 export async function initLibrary() {
   initGlobalPlayer();
   await loadLanguages();
@@ -104,14 +157,14 @@ function syncCardButtons(audioState) {
   const isPlayingC3 = audioState.isPlaying && audioState.storyId === 'chandrayaan-3';
 
   if (heroOBtn) {
-    if (isPlayingC3) {
+    if (audioState.isPlaying) {
       heroOBtn.classList.add('playing');
-      heroOBtn.title = 'Pause Chandrayaan-3 Podcast';
-      heroOBtn.setAttribute('aria-label', 'Pause Chandrayaan-3 Podcast');
+      heroOBtn.title = `Playing: ${audioState.title || 'Space Mission'} (Click 'O' to shuffle another audio)`;
+      heroOBtn.setAttribute('aria-label', `Playing ${audioState.title || 'Space Mission'}. Click 'O' to shuffle another audio`);
     } else {
       heroOBtn.classList.remove('playing');
-      heroOBtn.title = 'Play Top-Rated Podcast: Chandrayaan-3';
-      heroOBtn.setAttribute('aria-label', 'Play Top-Rated Podcast: Chandrayaan-3');
+      heroOBtn.title = "Click 'O' to play random space mission audio";
+      heroOBtn.setAttribute('aria-label', "Click 'O' to play random space mission audio");
     }
   }
 
@@ -307,10 +360,19 @@ function setupEventListeners() {
     });
   }
 
-  // Hero 'O' logo button click & quick-play button (Plays top-rated Chandrayaan-3)
-  const heroPlayTriggers = document.querySelectorAll('#hero-o-play-btn, #hero-btn-play-c3');
-  heroPlayTriggers.forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  // Hero 'O' logo button click: plays a random audio out of existing missions!
+  const heroOBtn = document.getElementById('hero-o-play-btn');
+  if (heroOBtn) {
+    heroOBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      playRandomStory();
+    });
+  }
+
+  // Hero Chandrayaan-3 instant listen button
+  const heroC3Btn = document.getElementById('hero-btn-play-c3');
+  if (heroC3Btn) {
+    heroC3Btn.addEventListener('click', (e) => {
       e.preventDefault();
       const audioState = getAudioState();
       if (audioState.isPlaying && audioState.storyId === 'chandrayaan-3') {
@@ -321,7 +383,7 @@ function setupEventListeners() {
         });
       }
     });
-  });
+  }
 
   // Explore Audio Stories button on Hero
   const exploreBtn = document.getElementById('hero-btn-explore-stories');
@@ -401,6 +463,10 @@ export async function loadStories() {
 
     const res = await apiFetch(`/api/stories?${query.toString()}`);
     const stories = res.stories || [];
+
+    if (stories.length > 0) {
+      availableStoriesPool = stories;
+    }
 
     if (stories.length === 0) {
       container.style.display = 'none';
