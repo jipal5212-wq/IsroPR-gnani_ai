@@ -223,7 +223,9 @@ function setupEventListeners() {
       if (audioState.isPlaying && audioState.storyId === 'chandrayaan-3') {
         togglePlay();
       } else {
-        playStory('chandrayaan-3', getActiveLang());
+        playStory('chandrayaan-3', getActiveLang(), {
+          coverSrc: '/media/covers/chandrayaan-3-cover.jpg'
+        });
       }
     });
   });
@@ -249,13 +251,15 @@ function setupEventListeners() {
 
       const storyId = playTarget.dataset.storyId || 'chandrayaan-3';
       const card = playTarget.closest('.story-card');
-      const title = card?.querySelector('.story-title')?.textContent?.trim();
+      const title = card?.querySelector('.story-card-title, .story-title')?.textContent?.trim();
+      const img = card?.querySelector('.story-card-img');
+      const coverSrc = img?.getAttribute('src');
       const audioState = getAudioState();
 
       if (audioState.isPlaying && audioState.storyId === storyId) {
         togglePlay();
       } else {
-        playStory(storyId, getActiveLang(), { title });
+        playStory(storyId, getActiveLang(), { title, coverSrc });
       }
     });
   }
@@ -334,7 +338,7 @@ function createStoryCard(story, lang) {
   card.dataset.storyId = story.id;
   card.dataset.duration = duration;
 
-  const coverSrc = story.cover_path ? `/media/covers/${story.cover_path}?v=navcam_20230827` : getEditorialCover(story.category);
+  const coverSrc = story.cover_path ? `/media/covers/${story.cover_path}` : getEditorialCover(story.category);
   const categoryLabel = isUpcoming ? 'Upcoming / Ongoing' : story.category === 'isro' ? 'ISRO Mission' : story.category === 'startups' ? 'NewSpace India' : 'Space Science';
 
   card.innerHTML = `
@@ -357,12 +361,6 @@ function createStoryCard(story, lang) {
           <span></span><span></span><span></span>
         </div>
       </button>
-    </div>
-
-    <!-- Authentic ISRO Telemetry Banner -->
-    <div class="photo-telemetry-strip ${isUpcoming ? 'telemetry-upcoming' : ''}">
-      <span class="navcam-badge ${isUpcoming ? 'badge-live' : ''}">${isUpcoming ? 'LIVE • GSLV-F18' : 'ISRO NavCam'}</span>
-      <span class="photo-caption-text">${isUpcoming ? 'GSLV-F18 on Launchpad Sriharikota · NavIC Constellation' : 'Authentic Pragyan rover crater photograph · 27 Aug 2023'}</span>
     </div>
 
     <div class="story-card-content">

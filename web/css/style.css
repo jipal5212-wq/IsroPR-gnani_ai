@@ -2127,6 +2127,7 @@ body:has(#player-content) {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .story-card-img {

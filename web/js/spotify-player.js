@@ -1,12 +1,18 @@
 // Spotify-style Global Audio Engine & Persistent Background Player
 import { formatDuration, getActiveLang } from './common.js';
 
+export const STORY_COVERS = {
+  'chandrayaan-3': '/media/covers/chandrayaan-3-cover.jpg',
+  'mangalyaan': '/media/covers/mangalyaan-cover.jpg',
+  'nvs-03': '/media/covers/nvs-03-cover.jpg'
+};
+
 let audio = null;
 let state = {
   storyId: 'chandrayaan-3',
   title: 'Chandrayaan-3: 15 Minutes of Terror & The South Pole Triumph',
   subtitle: 'ISRO Official Outreach • Lunar Landing Podcast',
-  coverSrc: '',
+  coverSrc: STORY_COVERS['chandrayaan-3'],
   audioSrc: '/media/audio/stories/chandrayaan-3/hi-IN.wav',
   duration: 180,
   currentTime: 0,
@@ -50,6 +56,9 @@ export function initGlobalPlayer() {
         const parsed = JSON.parse(saved);
         state = { ...state, ...parsed, isPlaying: false };
       } catch (e) {}
+    }
+    if (!state.coverSrc) {
+      state.coverSrc = STORY_COVERS[state.storyId] || '/media/covers/chandrayaan-3-cover.jpg';
     }
 
     // Determine default audio src based on active language
@@ -140,6 +149,13 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
       : 'ISRO Official Outreach • 3 Min Podcast';
   }
 
+  // Resolve cover image for current thing playing
+  if (metadata.coverSrc || metadata.cover) {
+    state.coverSrc = metadata.coverSrc || metadata.cover;
+  } else {
+    state.coverSrc = STORY_COVERS[storyId] || '/media/covers/chandrayaan-3-cover.jpg';
+  }
+
   // Update full view link
   const expandLink = document.querySelector('.sp-expand-link');
   if (expandLink) {
@@ -164,6 +180,7 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
     storyId: state.storyId,
     title: state.title,
     subtitle: state.subtitle,
+    coverSrc: state.coverSrc,
     currentTime: audio.currentTime
   }));
 
@@ -215,13 +232,12 @@ function injectSpotifyBar() {
   bar.innerHTML = `
     <!-- Left: Track info -->
     <div class="sp-track-info">
-      <div class="sp-thumb-wrap">
-        <img src="/media/covers/chandrayaan-3-navcam.png?v=navcam_20230827" alt="Chandrayaan-3 Poster" class="sp-thumb-img" onerror="this.src='/media/covers/chandrayaan-3-cover.jpg';" />
-        <div class="sp-thumb-fallback" style="display: none;"><img src="/images/isropr-logo.jpg" alt="IsroPR" style="width: 100%; height: 100%; object-fit: cover;"></div>
-      </div>
+      <a href="/story.html?id=${state.storyId}" class="sp-thumb-wrap" title="View story details">
+        <img src="${state.coverSrc || STORY_COVERS[state.storyId] || '/media/covers/chandrayaan-3-cover.jpg'}" alt="${state.title || 'Space Mission'} Poster" class="sp-thumb-img" onerror="this.src='/images/isropr-logo.jpg';" />
+      </a>
       <div class="sp-meta">
-        <a href="/story.html?id=chandrayaan-3" class="sp-title" id="sp-track-title">Chandrayaan-3: 15 Minutes of Terror</a>
-        <span class="sp-subtitle" id="sp-track-subtitle">ISRO Outreach • 3 Min Audio Story</span>
+        <a href="/story.html?id=${state.storyId}" class="sp-title" id="sp-track-title">${state.title || 'Chandrayaan-3: 15 Minutes of Terror'}</a>
+        <span class="sp-subtitle" id="sp-track-subtitle">${state.subtitle || 'ISRO Outreach • 3 Min Audio Story'}</span>
       </div>
       <div class="sp-equalizer" id="sp-equalizer" title="Playing">
         <span></span><span></span><span></span>
@@ -321,6 +337,24 @@ function updateBarUI() {
 
   if (titleEl && state.title) titleEl.textContent = state.title;
   if (subtitleEl && state.subtitle) subtitleEl.textContent = state.subtitle;
+
+  // Always show image of current thing playing
+  const thumbImg = document.querySelector('.sp-thumb-img');
+  const targetCover = state.coverSrc || STORY_COVERS[state.storyId] || '/media/covers/chandrayaan-3-cover.jpg';
+  if (thumbImg) {
+    if (!thumbImg.src.endsWith(targetCover)) {
+      thumbImg.src = targetCover;
+    }
+    thumbImg.alt = `${state.title || 'Space Mission'} Artwork`;
+  }
+
+  // Update links to point to currently playing story
+  const currentStoryLinks = document.querySelectorAll('.sp-expand-link, .sp-title, .sp-thumb-wrap');
+  currentStoryLinks.forEach(el => {
+    if (el && el.tagName === 'A') {
+      el.href = `/story.html?id=${state.storyId}`;
+    }
+  });
 
   // Sync card play buttons across the page
   document.querySelectorAll('.card-play-fab, .btn-listen-instant').forEach(btn => {

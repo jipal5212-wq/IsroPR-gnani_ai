@@ -22,3 +22,4 @@ db.exec(`
 `);
 db.pragma('foreign_keys = ON');
 console.log('Stories table updated with upcoming-ongoing category check!');
+

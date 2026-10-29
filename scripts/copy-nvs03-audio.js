@@ -10,3 +10,4 @@ for (const l of langs) {
   fs.copyFileSync(master, dest);
   console.log('Copied master to ' + dest + ' (' + fs.statSync(dest).size + ' bytes)');
 }
+

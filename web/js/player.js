@@ -58,7 +58,22 @@ function renderStoryMeta(story, availableLangs, currentLang) {
   if (titleEl) titleEl.textContent = story.title;
   if (summaryEl) summaryEl.textContent = story.summary;
   if (coverImg && story.cover_path) {
-    coverImg.src = `/media/covers/${story.cover_path}?v=navcam_20230827`;
+    coverImg.src = `/media/covers/${story.cover_path}`;
+    coverImg.alt = story.title || 'Space Mission Artwork';
+  }
+
+  const badgesRow = document.getElementById('story-badges-row');
+  if (badgesRow) {
+    const isUpcoming = story.category === 'upcoming-ongoing';
+    const catLabel = isUpcoming ? 'UPCOMING / ONGOING MISSION' : story.category === 'isro' ? 'ISRO MISSION' : 'SPACE SCIENCE';
+    const subLabel = story.id === 'chandrayaan-3' ? 'LUNAR LANDING' : story.id === 'mangalyaan' ? 'MARS ORBITER' : story.id === 'nvs-03' ? 'NavIC CONSTELLATION' : 'SPOTLIGHT PODCAST';
+    const duration = story.duration_hint_min || 3;
+
+    badgesRow.innerHTML = `
+      <span class="podcast-badge podcast-badge-primary ${isUpcoming ? 'badge-live' : ''}">${catLabel}</span>
+      <span class="podcast-badge podcast-badge-saffron">${subLabel}</span>
+      <span class="podcast-badge" style="background: #f1f5f9; color: var(--text-muted); border: 1px solid var(--border-light);">${duration} MIN CONTINUOUS</span>
+    `;
   }
 
   // Populate language selector
@@ -85,7 +100,9 @@ function renderStoryMeta(story, availableLangs, currentLang) {
       const newLang = e.target.value;
       setActiveLang(newLang);
       activeLang = newLang;
-      playStory(activeStoryId, newLang);
+      playStory(activeStoryId, newLang, {
+        coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`
+      });
     };
   }
 }
@@ -101,7 +118,9 @@ function setupPodcastControls() {
     playBtn.onclick = () => {
       const st = getAudioState();
       if (!st.isPlaying && st.storyId !== activeStoryId) {
-        playStory(activeStoryId, activeLang);
+        playStory(activeStoryId, activeLang, {
+          coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`
+        });
       } else {
         togglePlay();
       }

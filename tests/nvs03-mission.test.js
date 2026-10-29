@@ -49,3 +49,4 @@ test('NVS-03 cover image and audio file exist on disk and have valid sizes', () 
   assert.ok(fs.existsSync(audioPath), 'Master WAV audio must exist at data/audio/stories/nvs-03/hi-IN.wav');
   assert.ok(fs.statSync(audioPath).size > 20000000, 'Master WAV audio should be ~24MB');
 });
+

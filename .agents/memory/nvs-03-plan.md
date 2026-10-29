@@ -10,3 +10,4 @@ Reference: [nvs-03.md](file:///c:/Users/ASHISH%20KUMAR%20PAL/OneDrive/Desktop/Is
 - Audio Output: `data/audio/stories/nvs-03/hi-IN.wav` (and `nvs-03-full.wav`)
 - Cover Image: `data/covers/nvs-03-cover.jpg`
 - Pacing delay: 3,000ms between chunks to prevent Cloudflare 403 WAF triggers
+
