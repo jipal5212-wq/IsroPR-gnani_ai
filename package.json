@@ -2,8 +2,13 @@
   "name": "isro-pr",
   "version": "1.0.0",
   "type": "module",
-  "description": "IsroPR — Dedicated to public space awareness and education across India",
+  "description": "IsroPR — Multilingual Public Space Awareness & Outreach Platform for ISRO Missions",
   "main": "server/index.js",
+  "homepage": "https://isropr.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jipal5212-wq/IsroPR-gnani_ai.git"
+  },
   "scripts": {
     "dev": "node --watch server/index.js",
     "start": "node server/index.js",
@@ -13,10 +18,16 @@
   },
   "keywords": [
     "isro",
+    "gnani-ai",
+    "multilingual-tts",
+    "indic-languages",
     "space-bharat",
-    "podcast",
-    "chat",
-    "multilingual"
+    "audio-stories",
+    "chandrayaan-3",
+    "mangalyaan",
+    "nvs-03",
+    "rag-chatbot",
+    "podcast"
   ],
   "author": "Ashish Kumar Pal",
   "license": "ISC",

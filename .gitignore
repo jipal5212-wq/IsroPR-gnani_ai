@@ -4,31 +4,36 @@ vendor/
 __pycache__/
 *.pyc
 
-# Environment
+# Environment & Secrets
 .env
 .env.local
 .env.*.local
+*.pem
+*.key
 
-# Build outputs
+# Build outputs & Deployment Cache
 dist/
 build/
 out/
 .next/
+.vercel/
 
-# Runtime ephemeral data
+# Runtime Ephemeral Data
 data/audio/chat/
 data/uploads/
 *.db-shm
 *.db-wal
+.tmp*
+*.tmp
 
-
-# IDE
+# Local Dev & Agent Workspace
+.agents/
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS
+# OS Artifacts
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -36,9 +41,3 @@ desktop.ini
 # Logs
 *.log
 npm-debug.log*
-
-# Secrets
-*.pem
-*.key
-
-.vercel
