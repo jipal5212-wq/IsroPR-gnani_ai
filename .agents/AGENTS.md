@@ -40,6 +40,7 @@
 | 23 | 2026-10-29 | GitHub Repo & Vercel Production Deployment | Published repository to `jipal5212-wq/IsroPR-gnani_ai`; deployed unified full-stack serverless + global Edge CDN on Vercel at `https://isropr.vercel.app` with production secrets synced |
 | 24 | 2026-10-29 | Resilient Base64 Audio Delivery & CSP 'data:' Directive | Fixed 404 voice notes on serverless by returning audio directly as data URI (`data:audio/wav;base64,...`) and adding `data:` to Helmet `mediaSrc` CSP |
 | 25 | 2026-10-29 | Mangalyaan 6-Language Realistic Audio & Dynamic Player | Generated emotion-tagged realistic audio (<exhales>, <slow>, <sniffles>, <soft>) in Shivani voice across all 6 languages (HI, EN, TA, TE, BN, KN); chunked PCM concatenation; seeded into database with spacecraft cover; dynamic audio dock sync |
+| 26 | 2026-10-29 | Chandrayaan-3 5-Language Realistic Audio | Generated emotion-tagged realistic audio (<exhales>, <slow>, <sniffles>, <soft>) in Shivani voice across all 5 languages (EN, TA, TE, BN, KN); chunked PCM concatenation; seeded into database; verified with 20/20 tests passing |
 
 ---
 

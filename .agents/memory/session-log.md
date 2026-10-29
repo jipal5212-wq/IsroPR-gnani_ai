@@ -644,3 +644,22 @@ Project is live globally at **https://isropr.vercel.app**.
 - ✅ Added authentic Mangalyaan spacecraft cover image (`data/covers/mangalyaan-cover.jpg`).
 - ✅ Upgraded `web/js/spotify-player.js` and `web/js/library.js` to dynamically support multiple stories, metadata titles/subtitles, and proper URL endpoint targeting without audio cache collisions.
 - ✅ Verified all 20 automated tests passing (`npm test`).
+
+---
+
+## Session 26 — 2026-10-29
+
+**Goal**: Generate studio-voiced audio for Chandrayaan-3 across all 5 languages (English, Tamil, Telugu, Bengali, Kannada) in Shivani voice preserving emotional cues, re-seed database, run test suite, and deploy to Vercel production.
+
+### What was done:
+- ✅ Verified Cloudflare block lifted on Gnani Timbre v3.0 API via pre-flight test.
+- ✅ Executed [`scripts/generate-chandrayaan-audio.js`](file:///c:/Users/ASHISH%20KUMAR%20PAL/OneDrive/Desktop/Isro's%20PR/scripts/generate-chandrayaan-audio.js) with 2.5s chunk delay and sentence boundary splitting:
+  - English (`en-IN`): 8.92 MB (5 chunks)
+  - Tamil (`ta-IN`): 10.15 MB (5 chunks)
+  - Telugu (`te-IN`): 9.29 MB (4 chunks)
+  - Bengali (`bn-IN`): 10.27 MB (5 chunks)
+  - Kannada (`kn-IN`): 10.81 MB (5 chunks)
+  - Hindi (`hi-IN`): Original master intact (15.8 MB)
+- ✅ Re-seeded SQLite database (`data/spacebharat.db`) with updated translations and audio tracks for both Chandrayaan-3 and Mangalyaan.
+- ✅ Verified all 20 automated tests passing (`npm test`).
+- ✅ Pushed updates to GitHub and deployed to Vercel production.
