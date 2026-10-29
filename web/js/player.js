@@ -7,7 +7,8 @@ import {
   skip, 
   setPlaybackSpeed, 
   getAudioState, 
-  subscribeAudioState 
+  subscribeAudioState,
+  STORY_DURATIONS 
 } from './spotify-player.js';
 
 let activeStoryId = 'chandrayaan-3';
@@ -76,6 +77,28 @@ function renderStoryMeta(story, availableLangs, currentLang) {
     `;
   }
 
+  // Set total duration in timeline
+  const durSeconds = (story.duration_hint_min || 3) * 60;
+  const totalTimeEl = document.getElementById('player-total-time');
+  if (totalTimeEl) {
+    totalTimeEl.textContent = formatDuration(durSeconds);
+  }
+
+  // Populate dynamic source link
+  const sourceLinkContainer = document.getElementById('story-source-link');
+  if (sourceLinkContainer && story.sources && story.sources.length > 0) {
+    const src = story.sources[0];
+    let domain = 'isro.gov.in';
+    try {
+      domain = new URL(src).hostname.replace(/^www\./, '');
+    } catch (e) {}
+    sourceLinkContainer.innerHTML = `
+      <a href="${src}" target="_blank" rel="noopener noreferrer" style="font-size: 0.82rem; color: var(--isro-blue); text-decoration: none; font-weight: 600;">
+        Official Source (${domain}) ↗
+      </a>
+    `;
+  }
+
   // Populate language selector
   if (langSelectEl) {
     langSelectEl.innerHTML = '';
@@ -101,7 +124,8 @@ function renderStoryMeta(story, availableLangs, currentLang) {
       setActiveLang(newLang);
       activeLang = newLang;
       playStory(activeStoryId, newLang, {
-        coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`
+        coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`,
+        duration: STORY_DURATIONS[activeStoryId] || 180
       });
     };
   }
@@ -119,7 +143,8 @@ function setupPodcastControls() {
       const st = getAudioState();
       if (!st.isPlaying && st.storyId !== activeStoryId) {
         playStory(activeStoryId, activeLang, {
-          coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`
+          coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`,
+          duration: STORY_DURATIONS[activeStoryId] || 180
         });
       } else {
         togglePlay();
@@ -188,7 +213,9 @@ function syncPlayerUI(st) {
   }
 
   if (totalTimeEl) {
-    totalTimeEl.textContent = formatDuration(st.duration || 180);
+    const expectedSec = STORY_DURATIONS[st.storyId || activeStoryId] || 180;
+    const dur = (st.duration && !isNaN(st.duration) && st.duration > 0) ? st.duration : expectedSec;
+    totalTimeEl.textContent = formatDuration(dur);
   }
 
   if (slider && st.duration > 0) {

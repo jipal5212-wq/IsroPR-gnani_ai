@@ -7,6 +7,12 @@ export const STORY_COVERS = {
   'nvs-03': '/media/covers/nvs-03-cover.jpg'
 };
 
+export const STORY_DURATIONS = {
+  'chandrayaan-3': 180,
+  'mangalyaan': 180,
+  'nvs-03': 540
+};
+
 let audio = null;
 let state = {
   storyId: 'chandrayaan-3',
@@ -92,7 +98,11 @@ function setupAudioListeners() {
 
   audio.addEventListener('timeupdate', () => {
     state.currentTime = audio.currentTime;
-    state.duration = audio.duration || state.duration || 180;
+    if (audio.duration && !isNaN(audio.duration) && audio.duration > 0) {
+      state.duration = audio.duration;
+    } else if (!state.duration) {
+      state.duration = STORY_DURATIONS[state.storyId] || 180;
+    }
     notifyState();
     updateTimelineUI();
   });
@@ -106,8 +116,10 @@ function setupAudioListeners() {
   });
 
   audio.addEventListener('loadedmetadata', () => {
-    if (audio.duration && !isNaN(audio.duration)) {
+    if (audio.duration && !isNaN(audio.duration) && audio.duration > 0) {
       state.duration = audio.duration;
+    } else {
+      state.duration = STORY_DURATIONS[state.storyId] || 180;
     }
     notifyState();
     updateTimelineUI();
@@ -122,6 +134,11 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
 
   state.storyId = storyId;
   state.audioSrc = audioUrl;
+
+  const targetDuration = metadata.duration || STORY_DURATIONS[storyId] || 180;
+  state.duration = (audio && audio.duration && !isNaN(audio.duration) && audio.duration > 0) ? audio.duration : targetDuration;
+  state.currentTime = 0;
+  updateTimelineUI();
 
   if (metadata.title) {
     state.title = metadata.title;
@@ -266,7 +283,7 @@ function injectSpotifyBar() {
         <div class="sp-slider-wrap">
           <input type="range" id="sp-seek-slider" min="0" max="100" value="0" step="0.1" class="sp-seek-slider" aria-label="Seek track position" />
         </div>
-        <span id="sp-total-time" class="sp-time">3:00</span>
+        <span id="sp-total-time" class="sp-time">${formatDuration(state.duration || 180)}</span>
       </div>
     </div>
 

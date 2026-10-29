@@ -69,7 +69,7 @@ function syncCardButtons(audioState) {
       if (btnText) btnText.textContent = 'Pause NVS-03 Story';
     } else {
       upcomingPlayBtn.classList.remove('playing');
-      if (btnText) btnText.textContent = 'Listen: NVS-03 Story (9 min)';
+      if (btnText) btnText.textContent = 'Play Story (9 min)';
     }
   }
 
@@ -208,7 +208,8 @@ function setupEventListeners() {
         togglePlay();
       } else {
         playStory('nvs-03', getActiveLang(), {
-          title: 'NVS-03: NavIC Constellation & The Pyro Valve Gambit'
+          title: 'NVS-03: NavIC Constellation & The Pyro Valve Gambit',
+          duration: 540
         });
       }
     });
@@ -254,12 +255,13 @@ function setupEventListeners() {
       const title = card?.querySelector('.story-card-title, .story-title')?.textContent?.trim();
       const img = card?.querySelector('.story-card-img');
       const coverSrc = img?.getAttribute('src');
+      const durationMin = parseInt(card?.dataset.duration || '3', 10);
       const audioState = getAudioState();
 
       if (audioState.isPlaying && audioState.storyId === storyId) {
         togglePlay();
       } else {
-        playStory(storyId, getActiveLang(), { title, coverSrc });
+        playStory(storyId, getActiveLang(), { title, coverSrc, duration: durationMin * 60 });
       }
     });
   }
