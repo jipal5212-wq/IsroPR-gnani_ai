@@ -2525,25 +2525,26 @@ body:has(#player-content) {
 
 .upcoming-spotlight-card {
   display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 2.25rem;
-  align-items: stretch;
+  grid-template-columns: 320px 1fr;
+  gap: 2.5rem;
+  align-items: center;
 }
 
 .upcoming-media-col {
   display: flex;
-  height: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 .upcoming-img-wrapper {
   position: relative;
-  width: 100%;
-  min-height: 290px;
-  height: 100%;
-  border-radius: 16px;
+  width: 320px;
+  height: 320px;
+  aspect-ratio: 1 / 1;
+  border-radius: 20px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
 .upcoming-cover-img {
@@ -2959,8 +2960,8 @@ body:has(#player-content) {
 .shelf-card-thumb {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10;
-  border-radius: 12px;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
   overflow: hidden;
   margin-bottom: 0.85rem;
   background: #0f172a;
@@ -3141,10 +3142,20 @@ body:has(#player-content) {
     gap: 1.25rem;
   }
 
+  .upcoming-media-col {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
   .upcoming-img-wrapper {
-    height: 190px;
-    min-height: 190px;
-    border-radius: 14px;
+    width: 100%;
+    max-width: 280px;
+    height: 280px;
+    aspect-ratio: 1 / 1;
+    min-height: auto;
+    margin: 0 auto;
+    border-radius: 18px;
   }
 
   .upcoming-mission-title {
