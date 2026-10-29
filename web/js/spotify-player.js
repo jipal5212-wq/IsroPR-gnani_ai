@@ -134,7 +134,7 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
   const activeLang = lang || getActiveLang();
   const langCode = activeLang.includes('-') ? activeLang : `${activeLang}-IN`;
   const audioFile = `${langCode}.wav`;
-  const audioUrl = `/media/audio/stories/${storyId}/${audioFile}?v=nvs03_v3`;
+  const audioUrl = `/media/audio/stories/${storyId}/${audioFile}?v=nvs03_full_v4`;
 
   // Immediately silence and reset any currently playing audio so there is zero overlap
   if (audio) {
@@ -147,7 +147,7 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
   state.audioSrc = audioUrl;
 
   const defaultDuration = (storyId === 'nvs-03') 
-    ? (langCode.startsWith('hi') ? 540 : langCode.startsWith('en') ? 510 : 130)
+    ? (langCode.startsWith('en') ? 510 : 540)
     : (STORY_DURATIONS[storyId] || 180);
   const targetDuration = metadata.duration || defaultDuration;
 

@@ -595,10 +595,10 @@ A successful NVS-03 restores NavIC to four operational satellites, meeting the b
   const nvsDurations = {
     'hi-IN': 540,
     'en-IN': 483,
-    'ta-IN': 136,
-    'te-IN': 120,
-    'bn-IN': 132,
-    'kn-IN': 123
+    'ta-IN': 588,
+    'te-IN': 535,
+    'bn-IN': 554,
+    'kn-IN': 550
   };
 
   for (const t of nvs03Translations) {

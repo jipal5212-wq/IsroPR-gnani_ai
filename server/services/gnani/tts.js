@@ -40,7 +40,7 @@ export async function synthesizeSpeech({ text, lang, voice = 'Shivani', targetPa
 
   const endpoint = `${ENV.GNANI_BASE_URL}/api/v1/tts/inference`;
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 18000); // 18s timeout
+  const timeoutId = setTimeout(() => controller.abort(), 35000); // 35s timeout for longer chunks
   try {
     const validVoices = ['Avinash', 'Shivani', 'Lakshmi', 'Kalpana', 'Shubham', 'Prakash', 'Devansh', 'Yashraj', 'Chetana', 'Vasudha', 'Harshad', 'Riyaa', 'Tarika'];
     const selectedVoice = validVoices.includes(voice) ? voice : 'Shivani';

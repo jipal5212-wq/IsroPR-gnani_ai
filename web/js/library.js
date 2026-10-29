@@ -36,7 +36,7 @@ export function playChosenStory(storyId) {
   const story = pool.find(s => s.id === storyId) || EXISTING_STORIES.find(s => s.id === storyId) || { id: storyId };
 
   const durationSec = storyId === 'nvs-03'
-    ? (currentLang.startsWith('hi') ? 540 : currentLang.startsWith('en') ? 510 : 130)
+    ? (currentLang.startsWith('en') ? 510 : 540)
     : (story.duration || (story.duration_hint_min ? story.duration_hint_min * 60 : 180));
 
   const cover = story.cover_path
@@ -66,7 +66,7 @@ export function playRandomStory() {
   if (!chosen) return;
 
   const durationSec = chosen.id === 'nvs-03'
-    ? (currentLang.startsWith('hi') ? 540 : currentLang.startsWith('en') ? 483 : 130)
+    ? (currentLang.startsWith('en') ? 483 : 540)
     : (chosen.duration || (chosen.duration_hint_min ? chosen.duration_hint_min * 60 : 180));
 
   const cover = chosen.cover_path

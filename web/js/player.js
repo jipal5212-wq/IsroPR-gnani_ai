@@ -160,7 +160,7 @@ function renderStoryMeta(story, availableLangs, currentLang) {
       setActiveLang(newLang);
       activeLang = newLang;
       const expectedDuration = activeStoryId === 'nvs-03'
-        ? (newLang.startsWith('hi') ? 540 : newLang.startsWith('en') ? 483 : 130)
+        ? (newLang.startsWith('en') ? 483 : 540)
         : (STORY_DURATIONS[activeStoryId] || 180);
       playStory(activeStoryId, newLang, {
         coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`,
@@ -183,7 +183,7 @@ function setupPodcastControls() {
       // If a different story is loaded or playing, always start THIS story!
       if (st.storyId !== activeStoryId) {
         const expectedDuration = activeStoryId === 'nvs-03'
-          ? (activeLang.startsWith('hi') ? 540 : activeLang.startsWith('en') ? 510 : 130)
+          ? (activeLang.startsWith('en') ? 510 : 540)
           : (STORY_DURATIONS[activeStoryId] || 180);
         playStory(activeStoryId, activeLang, {
           title: document.getElementById('story-title')?.textContent,
@@ -262,7 +262,7 @@ function syncPlayerUI(st) {
   }
 
   const expectedSec = activeStoryId === 'nvs-03'
-    ? (activeLang.startsWith('hi') ? 540 : activeLang.startsWith('en') ? 510 : 130)
+    ? (activeLang.startsWith('en') ? 510 : 540)
     : (STORY_DURATIONS[activeStoryId] || 180);
 
   if (totalTimeEl) {
