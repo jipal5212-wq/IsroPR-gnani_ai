@@ -126,11 +126,22 @@ function setupAudioListeners() {
   });
 }
 
+let currentPlaySession = 0;
+
 export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata = {}) {
+  const sessionId = ++currentPlaySession;
+
   const activeLang = lang || getActiveLang();
   const langCode = activeLang.includes('-') ? activeLang : `${activeLang}-IN`;
   const audioFile = `${langCode}.wav`;
-  const audioUrl = `/media/audio/stories/${storyId}/${audioFile}?v=nvs03_v2`;
+  const audioUrl = `/media/audio/stories/${storyId}/${audioFile}?v=nvs03_v3`;
+
+  // Immediately silence and reset any currently playing audio so there is zero overlap
+  if (audio) {
+    try {
+      audio.pause();
+    } catch (_) {}
+  }
 
   state.storyId = storyId;
   state.audioSrc = audioUrl;
@@ -139,14 +150,15 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
     ? (langCode.startsWith('hi') ? 540 : langCode.startsWith('en') ? 510 : 130)
     : (STORY_DURATIONS[storyId] || 180);
   const targetDuration = metadata.duration || defaultDuration;
-  state.duration = (audio && audio.duration && !isNaN(audio.duration) && audio.duration > 0) ? audio.duration : targetDuration;
+
+  // Set duration strictly to the target story's duration, NOT the previous story's duration
+  state.duration = targetDuration;
   state.currentTime = 0;
-  updateTimelineUI();
 
   if (metadata.title) {
     state.title = metadata.title;
   } else if (storyId === 'mangalyaan') {
-    state.title = "Mangalyaan: India's First Mission to Mars";
+    state.title = "Mangalyaan: India's Historic Journey to Mars";
   } else if (storyId === 'nvs-03') {
     state.title = 'NVS-03: NavIC Constellation & The Pyro Valve Gambit';
   } else {
@@ -169,11 +181,11 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
       : 'ISRO Official Outreach • 3 Min Podcast';
   }
 
-  // Resolve cover image for current thing playing
+  // Resolve cover image for chosen story
   if (metadata.coverSrc || metadata.cover) {
     state.coverSrc = metadata.coverSrc || metadata.cover;
   } else {
-    state.coverSrc = STORY_COVERS[storyId] || '/media/covers/chandrayaan-3-cover.jpg';
+    state.coverSrc = STORY_COVERS[storyId] || `/media/covers/${storyId}-cover.jpg`;
   }
 
   // Update full view link
@@ -182,17 +194,31 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
     expandLink.href = `/story.html?id=${storyId}`;
   }
 
-  const targetPath = `/${storyId}/${audioFile}`;
-  if (!audio.src || !audio.src.includes(targetPath)) {
-    audio.src = audioUrl;
-    audio.currentTime = 0;
-  }
+  // Immediately notify UI so all cards, bars, and titles update in 0ms
+  notifyState();
+  updateBarUI();
+  updateTimelineUI();
+
+  // Load new audio source cleanly
+  audio.src = audioUrl;
+  audio.currentTime = 0;
+  audio.load();
 
   try {
-    await audio.play();
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      await playPromise;
+    }
+    // If user clicked another story while loading, discard this session
+    if (sessionId !== currentPlaySession) return;
     state.isPlaying = true;
+    notifyState();
+    updateBarUI();
   } catch (err) {
-    console.log('Play prevented or deferred:', err.message);
+    if (sessionId !== currentPlaySession) return;
+    if (err.name !== 'AbortError') {
+      console.warn('Play prevented or deferred:', err.message);
+    }
   }
 
   // Save state
@@ -201,11 +227,8 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
     title: state.title,
     subtitle: state.subtitle,
     coverSrc: state.coverSrc,
-    currentTime: audio.currentTime
+    currentTime: 0
   }));
-
-  notifyState();
-  updateBarUI();
 }
 
 export function togglePlay() {

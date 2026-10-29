@@ -29,6 +29,27 @@ const EXISTING_STORIES = [
 
 let availableStoriesPool = [...EXISTING_STORIES];
 
+export function playChosenStory(storyId) {
+  if (!storyId) return;
+  const currentLang = getActiveLang();
+  const pool = availableStoriesPool && availableStoriesPool.length > 0 ? availableStoriesPool : EXISTING_STORIES;
+  const story = pool.find(s => s.id === storyId) || EXISTING_STORIES.find(s => s.id === storyId) || { id: storyId };
+
+  const durationSec = storyId === 'nvs-03'
+    ? (currentLang.startsWith('hi') ? 540 : currentLang.startsWith('en') ? 510 : 130)
+    : (story.duration || (story.duration_hint_min ? story.duration_hint_min * 60 : 180));
+
+  const cover = story.cover_path
+    ? (story.cover_path.startsWith('/') ? story.cover_path : `/media/covers/${story.cover_path}`)
+    : (story.coverSrc || `/media/covers/${storyId}-cover.jpg`);
+
+  playStory(storyId, currentLang, {
+    title: story.title,
+    coverSrc: cover,
+    duration: durationSec
+  });
+}
+
 export function playRandomStory() {
   const currentLang = getActiveLang();
   const audioState = getAudioState();
@@ -344,83 +365,84 @@ function setupEventListeners() {
   // Upcoming NVS-03 Play Trigger
   const upcomingBtn = document.getElementById('upcoming-btn-play-nvs03');
   if (upcomingBtn) {
-    upcomingBtn.addEventListener('click', (e) => {
+    upcomingBtn.onclick = (e) => {
       e.preventDefault();
       const audioState = getAudioState();
       if (audioState.isPlaying && audioState.storyId === 'nvs-03') {
         togglePlay();
       } else {
-        const lang = getActiveLang();
-        const duration = lang.startsWith('hi') ? 540 : lang.startsWith('en') ? 483 : 130;
-        playStory('nvs-03', lang, {
-          title: 'NVS-03: NavIC Constellation & The Pyro Valve Gambit',
-          duration
-        });
+        playChosenStory('nvs-03');
       }
-    });
+    };
   }
 
   // Hero 'O' logo button click: plays a random audio out of existing missions!
   const heroOBtn = document.getElementById('hero-o-play-btn');
   if (heroOBtn) {
-    heroOBtn.addEventListener('click', (e) => {
+    heroOBtn.onclick = (e) => {
       e.preventDefault();
       playRandomStory();
-    });
+    };
   }
 
   // Hero Chandrayaan-3 instant listen button
   const heroC3Btn = document.getElementById('hero-btn-play-c3');
   if (heroC3Btn) {
-    heroC3Btn.addEventListener('click', (e) => {
+    heroC3Btn.onclick = (e) => {
       e.preventDefault();
       const audioState = getAudioState();
       if (audioState.isPlaying && audioState.storyId === 'chandrayaan-3') {
         togglePlay();
       } else {
-        playStory('chandrayaan-3', getActiveLang(), {
-          coverSrc: '/media/covers/chandrayaan-3-cover.jpg'
-        });
+        playChosenStory('chandrayaan-3');
       }
-    });
+    };
   }
 
   // Explore Audio Stories button on Hero
   const exploreBtn = document.getElementById('hero-btn-explore-stories');
   if (exploreBtn) {
-    exploreBtn.addEventListener('click', (e) => {
+    exploreBtn.onclick = (e) => {
       e.preventDefault();
       lockNavScroll(900);
       scrollToAudioStories();
-    });
+    };
   }
 
-  // Station cards & trending shelf instant play triggers
-  document.querySelectorAll('.station-card[data-story-id], .shelf-play-fab, .shelf-card').forEach(el => {
-    el.addEventListener('click', (e) => {
-      const storyId = el.dataset.storyId;
-      if (!storyId) return;
+  // Station cards quick play
+  document.querySelectorAll('.station-card[data-story-id]').forEach(btn => {
+    btn.onclick = (e) => {
       e.preventDefault();
-      e.stopPropagation();
+      const storyId = btn.dataset.storyId;
+      if (!storyId) return;
       const audioState = getAudioState();
       if (audioState.isPlaying && audioState.storyId === storyId) {
         togglePlay();
       } else {
-        const title = el.querySelector('.station-title, .shelf-card-title')?.textContent?.trim();
-        const img = el.querySelector('img')?.getAttribute('src');
-        const activeL = getActiveLang();
-        const durationSec = storyId === 'nvs-03' 
-          ? (activeL.startsWith('hi') ? 540 : activeL.startsWith('en') ? 483 : 130)
-          : 180;
-        playStory(storyId, activeL, { title, coverSrc: img, duration: durationSec });
+        playChosenStory(storyId);
       }
-    });
+    };
+  });
+
+  // Trending shelf cards quick play
+  document.querySelectorAll('.shelf-card[data-story-id]').forEach(card => {
+    card.onclick = (e) => {
+      e.preventDefault();
+      const storyId = card.dataset.storyId;
+      if (!storyId) return;
+      const audioState = getAudioState();
+      if (audioState.isPlaying && audioState.storyId === storyId) {
+        togglePlay();
+      } else {
+        playChosenStory(storyId);
+      }
+    };
   });
 
   // Delegated instant play clicks for story cards
   const container = document.getElementById('stories-grid');
   if (container) {
-    container.addEventListener('click', (e) => {
+    container.onclick = (e) => {
       const playTarget = e.target.closest('.card-play-fab, .btn-listen-instant');
       if (!playTarget) return;
 
@@ -428,19 +450,14 @@ function setupEventListeners() {
       e.stopPropagation();
 
       const storyId = playTarget.dataset.storyId || 'chandrayaan-3';
-      const card = playTarget.closest('.story-card');
-      const title = card?.querySelector('.story-card-title, .story-title')?.textContent?.trim();
-      const img = card?.querySelector('.story-card-img');
-      const coverSrc = img?.getAttribute('src');
-      const durationMin = parseInt(card?.dataset.duration || '3', 10);
       const audioState = getAudioState();
 
       if (audioState.isPlaying && audioState.storyId === storyId) {
         togglePlay();
       } else {
-        playStory(storyId, getActiveLang(), { title, coverSrc, duration: durationMin * 60 });
+        playChosenStory(storyId);
       }
-    });
+    };
   }
 }
 

@@ -180,11 +180,13 @@ function setupPodcastControls() {
   if (playBtn) {
     playBtn.onclick = () => {
       const st = getAudioState();
-      if (!st.isPlaying && st.storyId !== activeStoryId) {
+      // If a different story is loaded or playing, always start THIS story!
+      if (st.storyId !== activeStoryId) {
         const expectedDuration = activeStoryId === 'nvs-03'
-          ? (activeLang.startsWith('hi') ? 540 : activeLang.startsWith('en') ? 483 : 130)
+          ? (activeLang.startsWith('hi') ? 540 : activeLang.startsWith('en') ? 510 : 130)
           : (STORY_DURATIONS[activeStoryId] || 180);
         playStory(activeStoryId, activeLang, {
+          title: document.getElementById('story-title')?.textContent,
           coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`,
           duration: expectedDuration
         });
@@ -233,38 +235,52 @@ function syncPlayerUI(st) {
   const eq = document.getElementById('story-equalizer');
   const statusText = document.getElementById('playback-status-text');
 
+  const isCurrentStoryActive = st.storyId === activeStoryId;
+  const isCurrentStoryPlaying = st.isPlaying && isCurrentStoryActive;
+
   if (iconPlay && iconPause) {
-    iconPlay.style.display = st.isPlaying ? 'none' : 'block';
-    iconPause.style.display = st.isPlaying ? 'block' : 'none';
+    iconPlay.style.display = isCurrentStoryPlaying ? 'none' : 'block';
+    iconPause.style.display = isCurrentStoryPlaying ? 'block' : 'none';
   }
 
   if (eq) {
-    eq.style.display = st.isPlaying ? 'inline-flex' : 'none';
+    eq.style.display = isCurrentStoryPlaying ? 'inline-flex' : 'none';
   }
 
   if (statusText) {
-    statusText.textContent = st.isPlaying ? 'Playing in background' : 'Paused';
+    if (isCurrentStoryPlaying) {
+      statusText.textContent = 'Playing in background';
+    } else if (st.isPlaying && !isCurrentStoryActive) {
+      statusText.textContent = 'Another mission is playing • Click Play to switch to this story';
+    } else {
+      statusText.textContent = 'Paused';
+    }
   }
 
   if (speedBtn) {
     speedBtn.textContent = `${st.playbackRate || 1}x`;
   }
 
-  if (curTimeEl) {
-    curTimeEl.textContent = formatDuration(st.currentTime || 0);
-  }
+  const expectedSec = activeStoryId === 'nvs-03'
+    ? (activeLang.startsWith('hi') ? 540 : activeLang.startsWith('en') ? 510 : 130)
+    : (STORY_DURATIONS[activeStoryId] || 180);
 
   if (totalTimeEl) {
-    const expectedSec = (st.storyId || activeStoryId) === 'nvs-03'
-      ? (activeLang.startsWith('hi') ? 540 : activeLang.startsWith('en') ? 483 : 130)
-      : (STORY_DURATIONS[st.storyId || activeStoryId] || 180);
-    const dur = (st.duration && !isNaN(st.duration) && st.duration > 0) ? st.duration : expectedSec;
+    const dur = (isCurrentStoryActive && st.duration && !isNaN(st.duration) && st.duration > 0) ? st.duration : expectedSec;
     totalTimeEl.textContent = formatDuration(dur);
   }
 
-  if (slider && st.duration > 0) {
-    const pct = ((st.currentTime || 0) / st.duration) * 100;
-    slider.value = pct;
+  if (curTimeEl) {
+    const curTime = isCurrentStoryActive ? (st.currentTime || 0) : 0;
+    curTimeEl.textContent = formatDuration(curTime);
+  }
+
+  if (slider) {
+    if (isCurrentStoryActive && st.duration > 0) {
+      slider.value = ((st.currentTime || 0) / st.duration) * 100;
+    } else {
+      slider.value = 0;
+    }
   }
 }
 
