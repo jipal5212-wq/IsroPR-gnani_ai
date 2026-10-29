@@ -90,7 +90,7 @@ function renderStoryMeta(story, availableLangs, currentLang) {
   const titleEl = document.getElementById('story-title');
   const summaryEl = document.getElementById('story-summary');
   const coverImg = document.getElementById('story-cover-img');
-  const langSelectEl = document.getElementById('story-lang-select');
+  const langSelectEl = document.getElementById('story-lang-select') || document.getElementById('lang-select');
 
   if (titleEl) titleEl.textContent = story.title;
   if (summaryEl) summaryEl.textContent = story.summary;

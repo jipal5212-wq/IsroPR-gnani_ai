@@ -1,5 +1,5 @@
 import { apiFetch, getActiveLang, setActiveLang, formatDate } from './common.js';
-import { initGlobalPlayer, playStory, togglePlay, getAudioState, subscribeAudioState } from './spotify-player.js';
+import { initGlobalPlayer, playStory, togglePlay, getAudioState, subscribeAudioState, lockNavScroll, isNavClickScrolling } from './spotify-player.js';
 
 let currentCategory = 'all';
 let searchQuery = '';
@@ -42,6 +42,7 @@ function setupScrollSpy() {
   ];
 
   const updateActive = (hash) => {
+    if (isNavClickScrolling()) return;
     const navLinks = document.querySelectorAll('.nav-links a');
     navLinks.forEach(link => {
       const href = link.getAttribute('href');
@@ -56,6 +57,7 @@ function setupScrollSpy() {
 
   if ('IntersectionObserver' in window) {
     scrollSpyObserver = new IntersectionObserver((entries) => {
+      if (isNavClickScrolling()) return;
       const visible = entries.filter(e => e.isIntersecting);
       if (visible.length > 0) {
         const topmost = visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
@@ -76,6 +78,7 @@ function setupScrollSpy() {
   }
 
   window.addEventListener('scroll', () => {
+    if (isNavClickScrolling()) return;
     if (window.scrollY < 180) {
       updateActive('');
     }
@@ -320,14 +323,15 @@ function setupEventListeners() {
     });
   });
 
-  // Explore Audio Stories & navigation links pointing to #audio-stories
-  const exploreLinks = document.querySelectorAll('a[href="#audio-stories"], a[href="/#audio-stories"], #hero-btn-explore-stories');
-  exploreLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
+  // Explore Audio Stories button on Hero
+  const exploreBtn = document.getElementById('hero-btn-explore-stories');
+  if (exploreBtn) {
+    exploreBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      lockNavScroll(900);
       scrollToAudioStories();
     });
-  });
+  }
 
   // Station cards & trending shelf instant play triggers
   document.querySelectorAll('.station-card[data-story-id], .shelf-play-fab, .shelf-card').forEach(el => {

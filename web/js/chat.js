@@ -15,7 +15,7 @@ export async function initChat() {
 }
 
 async function setupLanguageSelector() {
-  const select = document.getElementById('chat-lang-select');
+  const select = document.getElementById('chat-lang-select') || document.getElementById('lang-select');
   if (!select) return;
 
   try {
@@ -117,7 +117,7 @@ function setupComposer() {
         currentLang = 'bn-IN';
       }
       setActiveLang(currentLang);
-      const langSelect = document.getElementById('chat-lang-select');
+      const langSelect = document.getElementById('chat-lang-select') || document.getElementById('lang-select');
       if (langSelect) langSelect.value = currentLang;
 
       addUserBubble({ text, inputType: 'text' });
@@ -133,7 +133,7 @@ function setupComposer() {
         if (res.lang && res.lang !== currentLang) {
           currentLang = res.lang;
           setActiveLang(currentLang);
-          const langSelect = document.getElementById('chat-lang-select');
+          const langSelect = document.getElementById('chat-lang-select') || document.getElementById('lang-select');
           if (langSelect) langSelect.value = currentLang;
         }
 
@@ -200,7 +200,7 @@ function setupComposer() {
           if (data.lang && data.lang !== currentLang) {
             currentLang = data.lang;
             setActiveLang(currentLang);
-            const langSelect = document.getElementById('chat-lang-select');
+            const langSelect = document.getElementById('chat-lang-select') || document.getElementById('lang-select');
             if (langSelect) langSelect.value = currentLang;
           }
 

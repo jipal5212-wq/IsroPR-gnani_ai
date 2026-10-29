@@ -411,8 +411,23 @@ function updateTimelineUI() {
 /**
  * Client-Side SPA Shell Navigation:
  * Intercepts internal link clicks so navigation between Library, Space Chat,
- * About, and Story views never interrupts background audio playback!
+ * and Story views never interrupts background audio playback!
  */
+let isNavScrolling = false;
+let navScrollTimeout = null;
+
+export function lockNavScroll(duration = 900) {
+  isNavScrolling = true;
+  if (navScrollTimeout) clearTimeout(navScrollTimeout);
+  navScrollTimeout = setTimeout(() => {
+    isNavScrolling = false;
+  }, duration);
+}
+
+export function isNavClickScrolling() {
+  return isNavScrolling;
+}
+
 function updateActiveNavLinks(targetUrl) {
   const currentPath = targetUrl?.pathname || window.location.pathname;
   const currentHash = targetUrl?.hash || window.location.hash;
@@ -483,21 +498,25 @@ function setupSpaNavigation() {
         const targetEl = document.getElementById(targetId);
         if (targetEl) {
           e.preventDefault();
+          lockNavScroll(900);
+          updateActiveNavLinks(targetUrl);
           targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
           try {
             history.pushState(null, '', targetUrl.hash);
           } catch (_) {}
-          updateActiveNavLinks(targetUrl);
           return;
         }
-      } else if (!targetUrl.hash && (currentUrl.hash || window.scrollY > 40)) {
-        // User clicked top of same page (e.g. "Library" or brand logo while on home)
+      } else {
+        // User clicked Library or brand logo while on home: smoothly scroll top without reloading
         e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        lockNavScroll(900);
+        updateActiveNavLinks(targetUrl);
+        if (window.scrollY > 10) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
         try {
           history.pushState(null, '', targetUrl.pathname);
         } catch (_) {}
-        updateActiveNavLinks(targetUrl);
         return;
       }
     }
@@ -516,6 +535,7 @@ function setupSpaNavigation() {
     if (isHomePage && hasStoriesGrid && targetHash) {
       const targetEl = document.getElementById(targetHash);
       if (targetEl) {
+        lockNavScroll(900);
         targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         updateActiveNavLinks(currentUrl);
         return;
@@ -545,38 +565,33 @@ async function navigateSpa(url, push = true) {
     // Update document title
     if (doc.title) document.title = doc.title;
 
-    // Swap .site-header so page-specific header controls and language dropdowns mount cleanly
-    const currentHeader = document.querySelector('.site-header');
-    const newHeader = doc.querySelector('.site-header');
-    if (currentHeader && newHeader) {
-      currentHeader.replaceWith(newHeader);
-    }
+    // Keep persistent .site-header in place to prevent any navbar flicker or sticky re-layout
+    updateActiveNavLinks(targetUrl);
 
-    // Swap <main> content with smooth micro cross-fade
-    const currentMain = document.querySelector('main');
-    const newMain = doc.querySelector('main');
-    if (currentMain && newMain) {
-      currentMain.style.transition = 'opacity 0.12s ease';
-      currentMain.style.opacity = '0';
-      await new Promise(r => setTimeout(r, 110));
-
-      newMain.style.opacity = '0';
-      newMain.style.transition = 'opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1)';
-      currentMain.replaceWith(newMain);
-      requestAnimationFrame(() => {
-        newMain.style.opacity = '1';
-      });
-    }
-
-    // Sync active language selector on the newly mounted header
+    // Sync active language selector on header
     const activeLang = getActiveLang();
     const mountedLangSelect = document.querySelector('.site-header .lang-select, #lang-select, #story-lang-select, #chat-lang-select');
     if (mountedLangSelect && activeLang) {
       mountedLangSelect.value = activeLang;
     }
 
-    // Update active nav links state
-    updateActiveNavLinks(targetUrl);
+    // Swap <main> content with instant scroll reset and clean cross-fade
+    const currentMain = document.querySelector('main');
+    const newMain = doc.querySelector('main');
+    if (currentMain && newMain) {
+      window.scrollTo(0, 0);
+
+      currentMain.style.transition = 'opacity 0.08s ease-out';
+      currentMain.style.opacity = '0';
+      await new Promise(r => setTimeout(r, 70));
+
+      newMain.style.opacity = '0';
+      newMain.style.transition = 'opacity 0.12s ease-in';
+      currentMain.replaceWith(newMain);
+
+      void newMain.offsetWidth;
+      newMain.style.opacity = '1';
+    }
 
     if (push) {
       window.history.pushState(null, '', url);
@@ -587,13 +602,10 @@ async function navigateSpa(url, push = true) {
       setTimeout(() => {
         const targetEl = document.getElementById(targetHash);
         if (targetEl) {
+          lockNavScroll(800);
           targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-      }, 150);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'instant' });
+      }, 100);
     }
 
     // Re-initialize view scripts
