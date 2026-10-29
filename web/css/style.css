@@ -809,8 +809,54 @@ body {
 }
 
 @media (max-width: 768px) {
-  .nav-links {
+  .site-header {
+    padding: 0.6rem 0.85rem 0.5rem;
+  }
+  .header-container {
+    flex-wrap: wrap;
+    row-gap: 0.45rem;
+  }
+  .brand-logo {
+    order: 1;
+  }
+  .header-actions {
+    order: 2;
+    margin-left: auto;
+  }
+  .header-container > nav,
+  nav[aria-label="Main Navigation"] {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.1rem 0;
+  }
+  .header-container > nav::-webkit-scrollbar,
+  nav[aria-label="Main Navigation"]::-webkit-scrollbar {
     display: none;
+  }
+  .nav-links {
+    display: flex !important;
+    gap: 0.4rem;
+    white-space: nowrap;
+    width: max-content;
+    padding-bottom: 2px;
+  }
+  .nav-link {
+    font-size: 0.82rem;
+    padding: 0.35rem 0.75rem;
+    background: #f8fafc;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 9999px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+  .nav-link:hover, .nav-link.active {
+    color: var(--isro-blue);
+    background: var(--isro-blue-light);
+    border-color: rgba(0, 114, 206, 0.25);
+    font-weight: 700;
   }
   .hero {
     padding: 2rem 1rem 1.5rem;
@@ -2455,6 +2501,7 @@ body:has(#player-content) {
   margin: -1.5rem auto 3.5rem;
   padding: 0 1.5rem;
   z-index: 10;
+  scroll-margin-top: 96px;
 }
 
 .upcoming-container {
@@ -2886,6 +2933,7 @@ body:has(#player-content) {
   max-width: 1160px;
   margin: 0 auto 3.5rem;
   padding: 0 1.5rem;
+  scroll-margin-top: 96px;
 }
 
 .shelf-header {

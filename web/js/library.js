@@ -3,20 +3,83 @@ import { initGlobalPlayer, playStory, togglePlay, getAudioState, subscribeAudioS
 
 let currentCategory = 'all';
 let searchQuery = '';
+let libraryUnsubscribe = null;
+let scrollSpyObserver = null;
 
 export async function initLibrary() {
   initGlobalPlayer();
   await loadLanguages();
   setupEventListeners();
   await loadStories();
+  setupScrollSpy();
 
   // Listen to global player changes to keep card buttons synchronized
-  subscribeAudioState(syncCardButtons);
+  if (libraryUnsubscribe) {
+    libraryUnsubscribe();
+  }
+  libraryUnsubscribe = subscribeAudioState(syncCardButtons);
 
   // If loaded with #audio-stories hash, glide smoothly to stories section
   if (window.location.hash === '#audio-stories') {
     setTimeout(scrollToAudioStories, 250);
+  } else if (window.location.hash === '#upcoming-missions') {
+    setTimeout(() => {
+      const sec = document.getElementById('upcoming-missions');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 250);
   }
+}
+
+function setupScrollSpy() {
+  if (scrollSpyObserver) {
+    scrollSpyObserver.disconnect();
+  }
+
+  const sections = [
+    { id: 'upcoming-missions', hash: '#upcoming-missions' },
+    { id: 'trending-shelf', hash: '#audio-stories' },
+    { id: 'audio-stories', hash: '#audio-stories' }
+  ];
+
+  const updateActive = (hash) => {
+    const navLinks = document.querySelectorAll('.nav-links a');
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+      if (hash) {
+        link.classList.toggle('active', href.endsWith(hash));
+      } else {
+        link.classList.toggle('active', href === '/' || href.endsWith('/index.html'));
+      }
+    });
+  };
+
+  if ('IntersectionObserver' in window) {
+    scrollSpyObserver = new IntersectionObserver((entries) => {
+      const visible = entries.filter(e => e.isIntersecting);
+      if (visible.length > 0) {
+        const topmost = visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        const match = sections.find(s => s.id === topmost.target.id);
+        if (match) updateActive(match.hash);
+      } else if (window.scrollY < 200) {
+        updateActive('');
+      }
+    }, {
+      rootMargin: '-20% 0px -50% 0px',
+      threshold: 0
+    });
+
+    sections.forEach(s => {
+      const el = document.getElementById(s.id);
+      if (el) scrollSpyObserver.observe(el);
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY < 180) {
+      updateActive('');
+    }
+  }, { passive: true });
 }
 
 export function scrollToAudioStories() {

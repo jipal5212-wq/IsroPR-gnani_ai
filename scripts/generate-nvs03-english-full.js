@@ -208,3 +208,4 @@ generateEnglishFull().catch(err => {
   console.error('Fatal generation error:', err);
   process.exit(1);
 });
+

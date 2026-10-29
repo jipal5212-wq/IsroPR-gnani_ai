@@ -15,6 +15,36 @@ let activeStoryId = 'chandrayaan-3';
 let activeLang = 'en-IN';
 let unsubscribe = null;
 
+const STORY_FAST_CACHE = {
+  'nvs-03': {
+    id: 'nvs-03',
+    title: 'NVS-03: NavIC Constellation & The Pyro Valve Gambit',
+    summary: "From the 1999 Kargil GPS denial to the heartbreak of NVS-02's oxidiser valve glitch — hear how ISRO took a daring, 51-year first gamble on GSLV-F18 to secure India's sovereign navigation system in the skies.",
+    cover_path: 'nvs-03-cover.jpg',
+    category: 'upcoming-ongoing',
+    duration_hint_min: 9,
+    sources: ['https://www.isro.gov.in/NVS-03.html']
+  },
+  'mangalyaan': {
+    id: 'mangalyaan',
+    title: "Mangalyaan: India's First Mission to Mars",
+    summary: "Relive India's historic Mars Orbiter Mission narrated in authentic Indian voices. How ISRO reached Mars on its maiden voyage with groundbreaking frugality.",
+    cover_path: 'mangalyaan-cover.jpg',
+    category: 'isro',
+    duration_hint_min: 3,
+    sources: ['https://www.isro.gov.in/MOM.html']
+  },
+  'chandrayaan-3': {
+    id: 'chandrayaan-3',
+    title: 'Chandrayaan-3: 15 Minutes of Terror & The South Pole Triumph',
+    summary: "Relive India's historic lunar touchdown narrated in studio Indian voice. Hear how ISRO turned failure into victory at the Moon's rugged south pole.",
+    cover_path: 'chandrayaan-3-cover.jpg',
+    category: 'isro',
+    duration_hint_min: 3,
+    sources: ['https://www.isro.gov.in/Chandrayaan3.html']
+  }
+};
+
 export async function initPlayer() {
   // Ensure the persistent global audio engine is running
   initGlobalPlayer();
@@ -23,7 +53,11 @@ export async function initPlayer() {
   activeStoryId = urlParams.get('id') || 'chandrayaan-3';
   activeLang = urlParams.get('lang') || getActiveLang();
 
-  await loadStoryDetails(activeStoryId, activeLang);
+  // Instant render from fast cache to prevent visual jump
+  if (STORY_FAST_CACHE[activeStoryId]) {
+    renderStoryMeta(STORY_FAST_CACHE[activeStoryId], [], activeLang);
+  }
+
   setupPodcastControls();
 
   // Subscribe to global audio state for live synced controls
@@ -32,6 +66,8 @@ export async function initPlayer() {
 
   // Initial sync
   syncPlayerUI(getAudioState());
+
+  await loadStoryDetails(activeStoryId, activeLang);
 
   // Auto-play if requested or query param autoplay=1
   if (urlParams.get('autoplay') === '1') {

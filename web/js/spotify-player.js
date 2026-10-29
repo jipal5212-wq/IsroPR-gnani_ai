@@ -413,46 +413,124 @@ function updateTimelineUI() {
  * Intercepts internal link clicks so navigation between Library, Space Chat,
  * About, and Story views never interrupts background audio playback!
  */
+function updateActiveNavLinks(targetUrl) {
+  const currentPath = targetUrl?.pathname || window.location.pathname;
+  const currentHash = targetUrl?.hash || window.location.hash;
+  const isHome = currentPath === '/' || currentPath.endsWith('/index.html') || currentPath === '';
+
+  const navLinks = document.querySelectorAll('.nav-links a');
+  navLinks.forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href) return;
+    try {
+      const linkUrl = new URL(href, window.location.origin);
+      const linkPath = linkUrl.pathname;
+      const linkHash = linkUrl.hash;
+
+      let isActive = false;
+      if (isHome) {
+        if (currentHash === '#upcoming-missions') {
+          isActive = linkHash === '#upcoming-missions';
+        } else if (currentHash === '#audio-stories') {
+          isActive = linkHash === '#audio-stories';
+        } else {
+          isActive = (linkPath === '/' || linkPath.endsWith('/index.html')) && !linkHash;
+        }
+      } else {
+        isActive = currentPath === linkPath && !linkHash;
+      }
+
+      if (isActive) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    } catch (_) {}
+  });
+}
+
 function setupSpaNavigation() {
   document.addEventListener('click', async (e) => {
     const link = e.target.closest('a');
     if (!link) return;
 
     const href = link.getAttribute('href');
-    if (!href || href.startsWith('http') || href.startsWith('data:') || href.startsWith('mailto:') || href.startsWith('/admin')) {
-      return; // External or non-nav link
+    if (!href || href.startsWith('data:') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:') || href.startsWith('/admin')) {
+      return; // Non-SPA link
     }
 
-    // Do not intercept if new tab requested
+    // Do not intercept if new tab requested or modifier pressed
     if (link.target === '_blank' || e.metaKey || e.ctrlKey || e.shiftKey) return;
 
-    // Same-page anchor clicks (e.g. href="#audio-stories")
-    if (href.startsWith('#')) {
-      const targetId = href.substring(1);
-      const targetEl = document.getElementById(targetId);
-      if (targetEl) {
-        e.preventDefault();
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        try {
-          history.pushState(null, '', href);
-        } catch (_) {}
-      }
+    let targetUrl;
+    try {
+      targetUrl = new URL(href, window.location.href);
+    } catch (_) {
       return;
     }
 
+    // Only intercept same origin links
+    if (targetUrl.origin !== window.location.origin) return;
+
+    const currentUrl = new URL(window.location.href);
+    const isSamePath = (targetUrl.pathname === currentUrl.pathname) || 
+      ((targetUrl.pathname === '/' || targetUrl.pathname.endsWith('/index.html')) && (currentUrl.pathname === '/' || currentUrl.pathname.endsWith('/index.html')));
+
+    // Case 1: Same page anchor navigation (e.g. #audio-stories, /#upcoming-missions from home)
+    if (isSamePath && targetUrl.search === currentUrl.search) {
+      if (targetUrl.hash) {
+        const targetId = targetUrl.hash.substring(1);
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          e.preventDefault();
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          try {
+            history.pushState(null, '', targetUrl.hash);
+          } catch (_) {}
+          updateActiveNavLinks(targetUrl);
+          return;
+        }
+      } else if (!targetUrl.hash && (currentUrl.hash || window.scrollY > 40)) {
+        // User clicked top of same page (e.g. "Library" or brand logo while on home)
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        try {
+          history.pushState(null, '', targetUrl.pathname);
+        } catch (_) {}
+        updateActiveNavLinks(targetUrl);
+        return;
+      }
+    }
+
+    // Case 2: Cross-page or search query navigation
     e.preventDefault();
-    await navigateSpa(href);
+    await navigateSpa(targetUrl.pathname + targetUrl.search + targetUrl.hash, true);
   });
 
   window.addEventListener('popstate', async () => {
+    const currentUrl = new URL(window.location.href);
+    const targetHash = currentUrl.hash ? currentUrl.hash.substring(1) : '';
+    const isHomePage = currentUrl.pathname === '/' || currentUrl.pathname.endsWith('/index.html');
+    const hasStoriesGrid = !!document.getElementById('stories-grid');
+
+    if (isHomePage && hasStoriesGrid && targetHash) {
+      const targetEl = document.getElementById(targetHash);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        updateActiveNavLinks(currentUrl);
+        return;
+      }
+    }
+
     await navigateSpa(window.location.pathname + window.location.search + window.location.hash, false);
   });
 }
 
 async function navigateSpa(url, push = true) {
   try {
-    const [pathOnly, targetHash] = url.split('#');
-    const cleanPath = pathOnly || '/';
+    const targetUrl = new URL(url, window.location.origin);
+    const cleanPath = targetUrl.pathname + targetUrl.search;
+    const targetHash = targetUrl.hash ? targetUrl.hash.substring(1) : '';
 
     const res = await fetch(cleanPath);
     if (!res.ok) {
@@ -467,39 +545,44 @@ async function navigateSpa(url, push = true) {
     // Update document title
     if (doc.title) document.title = doc.title;
 
-    // Swap <main> content with smooth cross-fade
+    // Swap .site-header so page-specific header controls and language dropdowns mount cleanly
+    const currentHeader = document.querySelector('.site-header');
+    const newHeader = doc.querySelector('.site-header');
+    if (currentHeader && newHeader) {
+      currentHeader.replaceWith(newHeader);
+    }
+
+    // Swap <main> content with smooth micro cross-fade
     const currentMain = document.querySelector('main');
     const newMain = doc.querySelector('main');
     if (currentMain && newMain) {
-      currentMain.style.transition = 'opacity 0.15s ease, transform 0.15s ease';
+      currentMain.style.transition = 'opacity 0.12s ease';
       currentMain.style.opacity = '0';
-      currentMain.style.transform = 'translateY(4px)';
-      await new Promise(r => setTimeout(r, 140));
+      await new Promise(r => setTimeout(r, 110));
 
       newMain.style.opacity = '0';
-      newMain.style.transform = 'translateY(4px)';
-      newMain.style.transition = 'opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)';
+      newMain.style.transition = 'opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1)';
       currentMain.replaceWith(newMain);
       requestAnimationFrame(() => {
         newMain.style.opacity = '1';
-        newMain.style.transform = 'translateY(0)';
       });
     }
 
-    // Update active nav links
-    const newNavLinks = doc.querySelectorAll('.nav-links a');
-    const currentNavLinks = document.querySelectorAll('.nav-links a');
-    currentNavLinks.forEach((l, idx) => {
-      if (newNavLinks[idx]) {
-        l.className = newNavLinks[idx].className;
-      }
-    });
+    // Sync active language selector on the newly mounted header
+    const activeLang = getActiveLang();
+    const mountedLangSelect = document.querySelector('.site-header .lang-select, #lang-select, #story-lang-select, #chat-lang-select');
+    if (mountedLangSelect && activeLang) {
+      mountedLangSelect.value = activeLang;
+    }
+
+    // Update active nav links state
+    updateActiveNavLinks(targetUrl);
 
     if (push) {
       window.history.pushState(null, '', url);
     }
 
-    // If targetHash exists, scroll directly to that element; otherwise top
+    // Handle scroll target
     if (targetHash) {
       setTimeout(() => {
         const targetEl = document.getElementById(targetHash);
@@ -508,24 +591,24 @@ async function navigateSpa(url, push = true) {
         } else {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-      }, 180);
+      }, 150);
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
     // Re-initialize view scripts
-    if (cleanPath.includes('/chat.html')) {
+    if (targetUrl.pathname.includes('/chat.html')) {
       const { initChat } = await import('./chat.js');
       initChat();
-    } else if (cleanPath.includes('/story.html')) {
+    } else if (targetUrl.pathname.includes('/story.html')) {
       const { initPlayer } = await import('./player.js');
       initPlayer();
-    } else if (cleanPath === '/' || cleanPath.endsWith('/index.html') || cleanPath === '') {
+    } else if (targetUrl.pathname === '/' || targetUrl.pathname.endsWith('/index.html') || targetUrl.pathname === '') {
       const { initLibrary } = await import('./library.js');
       initLibrary();
     }
 
-    // Ensure Spotify bar remains synced
+    // Ensure Spotify bar remains synced and visible
     injectSpotifyBar();
     updateBarUI();
   } catch (err) {
