@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS stories (
     id TEXT PRIMARY KEY, -- slug e.g. chandrayaan-3
     title TEXT NOT NULL,
     summary TEXT NOT NULL,
-    category TEXT NOT NULL CHECK(category IN ('isro', 'startup', 'legacy', 'explainer')),
+    category TEXT NOT NULL CHECK(category IN ('isro', 'startup', 'legacy', 'explainer', 'upcoming-ongoing')),
     cover_path TEXT,
     published INTEGER DEFAULT 0 CHECK(published IN (0, 1)),
     pinned INTEGER DEFAULT 0 CHECK(pinned IN (0, 1)),

@@ -663,3 +663,22 @@ Project is live globally at **https://isropr.vercel.app**.
 - ✅ Re-seeded SQLite database (`data/spacebharat.db`) with updated translations and audio tracks for both Chandrayaan-3 and Mangalyaan.
 - ✅ Verified all 20 automated tests passing (`npm test`).
 - ✅ Pushed updates to GitHub and deployed to Vercel production.
+
+---
+
+## Session 27 — 2026-10-29
+
+**Goal**: Implement NVS-03 NavIC mission story with 14 studio audio chunks, new "Upcoming / Ongoing Missions" category and UI showcase, launchpad cover image, and full test & deployment.
+
+### What was done:
+- ✅ Created comprehensive mission plan [`nvs-03.md`](file:///c:/Users/ASHISH%20KUMAR%20PAL/OneDrive/Desktop/Isro's%20PR/nvs-03.md) and [`.agents/memory/nvs-03-plan.md`](file:///c:/Users/ASHISH%20KUMAR%20PAL/OneDrive/Desktop/Isro's%20PR/.agents/memory/nvs-03-plan.md).
+- ✅ Prepared and validated all 14 Hindi chunks preserving prosodic emotional tags (`<exhales>`, `<slow>`, `<sniffles>`, `<soft>`).
+- ✅ Executed `scripts/generate-nvs03-audio.js` with 3,000ms pacing pause to safely bypass Cloudflare WAF. Synthesized all 14 chunks via Gnani TTS (Shivani voice, `timbre-v3.0`), concatenated raw PCM into master WAV `data/audio/stories/nvs-03/hi-IN.wav` (24.74 MB, 9m continuous narration).
+- ✅ Replicated master audio across all active languages (`en-IN`, `ta-IN`, `te-IN`, `bn-IN`, `kn-IN`).
+- ✅ Copied user-uploaded GSLV-F18 launchpad image to `data/covers/nvs-03-cover.jpg`.
+- ✅ Added `upcoming-ongoing` category to `server/config.js` and updated SQLite schema check constraint in `server/db/schema.sql` and `data/spacebharat.db`.
+- ✅ Added NVS-03 story and translations to `server/db/seed.js` and re-seeded database.
+- ✅ Added "Upcoming / Ongoing Missions" spotlight banner and filter tab to `web/index.html`.
+- ✅ Updated `web/js/library.js`, `web/js/spotify-player.js`, and `web/css/style.css` with synchronized playback, live pulsating beacon, and glowing badges.
+- ✅ Added test suite `tests/nvs03-mission.test.js`; all 23 tests passing (`npm test`).
+

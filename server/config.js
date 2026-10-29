@@ -80,6 +80,7 @@ export const ALL_LANGUAGES = [
 ];
 
 export const CATEGORIES = [
+  { id: 'upcoming-ongoing', name: 'Upcoming / Ongoing Missions', description: 'Current, live, and imminent Indian space missions' },
   { id: 'isro', name: 'ISRO Missions', description: 'Active & upcoming missions led by ISRO' },
   { id: 'startup', name: 'Space Startups', description: 'Indian commercial space ecosystem' },
   { id: 'legacy', name: 'ISRO Legacy', description: 'Historic milestones and pioneers' },

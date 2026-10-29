@@ -60,6 +60,19 @@ function syncCardButtons(audioState) {
     }
   }
 
+  const upcomingPlayBtn = document.getElementById('upcoming-btn-play-nvs03');
+  const isPlayingNvs03 = audioState.isPlaying && audioState.storyId === 'nvs-03';
+  if (upcomingPlayBtn) {
+    const btnText = upcomingPlayBtn.querySelector('.btn-play-text');
+    if (isPlayingNvs03) {
+      upcomingPlayBtn.classList.add('playing');
+      if (btnText) btnText.textContent = 'Pause NVS-03 Story';
+    } else {
+      upcomingPlayBtn.classList.remove('playing');
+      if (btnText) btnText.textContent = 'Listen: NVS-03 Story (9 min)';
+    }
+  }
+
   cards.forEach(card => {
     const cardStoryId = card.dataset.storyId || 'chandrayaan-3';
     const isPlayingThis = audioState.isPlaying && audioState.storyId === cardStoryId;
@@ -185,6 +198,22 @@ function setupEventListeners() {
     });
   }
 
+  // Upcoming NVS-03 Play Trigger
+  const upcomingBtn = document.getElementById('upcoming-btn-play-nvs03');
+  if (upcomingBtn) {
+    upcomingBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const audioState = getAudioState();
+      if (audioState.isPlaying && audioState.storyId === 'nvs-03') {
+        togglePlay();
+      } else {
+        playStory('nvs-03', getActiveLang(), {
+          title: 'NVS-03: NavIC Constellation & The Pyro Valve Gambit'
+        });
+      }
+    });
+  }
+
   // Hero 'O' logo button click & quick-play button (Plays top-rated Chandrayaan-3)
   const heroPlayTriggers = document.querySelectorAll('#hero-o-play-btn, #hero-btn-play-c3');
   heroPlayTriggers.forEach(btn => {
@@ -299,20 +328,21 @@ function createStoryCard(story, lang) {
   const audioState = getAudioState();
   const isPlayingThis = audioState.isPlaying && audioState.storyId === story.id;
   const duration = story.duration_hint_min || 3;
+  const isUpcoming = story.category === 'upcoming-ongoing';
 
-  card.className = `story-card ${isPlayingThis ? 'playing' : ''}`;
+  card.className = `story-card ${isPlayingThis ? 'playing' : ''} ${isUpcoming ? 'card-upcoming-highlight' : ''}`;
   card.dataset.storyId = story.id;
   card.dataset.duration = duration;
 
   const coverSrc = story.cover_path ? `/media/covers/${story.cover_path}?v=navcam_20230827` : getEditorialCover(story.category);
-  const categoryLabel = story.category === 'isro' ? 'ISRO Mission' : story.category === 'startups' ? 'NewSpace India' : 'Space Science';
+  const categoryLabel = isUpcoming ? 'Upcoming / Ongoing' : story.category === 'isro' ? 'ISRO Mission' : story.category === 'startups' ? 'NewSpace India' : 'Space Science';
 
   card.innerHTML = `
     <div class="story-card-top">
       <img src="${coverSrc}" alt="${story.title.replace(/"/g, '&quot;')}" class="story-card-img" loading="eager" />
       
       <div class="story-top-badges">
-        <span class="story-badge-cat">${categoryLabel}</span>
+        <span class="story-badge-cat ${isUpcoming ? 'badge-live' : ''}">${categoryLabel}</span>
         <span class="story-duration-pill">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
           ${duration} MIN LISTEN
@@ -330,9 +360,9 @@ function createStoryCard(story, lang) {
     </div>
 
     <!-- Authentic ISRO Telemetry Banner -->
-    <div class="photo-telemetry-strip">
-      <span class="navcam-badge">ISRO NavCam</span>
-      <span class="photo-caption-text">Authentic Pragyan rover crater photograph · 27 Aug 2023</span>
+    <div class="photo-telemetry-strip ${isUpcoming ? 'telemetry-upcoming' : ''}">
+      <span class="navcam-badge ${isUpcoming ? 'badge-live' : ''}">${isUpcoming ? 'LIVE • GSLV-F18' : 'ISRO NavCam'}</span>
+      <span class="photo-caption-text">${isUpcoming ? 'GSLV-F18 on Launchpad Sriharikota · NavIC Constellation' : 'Authentic Pragyan rover crater photograph · 27 Aug 2023'}</span>
     </div>
 
     <div class="story-card-content">

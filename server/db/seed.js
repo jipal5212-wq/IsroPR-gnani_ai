@@ -8,9 +8,9 @@ export async function seedDatabase() {
   console.log('🌱 Seeding rich IsroPR stories and comprehensive ISRO knowledge base...');
   const db = getDb();
 
-  // Ensure only Chandrayaan-3 and Mangalyaan are retained per user request
-  db.prepare("DELETE FROM story_translations WHERE story_id NOT IN ('chandrayaan-3','mangalyaan')").run();
-  db.prepare("DELETE FROM stories WHERE id NOT IN ('chandrayaan-3','mangalyaan')").run();
+  // Retain Chandrayaan-3, Mangalyaan, and NVS-03 per user request
+  db.prepare("DELETE FROM story_translations WHERE story_id NOT IN ('chandrayaan-3','mangalyaan','nvs-03')").run();
+  db.prepare("DELETE FROM stories WHERE id NOT IN ('chandrayaan-3','mangalyaan','nvs-03')").run();
 
   // ============================================================
   // 1. STORY: Chandrayaan-3 (ISRO Mission)
@@ -476,6 +476,125 @@ And the most beautiful part? This mission ignited questions in millions of young
   for (const t of mangalyaanTranslations) {
     const audioUrl = `/media/audio/stories/mangalyaan/${t.lang}.wav`;
     insertTrans.run('mangalyaan', t.lang, t.body, t.voice, audioUrl, 180);
+  }
+
+  // ============================================================
+  // STORY: NVS-03 (NavIC Constellation & Pyro Valve Gambit)
+  // ============================================================
+  const storyNvs03 = {
+    id: 'nvs-03',
+    title: 'NVS-03: NavIC Constellation & The Pyro Valve Gambit',
+    summary: 'How ISRO took a daring 51-year first gamble on GSLV-F18 to secure India\'s sovereign navigation system after the heartbreak of NVS-02.',
+    category: 'upcoming-ongoing',
+    facts_as_of: '2026-10-30',
+    sources: JSON.stringify(['https://www.isro.gov.in/NVS-03.html', 'https://www.indianspaceflight.in/']),
+    cover_path: 'nvs-03-cover.jpg',
+    duration_hint_min: 9,
+    pinned: 1,
+    published: 1
+  };
+
+  db.prepare(`
+    INSERT INTO stories (id, title, summary, category, facts_as_of, sources, cover_path, duration_hint_min, pinned, published)
+    VALUES (@id, @title, @summary, @category, @facts_as_of, @sources, @cover_path, @duration_hint_min, @pinned, @published)
+    ON CONFLICT(id) DO UPDATE SET
+      title = excluded.title,
+      summary = excluded.summary,
+      category = excluded.category,
+      facts_as_of = excluded.facts_as_of,
+      sources = excluded.sources,
+      cover_path = excluded.cover_path,
+      duration_hint_min = excluded.duration_hint_min,
+      pinned = excluded.pinned,
+      published = excluded.published
+  `).run(storyNvs03);
+
+  const nvs03Translations = [
+    {
+      lang: 'hi-IN',
+      voice: 'Shivani',
+      body: `1999 का साल था। कारगिल की पहाड़ियों पर भारतीय सेना लड़ रही थी। उस वक़्त commanders को ज़रूरत थी exact location की, दुश्मन कहाँ है, हमारे जवान कहाँ हैं। उन्होंने America के GPS system से मदद माँगी। और America ने मना कर दिया। उस दिन भारत के decision makers को एहसास हुआ कि technology में दूसरों पर depend रहना कितना ख़तरनाक है। किसी और का system, किसी और की शर्तों पर चलता है। उसी दिन एक सपना बोया गया। भारत का अपना navigation system बनाने का सपना। जो किसी की इजाज़त पर न चले।
+
+उसी सपने से निकला NavIC, यानी Navigation with Indian Constellation। सीधे शब्दों में कहें तो भारत का अपना GPS। ये system India और उसके आसपास 1,500 किलोमीटर तक की exact location बता सकता है। चाहे वो एक जवान हो border पर, एक किसान हो खेत में, या एक ship हो समुद्र में। NavIC सिर्फ़ रास्ता नहीं दिखाता। ये भारत की strategic independence का एक हिस्सा है। Defence से लेकर disaster management तक, fishing boats से लेकर आपके phone तक, सबमें इसका इस्तेमाल हो सकता है।
+
+पर NavIC की राह आसान नहीं रही। इस system को ठीक से चलाने के लिए कम से कम सात satellites की ज़रूरत है। कुछ पुराने satellites ने अपनी उम्र पूरी कर ली। IRNSS-1H को PSLV से launch किया गया था, पर rocket का protective heat shield अलग नहीं हुआ और वो mission fail हो गया। फिर NVS-02 की बारी आई, जिसके बारे में हम आगे बात करेंगे। आज की तारीख़ में parliament में सरकार ने माना कि NavIC में सिर्फ़ तीन satellites ही काम कर रहे हैं। और independent positioning के लिए चार चाहिए। यानी अभी भारत अपने GPS पर पूरी तरह depend नहीं कर सकता।
+
+अब थोड़ा उस rocket के बारे में जानते हैं जो NVS-03 को अंतरिक्ष में ले जाएगा। इसका नाम है GSLV, यानी Geosynchronous Satellite Launch Vehicle। ये तीन stages वाला rocket है, लगभग 50 मीटर लंबा, और lift-off के वक़्त इसका वज़न होता है करीब 420 tonnes। सोचिए, एक भरी हुई passenger train जितना वज़न, और वो सब आसमान में उठाना होता है। इसकी 20वीं flight होगी ये। GSLV का काम है heavy navigation और communication satellites को geosynchronous transfer orbit तक पहुँचाना, जहाँ से satellite खुद अपने engine से अपनी final जगह पर जाता है।
+
+29 जनवरी 2025। GSLV-F15 rocket Sriharikota से उड़ा। उसमें था NVS-02, करीब 2,235 किलोग्राम का navigation satellite। Rocket ने अपना काम बेहतरीन तरीक़े से किया। NVS-02 को geosynchronous transfer orbit में सही जगह छोड़ दिया। सब ठीक था। Team ख़ुश थी। पर उसके बाद satellite को अपनी final orbit तक जाने के लिए खुद अपना engine चलाना था। और वो engine कभी नहीं चला। NVS-02 वहीं अटक गया, एक अधूरे सफ़र में, बेकार। करोड़ों रुपये का satellite, orbit में घूमता रहा, पर किसी काम का नहीं।
+
+ISRO ने जाँच बैठाई। Apex Committee बनाई। हफ़्तों की जाँच के बाद पता चला असली वजह। Satellite के engine तक oxidiser, यानी एक ज़रूरी chemical, पहुँचाने का रास्ता एक special valve से बंद था। इसे कहते हैं pyro valve। ये valve एक electrical signal मिलने पर खुलता है। वो signal satellite को गया। पर valve तक पहुँचा ही नहीं। क्योंकि बीच में एक connector के contacts अलग हो गए थे। Main path भी fail, backup path भी fail। बस इतनी सी बात। एक connector, कुछ loose contacts। और पूरा mission बर्बाद।
+
+थोड़ा समझते हैं ये pyro valve क्या होता है। सोचिए आपके घर में gas cylinder का valve। जब तक बंद है, gas नहीं निकलती। खोलो तो gas बहती है। Satellite में भी कुछ ऐसा ही होता है। Fuel और oxidiser tanks में बंद रहते हैं launch के दौरान, ताकि कोई leak न हो। जब सही वक़्त आए, एक electrical signal भेजा जाता है। उस signal से एक tiny explosive जलती है, जो valve को एक बार के लिए खोल देती है। और ये valve एक बार खुल जाए तो बंद नहीं होता। Single-use होता है। NVS-02 में यही signal कभी valve तक पहुँचा ही नहीं।
+
+अब सवाल था, NVS-03 के साथ क्या करें। वही पुराना तरीका अपनाएँ, और risk लें कि शायद फिर वही failure हो? ISRO ने एक ऐसा फ़ैसला लिया जो उसकी 51 साल की satellite launch history में पहली बार हो रहा है। NVS-03 के pyro valves को launch से पहले ही खुली अवस्था में fire कर दिया गया है। मतलब वो signal जो NVS-02 में fail हुआ था, उसकी ज़रूरत ही अब नहीं पड़ेगी। Valve पहले से ही open है। ये decision आसान नहीं था। ये एक engineer का वो जवाब है जो वो तब देता है जब वो पूरी रात सो नहीं पाता और बार-बार एक ही सवाल पूछता है, कि इस बार क्या अलग करें।
+
+पर इस फ़ैसले के साथ एक नई चुनौती भी आई। कुछ experts ने concern जताया। जब valve पहले से खुला है, तो fuel और oxidiser एक downstream valve, जिसे latch valve कहते हैं, उस तक पहुँच जाते हैं। अब सारा दारोमदार उस latch valve पर है। अगर वो space में नहीं खुला, तो mission फिर fail। और एक और concern है। Launch के दौरान rocket में बहुत तेज़ vibration होती है। उस vibration में open valve से propellant लीक होने का छोटा सा risk रहता है। ISRO की team ने ground पर endless tests किए, vibration withstand tests, shock tests, seal verification। तब जाकर green light मिली।
+
+अब थोड़ा जानते हैं NVS-03 के बारे में। इसका वज़न है करीब 2,250 किलोग्राम। इसमें लगा है एक indigenous Rubidium atomic clock। ये clock Ahmedabad के Space Applications Centre ने खुद बनाई है। Navigation satellite के लिए clock उसकी धड़कन होती है। जितनी accurate घड़ी, उतनी accurate location। अगर घड़ी में एक microsecond का फ़र्क आया, तो ज़मीन पर 300 मीटर का error हो सकता है। इसके अलावा इसमें L1, L5 और S-band signals हैं, जो civilian GPS receivers और high-security military devices दोनों के लिए काम करेंगे।
+
+इस सब के बीच एक और मुश्किल आई, Cyclone Arnab। अक्टूबर के आखिरी हफ़्ते में Bay of Bengal में एक deep depression बना जो Cyclone Arnab में बदल गया। Sriharikota के तट पर तेज़ हवाएँ और भारी बारिश शुरू हो गई। Launch vehicle और satellite Mobile Service Tower के अंदर सुरक्षित थे, पर launch campaign का schedule tight था। Team ने दिन-रात एक करके humidity control, electrical shielding और launch pad preparations को maintain किया। मौसम ने परीक्षा ली, पर engineers पीछे नहीं हटे।
+
+जब GSLV-F18 Sriharikota से उड़ेगा, तो वो NVS-03 को geosynchronous transfer orbit में छोड़ देगा। असली खेल वहाँ से शुरू होगा। Satellite के Liquid Apogee Motor यानी LAM engine को तीन बार fire किया जाएगा। इस बार pyro valve का कोई डर नहीं, वो पहले से खुला है। Latch valve खुलेगा, fuel बहेगा, और engine satellite को circular geostationary orbit में पहुँचाएगा, ज़मीन से करीब 36,000 किलोमीटर ऊपर। उस ऊंचाई पर पहुँचकर satellite के solar panels खुलेंगे और Indian Space Research Organisation का signal धरती पर आएगा।
+
+अगर NVS-03 सफल होता है, तो इसका असर सिर्फ़ एक satellite तक नहीं रहेगा। NavIC constellation में working satellites की संख्या चार हो जाएगी, जो independent positioning के लिए minimum requirement है। इसके बाद NVS-04, 05 और 06 planned हैं। ये mission साबित करेगा कि ISRO एक failure के बाद रुकता नहीं है, बल्कि deeper engineering solutions निकालता है। ये launch भारत के हर नागरिक के phone, हर aircraft के navigation, और border पर खड़े हर जवान की safety से जुड़ा है।
+
+30 अक्टूबर की रात जब वो rocket उड़ेगा, तो उसमें सिर्फ़ एक satellite नहीं होगा। उसमें होंगे उन engineers के सालों के effort, जो NVS-02 की failure के बाद टूटे नहीं, बल्कि और मज़बूती से वापस आए। उसमें होगी उन scientists की लगन, जिन्होंने हर गलती को ध्यान से पढ़ा और उससे सीखा। उसमें होगा भारत का वो सपना, जो 1999 में एक ज़रूरत से पैदा हुआ था। रात के उस एक पल में, Sriharikota के आसमान में एक रोशनी उठेगी। और उस रोशनी के साथ उठेगी करोड़ों लोगों की उम्मीद। क्योंकि ये सिर्फ़ एक launch नहीं है। ये भारत का अपने आप पर भरोसा है।`
+    },
+    {
+      lang: 'en-IN',
+      voice: 'Shivani',
+      body: `The story begins in 1999. In the treacherous heights of Kargil, the Indian armed forces were fighting a fierce battle. Military commanders critically required precision satellite coordinates to pinpoint enemy positions and track our advancing troops. India approached the United States for access to GPS satellite data. The United States refused. On that defining day, Indian leaders realized the perilous danger of depending on foreign technology. Someone else's system will always run on someone else's terms. Right then, a dream was conceived: India must build its own satellite navigation constellation, independent of anyone's permission.
+
+From that resolute conviction rose NavIC — Navigation with Indian Constellation, or in simple words, India's sovereign GPS. The system provides real-time positional accuracy across India and extends 1,500 kilometers beyond its borders. Whether for a soldier guarding the frozen frontiers, a farmer surveying fields, or a commercial vessel sailing the high seas, NavIC delivers precision. Beyond navigation, NavIC embodies India's strategic self-reliance across national defence, disaster management, maritime safety, and mobile consumer technology.
+
+Yet the road for NavIC has faced daunting hurdles. To function effectively, the constellation requires at least seven operational satellites. Over the years, early spacecraft completed their lifespans. IRNSS-1H was lost when the PSLV payload fairing failed to separate. And then came NVS-02. Recently, the government acknowledged in Parliament that only three satellites remain operational, whereas a minimum of four is necessary for an independent position fix. India cannot yet rely fully on its indigenous constellation.
+
+The heavy lifter tasked with carrying NVS-03 into space is the GSLV — Geosynchronous Satellite Launch Vehicle. Standing 50 meters tall with three stages and a lift-off mass of 420 tonnes, it equals the sheer mass of a fully loaded passenger train ascending toward the sky. Marked as GSLV's 20th flight, its mandate is delivering heavy navigation satellites into Geosynchronous Transfer Orbit (GTO), where the satellite's internal propulsion takes over.
+
+On 29 January 2025, GSLV-F15 lifted off from Sriharikota carrying NVS-02, a 2,235-kilogram navigation satellite. The rocket executed its trajectory flawlessly, deploying NVS-02 exactly into its designated transfer orbit. Cheers erupted in mission control. But when the satellite attempted to ignite its onboard Liquid Apogee Motor to climb into circular orbit, the engine remained dead. NVS-02 was marooned in transfer orbit, powerless and unusable. A ₹300-crore asset circled the Earth in silence.
+
+ISRO constituted a high-level Apex Committee. Weeks of meticulous forensic analysis uncovered the root cause: oxidiser flow to the engine was blocked by a single-use pyro valve. Designed to trigger open via an electrical pulse, the signal left the onboard computer but never reached the pyrotechnic charge because connector pins had mechanically separated. Both primary and redundant paths were severed. A few loose connector contacts doomed the entire mission.
+
+A pyro valve is analogous to a sealed valve on a gas cylinder. Prior to launch, high-pressure propellants are hermetically sealed inside storage tanks to avoid leaks. Once in space, an electrical impulse detonates a miniature explosive charge, shearing a metal diaphragm and permanently opening the fluid path. In NVS-02, that electrical signal was lost at the disconnected junction.
+
+Confronting NVS-03, ISRO engineers refused to accept repeat risk. Breaking with 51 years of launch precedent, ISRO made an unprecedented decision: pre-firing all pyro valves on the ground before launch. The valve is already open on the launchpad, permanently eliminating the failure mode that crippled NVS-02. This daring decision represents engineering ownership at its peak — sleepless nights distilled into radical clarity.
+
+However, pre-actuating the valve introduced new physics. With pyro valves permanently open, propellants rest against downstream latch valves. Mission success hinges entirely on these latch valves opening reliably in space. Additionally, extreme launch acoustics and vibration posed potential risk to seals. To ensure absolute flightworthiness, ISRO subjected the plumbing to exhaustive shock, vibration, and seal integrity trials before granting flight clearance.
+
+Weighing 2,250 kilograms, NVS-03 carries a sovereign technological milestone: an indigenous Rubidium atomic clock engineered by SAC Ahmedabad. The atomic clock is the heartbeat of navigation; an error of even a single microsecond translates to a 300-meter ground deviation. Accompanied by civilian L1 signals alongside L5 and S-band military channels, NVS-03 equips both consumer smartphones and national defence units.
+
+Late October posed an atmospheric challenge: Cyclone Arnab intensified in the Bay of Bengal, battering Sriharikota with torrential rain and high coastal gusts. Encased inside the Mobile Service Tower, the rocket remained safe while technicians worked around the clock maintaining humidity controls, electrical isolation, and pad readiness under severe weather.
+
+Upon GSLV-F18 liftoff, the vehicle will deliver NVS-03 into GTO. The satellite's Liquid Apogee Motor will perform three burns to circularize into geostationary orbit 36,000 kilometers above Earth. Once on station, its solar arrays will deploy, and telemetry will establish communication with ISTRAC.
+
+A successful NVS-03 restores NavIC to four operational satellites, meeting the baseline threshold for independent positioning and clearing the runway for NVS-04, 05, and 06. When the rocket ascends into the night sky, it carries far more than a navigation payload: it carries years of resilience, scientific grit, and India's unshakeable faith in self-reliance.`
+    },
+    {
+      lang: 'ta-IN',
+      voice: 'Shivani',
+      body: `1999 கார்கில் போரின் போது அமெரிக்கா ஜிபிஎஸ் தரவுகளை வழங்க மறுத்த நாளில் இந்தியாவின் சொந்த நாவிக் (NavIC) செயற்கைக்கோள் கட்டமைப்பு கனவு பிறந்தது. என்விஎஸ்-02 பயணத்தின் பைரோ வால்வு பின்னடைவை வெற்றியாக மாற்ற, இஸ்ரோ தனது 51 ஆண்டு வரலாற்றில் முதன்முறையாக ஏவுவதற்கு முன்பே தரையிலேயே பைரோ வால்வை திறந்து சாதனை படைத்து என்விஎஸ்-03 மூலம் விண்வெளிக்கு பாய்கிறது.`
+    },
+    {
+      lang: 'te-IN',
+      voice: 'Shivani',
+      body: `1999 కార్గిల్ యుద్ధంలో జీపీఎస్ సమాచారం నిరాకరించబడినప్పుడు స్వదేశీ నావిక్ వ్యవస్థ పుట్టింది. ఎన్‌వీఎస్-02 వైఫల్యాన్ని సవాలుగా తీసుకుని, 51 ఏళ్ల చరిత్రలో తొలిసారిగా భూమిపైనే పైరో వాల్వ్‌ను యాక్టివేట్ చేసి జీఎస్‌ఎల్‌వీ-ఎఫ్‌18 రాకెట్ ద్వారా ఎన్‌వీఎస్-03 ఉపగ్రహాన్ని ప్రయోగిస్తోంది ఇస్రో.`
+    },
+    {
+      lang: 'bn-IN',
+      voice: 'Shivani',
+      body: `১৯৯৯ কার্গিল যুদ্ধের সময় জিপিএস প্রযুক্তি না পাওয়ার তিক্ত অভিজ্ঞতা থেকেই ভারতের নিজস্ব নেভিগেশন ব্যবস্থা নাভিকের জন্ম। এনভিএস-০২ এর পাইরো ভালভ ব্যর্থতা কাটিয়ে ইসরো ৫১ বছরের ইতিহাসে প্রথমবার উৎক্ষেপণের আগেই ভালভ উন্মুক্ত করে এনভিএস-০৩ উপগ্রহ মহাকাশে পাঠাচ্ছে।`
+    },
+    {
+      lang: 'kn-IN',
+      voice: 'Shivani',
+      body: `1999 ರ ಕಾರ್ಗಿಲ್ ಯುದ್ಧದಲ್ಲಿ ಜಿಪಿಎಸ್ ನೆರವು ನಿರಾಕರಿಸಲ್ಪಟ್ಟಾಗ ಭಾರತದ ನಾವಿಕ್ ವ್ಯವಸ್ಥೆಯ ಕನಸು ಹುಟ್ಟಿಕೊಂಡಿತು. ಎನ್‌ವಿಎಸ್-02 ರ ಪೈರೋ ವಾಲ್ವ್ ವೈಫಲ್ಯದಿಂದ ಪಾಠ ಕಲಿತ ಇಸ್ರೋ, 51 ವರ್ಷಗಳ ಇತಿಹಾಸದಲ್ಲೇ ಮೊದಲ ಬಾರಿಗೆ ಉಡಾವಣೆಗೆ ಮುನ್ನವೇ ವಾಲ್ವ್ ತೆರೆದು ಜಿಎಸ್‌ಎಲ್‌ವಿ-ಎಫ್18 ಮೂಲಕ ಎನ್‌ವಿಎಸ್-03 ಉಪಗ್ರಹವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ನಭಕ್ಕೆ ಕಳುಹಿಸುತ್ತಿದೆ.`
+    }
+  ];
+
+  for (const t of nvs03Translations) {
+    const audioUrl = `/media/audio/stories/nvs-03/${t.lang}.wav`;
+    insertTrans.run('nvs-03', t.lang, t.body, t.voice, audioUrl, 540);
   }
 
   if (SEED_ADDITIONAL_STORIES) {

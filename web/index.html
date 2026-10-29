@@ -16,6 +16,7 @@
       <nav>
         <ul class="nav-links">
           <li><a href="/" class="nav-link active">Library</a></li>
+          <li><a href="#upcoming-missions" class="nav-link">Upcoming Missions</a></li>
           <li><a href="#audio-stories" class="nav-link">Audio Stories</a></li>
           <li><a href="/chat.html" class="nav-link">Space Chat</a></li>
         </ul>
@@ -111,7 +112,59 @@
       </div>
     </section>
 
-    <!-- 2. HIGHLIGHT: AUDIO STORIES SHOWCASE -->
+    <!-- 2. UPCOMING / ONGOING MISSIONS SPOTLIGHT SHOWCASE -->
+    <section class="upcoming-missions-section" id="upcoming-missions">
+      <div class="upcoming-container">
+        <div class="upcoming-badge-strip">
+          <span class="live-dot-pulse"></span>
+          <span class="upcoming-tag">UPCOMING / ONGOING MISSIONS</span>
+          <span class="upcoming-date-pill">GSLV-F18 • LAUNCH: 30 OCT 2026</span>
+        </div>
+
+        <div class="upcoming-spotlight-card">
+          <div class="upcoming-media-col">
+            <div class="upcoming-img-wrapper">
+              <img src="/media/covers/nvs-03-cover.jpg" alt="GSLV-F18 / NVS-03 Sriharikota Launchpad" class="upcoming-cover-img" />
+              <div class="upcoming-overlay-badge">
+                <span class="pad-status-dot"></span>
+                <span>Mobile Service Tower · Sriharikota</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="upcoming-info-col">
+            <div class="upcoming-meta-chips">
+              <span class="chip-accent">GSLV 20th Flight</span>
+              <span class="chip-accent">NavIC Sovereign GPS</span>
+              <span class="chip-accent">Ahmedabad Atomic Clock</span>
+              <span class="chip-duration">9 MIN AUDIO PODCAST</span>
+            </div>
+
+            <h2 class="upcoming-mission-title">NVS-03: NavIC Constellation & The Pyro Valve Gambit</h2>
+            <p class="upcoming-mission-desc">
+              From the 1999 Kargil GPS denial to the heartbreak of NVS-02's oxidiser valve glitch — hear how ISRO took a daring, 51-year first gamble on GSLV-F18 to secure India's sovereign navigation system in the skies.
+            </p>
+
+            <div class="upcoming-action-dock">
+              <button id="upcoming-btn-play-nvs03" class="btn-upcoming-play" type="button" aria-label="Listen to NVS-03 Podcast">
+                <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <div class="sp-equalizer-bars">
+                  <span></span><span></span><span></span>
+                </div>
+                <span class="btn-play-text">Listen: NVS-03 Story (9 min)</span>
+              </button>
+
+              <a href="/story.html?id=nvs-03" class="btn-upcoming-details">
+                <span>View Full Episode & Briefing</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. HIGHLIGHT: AUDIO STORIES SHOWCASE -->
     <section class="audio-stories-section" id="audio-stories">
       <div class="section-header-box">
         <span class="section-tag-pill">IMMERSIVE SPACE PODCASTS</span>
@@ -125,6 +178,7 @@
       <div class="stories-controls-bar">
         <div class="stories-tabs-row" role="tablist">
           <button class="cat-tab active" data-category="all" role="tab">All Audio Feats</button>
+          <button class="cat-tab cat-tab-upcoming" data-category="upcoming-ongoing" role="tab"><span class="live-dot-pulse"></span>Upcoming / Ongoing</button>
           <button class="cat-tab" data-category="isro" role="tab">ISRO Missions</button>
           <button class="cat-tab" data-category="startups" role="tab">Space Startups</button>
           <button class="cat-tab" data-category="explainer" role="tab">Science & Tech</button>

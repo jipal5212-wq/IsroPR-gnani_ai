@@ -118,6 +118,8 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
     state.title = metadata.title;
   } else if (storyId === 'mangalyaan') {
     state.title = "Mangalyaan: India's First Mission to Mars";
+  } else if (storyId === 'nvs-03') {
+    state.title = 'NVS-03: NavIC Constellation & The Pyro Valve Gambit';
   } else {
     state.title = 'Chandrayaan-3: 15 Minutes of Terror & The South Pole Triumph';
   }
@@ -128,6 +130,10 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
     state.subtitle = langCode.startsWith('hi') 
       ? 'इसरो आधिकारिक ऑडियो पॉडकास्ट • मंगलयान' 
       : 'ISRO Official Outreach • Mars Orbiter Mission';
+  } else if (storyId === 'nvs-03') {
+    state.subtitle = langCode.startsWith('hi') 
+      ? 'इसरो आधिकारिक ऑडियो पॉडकास्ट • 9 मिनट' 
+      : 'ISRO Official Outreach • GSLV-F18 / NavIC';
   } else {
     state.subtitle = langCode.startsWith('hi') 
       ? 'इसरो आधिकारिक ऑडियो पॉडकास्ट • 3 मिनट' 
