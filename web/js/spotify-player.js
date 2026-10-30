@@ -438,8 +438,10 @@ function updateTimelineUI() {
  */
 let isNavScrolling = false;
 let navScrollTimeout = null;
+let spaNavigationInitialized = false;
+let isNavigating = false;
 
-export function lockNavScroll(duration = 900) {
+export function lockNavScroll(duration = 1200) {
   isNavScrolling = true;
   if (navScrollTimeout) clearTimeout(navScrollTimeout);
   navScrollTimeout = setTimeout(() => {
@@ -451,7 +453,7 @@ export function isNavClickScrolling() {
   return isNavScrolling;
 }
 
-function updateActiveNavLinks(targetUrl) {
+export function updateActiveNavLinks(targetUrl) {
   const currentPath = targetUrl?.pathname || window.location.pathname;
   const currentHash = targetUrl?.hash || window.location.hash;
   const isHome = currentPath === '/' || currentPath.endsWith('/index.html') || currentPath === '';
@@ -475,19 +477,24 @@ function updateActiveNavLinks(targetUrl) {
           isActive = (linkPath === '/' || linkPath.endsWith('/index.html')) && !linkHash;
         }
       } else {
-        isActive = currentPath === linkPath && !linkHash;
+        isActive = (currentPath === linkPath || (currentPath.endsWith('/chat.html') && linkPath.endsWith('/chat.html'))) && !linkHash;
       }
 
       if (isActive) {
         link.classList.add('active');
+        link.setAttribute('aria-current', 'page');
       } else {
         link.classList.remove('active');
+        link.removeAttribute('aria-current');
       }
     } catch (_) {}
   });
 }
 
 function setupSpaNavigation() {
+  if (spaNavigationInitialized) return;
+  spaNavigationInitialized = true;
+
   document.addEventListener('click', async (e) => {
     const link = e.target.closest('a');
     if (!link) return;
@@ -511,55 +518,60 @@ function setupSpaNavigation() {
     if (targetUrl.origin !== window.location.origin) return;
 
     const currentUrl = new URL(window.location.href);
-    const isSamePath = (targetUrl.pathname === currentUrl.pathname) || 
-      ((targetUrl.pathname === '/' || targetUrl.pathname.endsWith('/index.html')) && (currentUrl.pathname === '/' || currentUrl.pathname.endsWith('/index.html')));
+    const isCurrentHome = currentUrl.pathname === '/' || currentUrl.pathname.endsWith('/index.html') || currentUrl.pathname === '';
+    const isTargetHome = targetUrl.pathname === '/' || targetUrl.pathname.endsWith('/index.html') || targetUrl.pathname === '';
 
     // Case 1: Same page anchor navigation (e.g. #audio-stories, /#upcoming-missions from home)
-    if (isSamePath && targetUrl.search === currentUrl.search) {
+    if (isCurrentHome && isTargetHome && targetUrl.search === currentUrl.search) {
+      e.preventDefault();
+      lockNavScroll(1200);
+      updateActiveNavLinks(targetUrl);
+
       if (targetUrl.hash) {
         const targetId = targetUrl.hash.substring(1);
         const targetEl = document.getElementById(targetId);
         if (targetEl) {
-          e.preventDefault();
-          lockNavScroll(900);
-          updateActiveNavLinks(targetUrl);
-          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const headerHeight = document.querySelector('.site-header')?.offsetHeight || 72;
+          const rect = targetEl.getBoundingClientRect();
+          const targetTop = window.scrollY + rect.top - headerHeight - 16;
+          window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
           try {
             history.pushState(null, '', targetUrl.hash);
           } catch (_) {}
           return;
         }
       } else {
-        // User clicked Library or brand logo while on home: smoothly scroll top without reloading
-        e.preventDefault();
-        lockNavScroll(900);
-        updateActiveNavLinks(targetUrl);
-        if (window.scrollY > 10) {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        // User clicked Library or brand logo while on home: smoothly scroll top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         try {
-          history.pushState(null, '', targetUrl.pathname);
+          history.pushState(null, '', '/');
         } catch (_) {}
         return;
       }
     }
 
-    // Case 2: Cross-page or search query navigation
+    // Case 2: Cross-page or query navigation
     e.preventDefault();
+    if (isNavigating) return;
+    lockNavScroll(1500);
+    updateActiveNavLinks(targetUrl);
     await navigateSpa(targetUrl.pathname + targetUrl.search + targetUrl.hash, true);
   });
 
   window.addEventListener('popstate', async () => {
     const currentUrl = new URL(window.location.href);
     const targetHash = currentUrl.hash ? currentUrl.hash.substring(1) : '';
-    const isHomePage = currentUrl.pathname === '/' || currentUrl.pathname.endsWith('/index.html');
+    const isHomePage = currentUrl.pathname === '/' || currentUrl.pathname.endsWith('/index.html') || currentUrl.pathname === '';
     const hasStoriesGrid = !!document.getElementById('stories-grid');
 
     if (isHomePage && hasStoriesGrid && targetHash) {
       const targetEl = document.getElementById(targetHash);
       if (targetEl) {
-        lockNavScroll(900);
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        lockNavScroll(1200);
+        const headerHeight = document.querySelector('.site-header')?.offsetHeight || 72;
+        const rect = targetEl.getBoundingClientRect();
+        const targetTop = window.scrollY + rect.top - headerHeight - 16;
+        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
         updateActiveNavLinks(currentUrl);
         return;
       }
@@ -570,6 +582,9 @@ function setupSpaNavigation() {
 }
 
 async function navigateSpa(url, push = true) {
+  if (isNavigating) return;
+  isNavigating = true;
+
   try {
     const targetUrl = new URL(url, window.location.origin);
     const cleanPath = targetUrl.pathname + targetUrl.search;
@@ -588,7 +603,7 @@ async function navigateSpa(url, push = true) {
     // Update document title
     if (doc.title) document.title = doc.title;
 
-    // Keep persistent .site-header in place to prevent any navbar flicker or sticky re-layout
+    // Immediately update navbar active state
     updateActiveNavLinks(targetUrl);
 
     // Sync active language selector on header
@@ -598,20 +613,36 @@ async function navigateSpa(url, push = true) {
       mountedLangSelect.value = activeLang;
     }
 
-    // Swap <main> content with instant scroll reset and clean cross-fade
+    // Swap <main> content with smooth cross-fade and zero position jumping
     const currentMain = document.querySelector('main');
     const newMain = doc.querySelector('main');
     if (currentMain && newMain) {
-      window.scrollTo(0, 0);
-
+      // Gentle fade out of old main
       currentMain.style.transition = 'opacity 0.08s ease-out';
-      currentMain.style.opacity = '0';
-      await new Promise(r => setTimeout(r, 70));
+      currentMain.style.opacity = '0.35';
+      await new Promise(r => setTimeout(r, 65));
 
+      // Prep new main invisibly to measure and position scroll
       newMain.style.opacity = '0';
-      newMain.style.transition = 'opacity 0.12s ease-in';
+      newMain.style.transition = 'opacity 0.15s ease-in';
       currentMain.replaceWith(newMain);
 
+      // Snap scroll position directly to target BEFORE making visible
+      if (targetHash) {
+        const targetEl = newMain.querySelector('#' + targetHash);
+        if (targetEl) {
+          const headerHeight = document.querySelector('.site-header')?.offsetHeight || 72;
+          const rect = targetEl.getBoundingClientRect();
+          const targetTop = window.scrollY + rect.top - headerHeight - 16;
+          window.scrollTo(0, Math.max(0, targetTop));
+        } else {
+          window.scrollTo(0, 0);
+        }
+      } else {
+        window.scrollTo(0, 0);
+      }
+
+      // Fade new main in cleanly
       void newMain.offsetWidth;
       newMain.style.opacity = '1';
     }
@@ -620,27 +651,16 @@ async function navigateSpa(url, push = true) {
       window.history.pushState(null, '', url);
     }
 
-    // Handle scroll target
-    if (targetHash) {
-      setTimeout(() => {
-        const targetEl = document.getElementById(targetHash);
-        if (targetEl) {
-          lockNavScroll(800);
-          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 100);
-    }
-
     // Re-initialize view scripts
     if (targetUrl.pathname.includes('/chat.html')) {
       const { initChat } = await import('./chat.js');
-      initChat();
+      await initChat();
     } else if (targetUrl.pathname.includes('/story.html')) {
       const { initPlayer } = await import('./player.js');
-      initPlayer();
+      await initPlayer();
     } else if (targetUrl.pathname === '/' || targetUrl.pathname.endsWith('/index.html') || targetUrl.pathname === '') {
       const { initLibrary } = await import('./library.js');
-      initLibrary();
+      await initLibrary();
     }
 
     // Ensure Spotify bar remains synced and visible
@@ -649,5 +669,7 @@ async function navigateSpa(url, push = true) {
   } catch (err) {
     console.error('SPA navigation failed, falling back to full load:', err);
     window.location.href = url;
+  } finally {
+    isNavigating = false;
   }
 }

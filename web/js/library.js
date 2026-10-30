@@ -28,6 +28,7 @@ const EXISTING_STORIES = [
 ];
 
 let availableStoriesPool = [...EXISTING_STORIES];
+let boundScrollHandler = null;
 
 export function playChosenStory(storyId) {
   if (!storyId) return;
@@ -93,20 +94,31 @@ export async function initLibrary() {
   }
   libraryUnsubscribe = subscribeAudioState(syncCardButtons);
 
-  // If loaded with #audio-stories hash, glide smoothly to stories section
-  if (window.location.hash === '#audio-stories') {
-    setTimeout(scrollToAudioStories, 250);
-  } else if (window.location.hash === '#upcoming-missions') {
-    setTimeout(() => {
-      const sec = document.getElementById('upcoming-missions');
-      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 250);
+  // If loaded directly from browser with hash (not SPA navigation which positions instantly)
+  if (!isNavClickScrolling()) {
+    if (window.location.hash === '#audio-stories') {
+      setTimeout(scrollToAudioStories, 100);
+    } else if (window.location.hash === '#upcoming-missions') {
+      setTimeout(() => {
+        const sec = document.getElementById('upcoming-missions');
+        if (sec) {
+          const headerHeight = document.querySelector('.site-header')?.offsetHeight || 72;
+          const targetTop = sec.getBoundingClientRect().top + window.scrollY - headerHeight - 16;
+          window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+        }
+      }, 100);
+    }
   }
 }
 
 function setupScrollSpy() {
   if (scrollSpyObserver) {
     scrollSpyObserver.disconnect();
+    scrollSpyObserver = null;
+  }
+  if (boundScrollHandler) {
+    window.removeEventListener('scroll', boundScrollHandler);
+    boundScrollHandler = null;
   }
 
   const sections = [
@@ -122,9 +134,15 @@ function setupScrollSpy() {
       const href = link.getAttribute('href');
       if (!href) return;
       if (hash) {
-        link.classList.toggle('active', href.endsWith(hash));
+        const matches = href.endsWith(hash);
+        link.classList.toggle('active', matches);
+        if (matches) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
       } else {
-        link.classList.toggle('active', href === '/' || href.endsWith('/index.html'));
+        const matches = href === '/' || href.endsWith('/index.html');
+        link.classList.toggle('active', matches);
+        if (matches) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
       }
     });
   };
@@ -151,18 +169,21 @@ function setupScrollSpy() {
     });
   }
 
-  window.addEventListener('scroll', () => {
+  boundScrollHandler = () => {
     if (isNavClickScrolling()) return;
     if (window.scrollY < 180) {
       updateActive('');
     }
-  }, { passive: true });
+  };
+  window.addEventListener('scroll', boundScrollHandler, { passive: true });
 }
 
 export function scrollToAudioStories() {
   const section = document.getElementById('audio-stories');
   if (section) {
-    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const headerHeight = document.querySelector('.site-header')?.offsetHeight || 72;
+    const targetTop = section.getBoundingClientRect().top + window.scrollY - headerHeight - 16;
+    window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
     try {
       if (window.location.hash !== '#audio-stories') {
         history.pushState(null, '', '#audio-stories');
@@ -467,7 +488,12 @@ export async function loadStories() {
   if (!container) return;
 
   const lang = getActiveLang();
-  container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-dim);">Scanning the cosmos for stories...</div>`;
+  const hasExistingCards = container.querySelectorAll('.story-card').length > 0;
+
+  // Only show placeholder if empty or actively searching so grid height never collapses
+  if (!hasExistingCards || searchQuery) {
+    container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-dim);">Scanning the cosmos for stories...</div>`;
+  }
 
   try {
     const query = new URLSearchParams({ lang });

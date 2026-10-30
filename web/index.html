@@ -26,8 +26,8 @@
       <nav aria-label="Main Navigation">
         <ul class="nav-links">
           <li><a href="/" class="nav-link active">Library</a></li>
-          <li><a href="#upcoming-missions" class="nav-link">Upcoming Missions</a></li>
-          <li><a href="#audio-stories" class="nav-link">Audio Stories</a></li>
+          <li><a href="/#upcoming-missions" class="nav-link">Upcoming Missions</a></li>
+          <li><a href="/#audio-stories" class="nav-link">Audio Stories</a></li>
           <li><a href="/chat.html" class="nav-link">Space Chat</a></li>
         </ul>
       </nav>
@@ -312,7 +312,134 @@
       <!-- Audio Stories Container -->
       <div class="stories-container">
         <div id="stories-grid" class="stories-grid">
-          <!-- Audio story cards dynamically injected by library.js -->
+          <!-- Mission 1: Chandrayaan-3 -->
+          <article class="story-card" data-story-id="chandrayaan-3" data-duration="3">
+            <div class="story-card-top">
+              <img src="/media/covers/chandrayaan-3-cover.jpg" alt="Chandrayaan-3: 15 Minutes of Terror &amp; The South Pole Triumph" class="story-card-img" loading="eager" />
+              <div class="story-top-badges">
+                <span class="story-badge-cat">ISRO Mission</span>
+                <span class="story-duration-pill">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                  3 MIN LISTEN
+                </span>
+              </div>
+              <button class="card-play-fab" data-story-id="chandrayaan-3" title="Play Podcast" aria-label="Play Chandrayaan-3">
+                <svg class="sp-icon-svg icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <svg class="sp-icon-svg icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                <div class="sp-equalizer-bars">
+                  <span></span><span></span><span></span>
+                </div>
+              </button>
+            </div>
+            <div class="story-card-content">
+              <div class="story-languages-cue">
+                <span class="lang-wave-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: inline-block; vertical-align: middle;"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="7" y1="6" x2="7" y2="18"></line><line x1="17" y1="6" x2="17" y2="18"></line><line x1="2" y1="10" x2="2" y2="14"></line><line x1="22" y1="10" x2="22" y2="14"></line></svg></span>
+                <span class="lang-names">EN • हिन्दी • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ</span>
+              </div>
+              <a href="/story.html?id=chandrayaan-3" class="story-card-title">Chandrayaan-3: 15 Minutes of Terror &amp; The South Pole Triumph</a>
+              <p class="story-card-summary">Relive India's historic lunar touchdown narrated in studio Indian voice. Hear how ISRO turned failure into victory at the Moon's rugged south pole.</p>
+              <div class="story-card-footer">
+                <div class="story-meta-col">
+                  <div class="facts-as-of" title="Verified against official sources">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>
+                    Official Fact-Check (23 Aug 2023)
+                  </div>
+                </div>
+                <div class="story-action-col">
+                  <button class="btn-listen-instant" data-story-id="chandrayaan-3" aria-label="Listen Chandrayaan-3">
+                    <svg class="icon-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    <span class="btn-text">Listen (3 min)</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Mission 2: NVS-03 -->
+          <article class="story-card card-upcoming-highlight" data-story-id="nvs-03" data-duration="9">
+            <div class="story-card-top">
+              <img src="/media/covers/nvs-03-cover.jpg" alt="NVS-03: NavIC Constellation &amp; The Pyro Valve Gambit" class="story-card-img" loading="eager" />
+              <div class="story-top-badges">
+                <span class="story-badge-cat badge-live">Upcoming / Ongoing</span>
+                <span class="story-duration-pill">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                  9 MIN LISTEN
+                </span>
+              </div>
+              <button class="card-play-fab" data-story-id="nvs-03" title="Play Podcast" aria-label="Play NVS-03">
+                <svg class="sp-icon-svg icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <svg class="sp-icon-svg icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                <div class="sp-equalizer-bars">
+                  <span></span><span></span><span></span>
+                </div>
+              </button>
+            </div>
+            <div class="story-card-content">
+              <div class="story-languages-cue">
+                <span class="lang-wave-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: inline-block; vertical-align: middle;"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="7" y1="6" x2="7" y2="18"></line><line x1="17" y1="6" x2="17" y2="18"></line><line x1="2" y1="10" x2="2" y2="14"></line><line x1="22" y1="10" x2="22" y2="14"></line></svg></span>
+                <span class="lang-names">EN • हिन्दी • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ</span>
+              </div>
+              <a href="/story.html?id=nvs-03" class="story-card-title">NVS-03: NavIC Constellation &amp; The Pyro Valve Gambit</a>
+              <p class="story-card-summary">From the 1999 Kargil GPS denial to the heartbreak of NVS-02's oxidiser valve glitch — hear how ISRO took a daring, 51-year first gamble on GSLV-F18 to secure India's sovereign navigation system in the skies.</p>
+              <div class="story-card-footer">
+                <div class="story-meta-col">
+                  <div class="facts-as-of" title="Verified against official sources">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>
+                    Official Fact-Check (29 Oct 2026)
+                  </div>
+                </div>
+                <div class="story-action-col">
+                  <button class="btn-listen-instant" data-story-id="nvs-03" aria-label="Listen NVS-03">
+                    <svg class="icon-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    <span class="btn-text">Listen (9 min)</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Mission 3: Mangalyaan -->
+          <article class="story-card" data-story-id="mangalyaan" data-duration="3">
+            <div class="story-card-top">
+              <img src="/media/covers/mangalyaan-cover.jpg" alt="Mangalyaan: India's Historic Journey to Mars" class="story-card-img" loading="eager" />
+              <div class="story-top-badges">
+                <span class="story-badge-cat">ISRO Mission</span>
+                <span class="story-duration-pill">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                  3 MIN LISTEN
+                </span>
+              </div>
+              <button class="card-play-fab" data-story-id="mangalyaan" title="Play Podcast" aria-label="Play Mangalyaan">
+                <svg class="sp-icon-svg icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <svg class="sp-icon-svg icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                <div class="sp-equalizer-bars">
+                  <span></span><span></span><span></span>
+                </div>
+              </button>
+            </div>
+            <div class="story-card-content">
+              <div class="story-languages-cue">
+                <span class="lang-wave-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: inline-block; vertical-align: middle;"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="7" y1="6" x2="7" y2="18"></line><line x1="17" y1="6" x2="17" y2="18"></line><line x1="2" y1="10" x2="2" y2="14"></line><line x1="22" y1="10" x2="22" y2="14"></line></svg></span>
+                <span class="lang-names">EN • हिन्दी • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ</span>
+              </div>
+              <a href="/story.html?id=mangalyaan" class="story-card-title">Mangalyaan: India's Historic Journey to Mars</a>
+              <p class="story-card-summary">Relive how India reached the Red Planet on its maiden attempt for less than the cost of a Hollywood movie.</p>
+              <div class="story-card-footer">
+                <div class="story-meta-col">
+                  <div class="facts-as-of" title="Verified against official sources">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>
+                    Official Fact-Check (24 Sep 2014)
+                  </div>
+                </div>
+                <div class="story-action-col">
+                  <button class="btn-listen-instant" data-story-id="mangalyaan" aria-label="Listen Mangalyaan">
+                    <svg class="icon-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    <span class="btn-text">Listen (3 min)</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
 
         <div id="empty-state" class="empty-state" style="display: none;">
