@@ -25,44 +25,47 @@
 
 ## 📄 1-Page Solution Pitch
 
-### 1. Executive Summary & Problem Statement
-India's space milestones — from Chandrayaan-3 landing near the lunar South Pole to Mangalyaan and the sovereign NavIC navigation constellation — inspire the nation. However, scientific outreach and press briefings remain predominantly in technical English and formal Hindi. **Over 800 million citizens** across regional states miss out on the pride, educational depth, and engineering thrill of India's space program in their mother tongue. Furthermore, general-purpose chatbots frequently hallucinate dates, orbital parameters, and rocket specs.
+### 🌌 The Vision
+> *"If we truly want India to dominate the space sector, we need to inspire the next generation."*
 
-**IsroPR** bridges this gap: a sovereign, voice-first public engagement platform that transforms space missions into **cinematic audio documentaries in 6 Indian languages**, paired with a **conversational Space Chat assistant featuring true voice-in/voice-out parity** powered by **Gnani AI**.
+India has achieved incredible milestones in space exploration — from Chandrayaan-3 touching down near the Moon's rugged South Pole to Mangalyaan reaching Mars on its maiden voyage and NavIC securing our sovereign skies. 
 
----
+**But how many people truly know the untold stories behind these missions? And how many young minds are inspired to pursue careers in space science and engineering?**
 
-### 2. The Solution: Two Core Pillars
+I believe every great space mission has a story worth telling — and that story deserves to reach everyone, in their own mother tongue. **The next generation of Indian space scientists and engineers might need just one inspiring story to begin their journey.**
 
-#### A. Cinematic Multilingual Audio Documentaries (Spotify-Grade)
-Instead of dry text briefings, missions are produced as dramatic, studio-quality audio episodes (up to 9 minutes per story) detailing human grit, technical anomalies, and historic triumphs (e.g., from the 1999 Kargil GPS denial to the 2026 GSLV-F18 Pyro Valve gambit).
-- **Persistent Spotify Audio Dock**: Plays continuously in the background across all page transitions and chat interactions.
-- **On-the-Fly Language Switcher**: Switch narration across **Hindi, English, Tamil, Telugu, Bengali, and Kannada** without losing playback context.
-- **Broadcast Audio Standards**: Master 24,000 Hz, 16-bit Mono PCM WAV with variable speed controls (0.75x–1.5x) and 15s skip.
-
-#### B. WhatsApp-Style Conversational Space Chat (Voice Parity)
-A conversational assistant that replicates the familiar WhatsApp voice note experience:
-- **True Voice Parity**: Citizens speak in their native tongue; the assistant transcribes via **Gnani Prisma STT**, retrieves verified facts, and answers back with **both text and a natural voice note** synthesized via **Gnani Timbre TTS**.
-- **Zero-Hallucination Verified RAG**: Hybrid retrieval combining native SQLite FTS5 BM25 search over verified ISRO records with live web retrieval (DDG/Wikipedia). Every fact includes official citations (`isro.gov.in`).
-- **Resilient Fallback**: If external LLMs are unreachable or rate-limited, deterministic local knowledge retrieval answers accurately, ensuring 100% platform availability.
+To contribute towards this vision, I built **IsroPR** — a voice-first, multilingual space storytelling platform powered by **Gnani.ai** designed to bring India's remarkable space achievements closer to 1.4 billion citizens.
 
 ---
 
-### 3. Gnani AI Stack Integration & Technical Highlights
+### 🎯 What IsroPR Achieves
 
-| Capability | Gnani AI Technology | Implementation in IsroPR |
-|:---|:---|:---|
-| **Emotional Speech Synthesis** | **Gnani Timbre v3.0** | Synthesizes multi-chunk documentary narrations using expressive vocal tags (`<exhales>`, `<slow>`, `<soft>`) with a consistent institutional voice identity (`Shivani`). |
-| **Speech-to-Text Recognition** | **Gnani Prisma v2.5** | High-accuracy multilingual speech transcription with `indic-auto` automatic language detection. |
-| **Edge Performance** | **Vanilla ES Modules + Express** | 0KB frontend framework overhead; sub-100ms client route transitions without UI flickering or layout shifts. |
-| **Reliability & Testing** | **Native Node.js Test Suite** | **23/23 tests passing** covering database schemas, RAG retrieval, audio streaming, and link sanitization. |
+1. **Make India's space achievements accessible to a wider audience**: Replaces dry, technical text briefings with gripping, broadcast-quality audio documentaries (up to 9 minutes per episode) detailing the human grit, engineering heartbreaks, and victories.
+2. **Break language barriers**: Empowers **over 800 million citizens** across regional linguistic belts by delivering authentic narrations and AI interactions across **6 Indian languages** (Hindi, English, Tamil, Telugu, Bengali, Kannada).
+3. **Inspire the next generation**: Equips curious students and space enthusiasts with an interactive, **WhatsApp-style conversational Space Chat** featuring true voice-in/voice-out parity and verified, zero-hallucination facts.
 
 ---
 
-### 4. Impact & Scalability
-- **Linguistic Inclusion**: Directly empowers citizens across 6 languages representing over **85% of India's population**.
-- **Production Ready**: Fully deployed and operational on Vercel Edge ([`https://isropr.vercel.app`](https://isropr.vercel.app)) with Helmet CSP shielding, HttpOnly auth cookies, and bandwidth-efficient Range streaming (`HTTP 206`).
-- **Future Ready**: Extensible architecture designed to onboard upcoming missions (Gaganyaan crewed flights, Chandrayaan-4, Shukrayaan) with one-click automated audio synthesis pipelines.
+### 🛠️ Two Core Pillars & Gnani.ai Stack Integration
+
+#### 1. Cinematic Multilingual Audio Documentaries (Spotify-Grade)
+- **Gnani Timbre v3.0 TTS**: Deep emotional synthesis using expressive voice markers (`<exhales>`, `<slow>`, `<soft>`) in studio 24kHz 16-bit Mono PCM WAV with single institutional voice dignity (`Shivani`).
+- **Persistent Spotify Audio Dock**: Background playback continues uninterrupted across all page views, missions, and chat interactions with 15s skip, variable speeds (0.75x–1.5x), and live scrubbers.
+- **On-the-Fly Language Switcher**: Switch narration language instantly (e.g., Hindi to Tamil or Kannada) without losing playback time.
+
+#### 2. WhatsApp-Style Conversational Space Chat (Voice Parity)
+- **Gnani Prisma v2.5 STT**: Real-time voice note transcription with `indic-auto` automatic language recognition.
+- **Voice Parity**: Users speak in their mother tongue and receive both synchronized text and a natural, studio-voiced audio note in response.
+- **Zero-Hallucination Verified RAG**: Native SQLite FTS5 BM25 search over official ISRO archives combined with live web retrieval. Every response cites verified sources (`isro.gov.in`) with automated offline fallback.
+
+---
+
+### 📊 Tech Stack & Performance Highlights
+- **Architecture**: Node.js 24 + Express + SQLite FTS5 (0KB frontend framework overhead, instant sub-100ms transitions).
+- **Test Suite**: **23/23 tests passing** (`npm test`) covering audio streaming, RAG retrieval, and language detection.
+- **Live Deployment**: Production-ready on Vercel Edge at [`https://isropr.vercel.app`](https://isropr.vercel.app).
+
+> *Note: More interesting future updates are coming to the IsroPR platform — including Gaganyaan crewed mission tracking, interactive orbital telemetry, and classroom outreach modules.*
 
 ---
 
