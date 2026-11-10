@@ -23,6 +23,11 @@ export function getDb() {
   const schemaSql = fs.readFileSync(schemaPath, 'utf8');
   db.exec(schemaSql);
 
+  // Safe migration for play_count
+  try {
+    db.prepare(`ALTER TABLE stories ADD COLUMN play_count INTEGER DEFAULT 0`).run();
+  } catch (_) {}
+
   // Initialize default settings if not already present
   const defaultLanguages = ALL_LANGUAGES.filter(l => l.listening).map(l => l.code);
   const defaultSettings = [
@@ -32,6 +37,7 @@ export function getDb() {
     { key: 'chat_max_audio_sec', value: JSON.stringify(30) },
     { key: 'chat_retention_days', value: JSON.stringify(30) },
     { key: 'always_send_voice_replies', value: JSON.stringify(0) },
+    { key: 'total_site_visits', value: JSON.stringify(1) },
     { key: 'rate_limits', value: JSON.stringify({ publicRpm: 60, chatTextRpm: 20, chatVoiceRpm: 5, loginRpm: 5 }) }
   ];
 

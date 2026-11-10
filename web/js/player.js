@@ -16,6 +16,15 @@ let activeLang = 'en-IN';
 let unsubscribe = null;
 
 const STORY_FAST_CACHE = {
+  'everest-indian-ffsc': {
+    id: 'everest-indian-ffsc',
+    title: 'EVEREST: The Indian FFSC',
+    summary: "How Indian deep-tech startup Astrobase is engineering India's first Full-Flow Staged Combustion (FFSC) methalox rocket engine — placing India alongside the US, Russia, and China in heavy reusable rocketry.",
+    cover_path: 'everest-ffsc-cover.jpg',
+    category: 'startup',
+    duration_hint_min: 10,
+    sources: ['https://astrobase.space', 'https://www.inspace.gov.in']
+  },
   'nvs-03': {
     id: 'nvs-03',
     title: 'NVS-03: NavIC Constellation & The Pyro Valve Gambit',
@@ -95,20 +104,23 @@ function renderStoryMeta(story, availableLangs, currentLang) {
   if (titleEl) titleEl.textContent = story.title;
   if (summaryEl) summaryEl.textContent = story.summary;
   if (coverImg && story.cover_path) {
-    coverImg.src = `/media/covers/${story.cover_path}`;
+    coverImg.src = `/media/covers/${story.cover_path}?v=3`;
     coverImg.alt = story.title || 'Space Mission Artwork';
   }
 
   const badgesRow = document.getElementById('story-badges-row');
   if (badgesRow) {
     const isUpcoming = story.category === 'upcoming-ongoing';
-    const catLabel = isUpcoming ? 'UPCOMING / ONGOING MISSION' : story.category === 'isro' ? 'ISRO MISSION' : 'SPACE SCIENCE';
-    const subLabel = story.id === 'chandrayaan-3' ? 'LUNAR LANDING' : story.id === 'mangalyaan' ? 'MARS ORBITER' : story.id === 'nvs-03' ? 'NavIC CONSTELLATION' : 'SPOTLIGHT PODCAST';
+    const isStartup = story.category === 'startup';
+    const catLabel = isUpcoming ? 'UPCOMING / ONGOING MISSION' : isStartup ? 'INDIAN SPACETECH' : story.category === 'isro' ? 'ISRO MISSION' : 'SPACE SCIENCE';
+    const subLabel = story.id === 'chandrayaan-3' ? 'LUNAR LANDING' : story.id === 'mangalyaan' ? 'MARS ORBITER' : story.id === 'nvs-03' ? 'NavIC CONSTELLATION' : story.id === 'everest-indian-ffsc' ? 'FFSC METHALOX' : 'SPOTLIGHT PODCAST';
     const duration = story.duration_hint_min || 3;
 
+    const playCount = Number(story.play_count || 0).toLocaleString();
     badgesRow.innerHTML = `
       <span class="podcast-badge podcast-badge-primary ${isUpcoming ? 'badge-live' : ''}">${catLabel}</span>
       <span class="podcast-badge podcast-badge-saffron">${subLabel}</span>
+      <span class="podcast-badge podcast-badge-plays">🎧 <span id="story-play-count">${playCount}</span> PLAYS</span>
       <span class="podcast-badge" style="background: #f1f5f9; color: var(--text-muted); border: 1px solid var(--border-light);">${duration} MIN CONTINUOUS</span>
     `;
   }
@@ -135,39 +147,66 @@ function renderStoryMeta(story, availableLangs, currentLang) {
     `;
   }
 
-  // Populate language selector
+  // Populate language selector idempotently
   if (langSelectEl) {
-    langSelectEl.innerHTML = '';
-    const allLangs = [
-      { code: 'en-IN', label: 'English' },
-      { code: 'hi-IN', label: 'हिन्दी (Hindi)' },
-      { code: 'ta-IN', label: 'தமிழ் (Tamil)' },
-      { code: 'te-IN', label: 'తెలుగు (Telugu)' },
-      { code: 'bn-IN', label: 'বাংলা (Bengali)' },
-      { code: 'kn-IN', label: 'ಕನ್ನಡ (Kannada)' }
-    ];
+    if (langSelectEl.options.length === 0) {
+      const allLangs = [
+        { code: 'en-IN', label: 'English' },
+        { code: 'hi-IN', label: 'हिन्दी (Hindi)' },
+        { code: 'ml-IN', label: 'മലയാളം (Malayalam)' },
+        { code: 'ta-IN', label: 'தமிழ் (Tamil)' },
+        { code: 'te-IN', label: 'తెలుగు (Telugu)' },
+        { code: 'bn-IN', label: 'বাংলা (Bengali)' },
+        { code: 'kn-IN', label: 'ಕನ್ನಡ (Kannada)' }
+      ];
 
-    for (const l of allLangs) {
-      const opt = document.createElement('option');
-      opt.value = l.code;
-      opt.textContent = l.label;
-      if (l.code === currentLang) opt.selected = true;
-      langSelectEl.appendChild(opt);
+      for (const l of allLangs) {
+        const opt = document.createElement('option');
+        opt.value = l.code;
+        opt.textContent = l.label;
+        if (l.code === currentLang) opt.selected = true;
+        langSelectEl.appendChild(opt);
+      }
+
+      langSelectEl.onchange = (e) => {
+        const newLang = e.target.value;
+        setActiveLang(newLang);
+        activeLang = newLang;
+        const expectedDuration = getStoryDuration(activeStoryId, newLang);
+        playStory(activeStoryId, newLang, {
+          coverSrc: getStoryCover(activeStoryId),
+          duration: expectedDuration,
+          isLanguageSwitch: true
+        });
+      };
+    } else {
+      langSelectEl.value = currentLang;
     }
-
-    langSelectEl.onchange = (e) => {
-      const newLang = e.target.value;
-      setActiveLang(newLang);
-      activeLang = newLang;
-      const expectedDuration = activeStoryId === 'nvs-03'
-        ? (newLang.startsWith('en') ? 483 : 540)
-        : (STORY_DURATIONS[activeStoryId] || 180);
-      playStory(activeStoryId, newLang, {
-        coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`,
-        duration: expectedDuration
-      });
-    };
   }
+}
+
+function getStoryDuration(storyId, lang = 'en-IN') {
+  if (storyId === 'nvs-03') return lang.startsWith('ml') ? 374 : lang.startsWith('en') ? 510 : 540;
+  if (storyId === 'chandrayaan-3') return lang.startsWith('ml') ? 192 : 180;
+  if (storyId === 'mangalyaan') return lang.startsWith('ml') ? 154 : 180;
+  if (storyId === 'everest-indian-ffsc') {
+    if (lang.startsWith('hi')) return 624;
+    if (lang.startsWith('ta')) return 520;
+    if (lang.startsWith('kn')) return 514;
+    if (lang.startsWith('te')) return 481;
+    if (lang.startsWith('bn')) return 478;
+    if (lang.startsWith('en')) return 436;
+    if (lang.startsWith('ml')) return 397;
+    return 624;
+  }
+  return STORY_DURATIONS[storyId] || 180;
+}
+
+function getStoryCover(storyId) {
+  if (storyId === 'mangalyaan') return '/media/covers/mangalyaan-cover.jpg';
+  if (storyId === 'nvs-03') return '/media/covers/nvs-03-cover.jpg';
+  if (storyId === 'everest-indian-ffsc') return '/media/covers/everest-ffsc-cover.jpg?v=3';
+  return '/media/covers/chandrayaan-3-cover.jpg';
 }
 
 function setupPodcastControls() {
@@ -180,14 +219,12 @@ function setupPodcastControls() {
   if (playBtn) {
     playBtn.onclick = () => {
       const st = getAudioState();
-      // If a different story is loaded or playing, always start THIS story!
-      if (st.storyId !== activeStoryId) {
-        const expectedDuration = activeStoryId === 'nvs-03'
-          ? (activeLang.startsWith('en') ? 510 : 540)
-          : (STORY_DURATIONS[activeStoryId] || 180);
+      // If a different story is loaded or different language is selected, always load and play that track!
+      if (st.storyId !== activeStoryId || st.lang !== activeLang) {
+        const expectedDuration = getStoryDuration(activeStoryId, activeLang);
         playStory(activeStoryId, activeLang, {
           title: document.getElementById('story-title')?.textContent,
-          coverSrc: `/media/covers/${activeStoryId === 'mangalyaan' ? 'mangalyaan-cover.jpg' : activeStoryId === 'nvs-03' ? 'nvs-03-cover.jpg' : 'chandrayaan-3-cover.jpg'}`,
+          coverSrc: getStoryCover(activeStoryId),
           duration: expectedDuration
         });
       } else {
@@ -261,9 +298,7 @@ function syncPlayerUI(st) {
     speedBtn.textContent = `${st.playbackRate || 1}x`;
   }
 
-  const expectedSec = activeStoryId === 'nvs-03'
-    ? (activeLang.startsWith('en') ? 510 : 540)
-    : (STORY_DURATIONS[activeStoryId] || 180);
+  const expectedSec = getStoryDuration(activeStoryId, activeLang);
 
   if (totalTimeEl) {
     const dur = (isCurrentStoryActive && st.duration && !isNaN(st.duration) && st.duration > 0) ? st.duration : expectedSec;

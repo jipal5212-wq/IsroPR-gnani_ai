@@ -38,6 +38,7 @@
           <select id="lang-select" class="lang-select" aria-label="Select Content Language">
             <option value="en-IN">English</option>
             <option value="hi-IN">हिन्दी (Hindi)</option>
+            <option value="ml-IN">മലയാളം (Malayalam)</option>
             <option value="ta-IN">தமிழ் (Tamil)</option>
             <option value="te-IN">తెలుగు (Telugu)</option>
             <option value="bn-IN">বাংলা (Bengali)</option>
@@ -63,13 +64,29 @@
         <!-- Explore Glory of Space India -->
         <div class="spotlight-glory-tag">Explore Glory of Space India</div>
 
+        <!-- Live Space Community Telemetry Strip -->
+        <div class="live-telemetry-banner" id="live-telemetry-banner" role="status" aria-label="Live platform telemetry">
+          <div class="telemetry-pill">
+            <span class="telemetry-pulse"></span>
+            <span class="telemetry-text"><strong id="telemetry-online">1</strong> Online Now</span>
+          </div>
+          <span class="telemetry-divider">•</span>
+          <div class="telemetry-item">
+            <span class="telemetry-text"><strong id="telemetry-visits">1</strong> <span id="telemetry-visits-label">Exploration</span></span>
+          </div>
+          <span class="telemetry-divider">•</span>
+          <div class="telemetry-item">
+            <span class="telemetry-text"><strong id="telemetry-plays">0</strong> <span id="telemetry-plays-label">Audio Listens</span></span>
+          </div>
+        </div>
+
         <!-- Creative Multilingual Audio Highlight Capsule -->
-        <div class="multilingual-audio-highlight" role="region" aria-label="Audio narration across 6 languages">
+        <div class="multilingual-audio-highlight" role="region" aria-label="Audio narration across more than 6 Indian languages">
           <div class="mah-header-strip">
             <span class="mah-eq-icon" aria-hidden="true">
               <span></span><span></span><span></span><span></span>
             </span>
-            <span class="mah-title">Audio Narration across <strong class="mah-lang-count">6 Indian Languages</strong></span>
+            <span class="mah-title">Audio Narration across <strong class="mah-lang-count">more than 6 Indian Languages</strong></span>
             <span class="mah-badge-live">Studio Voiced</span>
           </div>
 
@@ -97,6 +114,10 @@
             <button type="button" class="mah-chip" data-lang="kn-IN" role="tab" aria-selected="false" title="Listen in ಕನ್ನಡ (Kannada)">
               <span class="mah-chip-code">KN</span>
               <span class="mah-chip-name">ಕನ್ನಡ</span>
+            </button>
+            <button type="button" class="mah-chip" data-lang="ml-IN" role="tab" aria-selected="false" title="Listen in മലയാളം (Malayalam)">
+              <span class="mah-chip-code">ML</span>
+              <span class="mah-chip-name">മലയാളം</span>
             </button>
           </div>
         </div>
@@ -133,6 +154,17 @@
           <div class="station-meta">
             <span class="station-title">Chandrayaan-3</span>
             <span class="station-sub">Lunar South Pole • 3 min</span>
+          </div>
+        </button>
+
+        <button class="station-card station-everest" data-story-id="everest-indian-ffsc" type="button" aria-label="Play EVEREST FFSC">
+          <div class="station-icon-wrap">
+            <img src="/media/covers/everest-ffsc-cover.jpg?v=3" alt="EVEREST FFSC" class="station-thumb" />
+            <span class="station-play-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </div>
+          <div class="station-meta">
+            <span class="station-title">EVEREST FFSC</span>
+            <span class="station-sub">Astrobase • 10 min</span>
           </div>
         </button>
 
@@ -234,6 +266,22 @@
       </div>
 
       <div class="trending-shelf-scroll" id="trending-shelf-scroll">
+        <div class="shelf-card" data-story-id="everest-indian-ffsc">
+          <div class="shelf-card-thumb">
+            <img src="/media/covers/everest-ffsc-cover.jpg?v=3" alt="EVEREST: The Indian FFSC" />
+            <span class="shelf-duration-tag shelf-tag-accent">🔥 TRENDING • 10 MIN</span>
+            <button class="shelf-play-fab" data-story-id="everest-indian-ffsc" aria-label="Play EVEREST FFSC">
+              <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <div class="sp-equalizer-bars"><span></span><span></span><span></span></div>
+            </button>
+          </div>
+          <div class="shelf-card-info">
+            <h3 class="shelf-card-title">EVEREST: The Indian FFSC</h3>
+            <span class="shelf-card-sub">Astrobase • Indian Space Startup</span>
+            <span class="shelf-plays" data-story-id="everest-indian-ffsc">🎧 0 plays</span>
+          </div>
+        </div>
+
         <div class="shelf-card" data-story-id="chandrayaan-3">
           <div class="shelf-card-thumb">
             <img src="/media/covers/chandrayaan-3-cover.jpg" alt="Chandrayaan-3" />
@@ -246,6 +294,7 @@
           <div class="shelf-card-info">
             <h3 class="shelf-card-title">Chandrayaan-3</h3>
             <span class="shelf-card-sub">Lunar South Pole • Vikram Lander</span>
+            <span class="shelf-plays" data-story-id="chandrayaan-3">🎧 0 plays</span>
           </div>
         </div>
 
@@ -261,6 +310,7 @@
           <div class="shelf-card-info">
             <h3 class="shelf-card-title">NVS-03: NavIC Gambit</h3>
             <span class="shelf-card-sub">Pyro Valve • GSLV-F18 GPS</span>
+            <span class="shelf-plays" data-story-id="nvs-03">🎧 0 plays</span>
           </div>
         </div>
 
@@ -276,6 +326,7 @@
           <div class="shelf-card-info">
             <h3 class="shelf-card-title">Mangalyaan</h3>
             <span class="shelf-card-sub">India's Mars Orbiter Mission</span>
+            <span class="shelf-plays" data-story-id="mangalyaan">🎧 0 plays</span>
           </div>
         </div>
       </div>
@@ -297,7 +348,7 @@
           <button class="cat-tab active" data-category="all" role="tab">All Audio Feats</button>
           <button class="cat-tab cat-tab-upcoming" data-category="upcoming-ongoing" role="tab"><span class="live-dot-pulse"></span>Upcoming / Ongoing</button>
           <button class="cat-tab" data-category="isro" role="tab">ISRO Missions</button>
-          <button class="cat-tab" data-category="startups" role="tab">Space Startups</button>
+          <button class="cat-tab" data-category="startup" role="tab">Space Startups</button>
           <button class="cat-tab" data-category="explainer" role="tab">Science & Tech</button>
         </div>
 
@@ -312,7 +363,54 @@
       <!-- Audio Stories Container -->
       <div class="stories-container">
         <div id="stories-grid" class="stories-grid">
-          <!-- Mission 1: Chandrayaan-3 -->
+          <!-- Mission 1: EVEREST FFSC (Pinned Indian Startup) -->
+          <article class="story-card" data-story-id="everest-indian-ffsc" data-duration="10">
+            <div class="story-card-top">
+              <img src="/media/covers/everest-ffsc-cover.jpg?v=3" alt="EVEREST: The Indian FFSC" class="story-card-img" loading="eager" />
+              <div class="story-top-badges">
+                <span class="story-badge-cat">Space Startup</span>
+                <span class="story-duration-pill">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+                  10 MIN
+                </span>
+                <span class="story-play-pill card-play-count" data-story-id="everest-indian-ffsc" title="0 listens recorded">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                  0 plays
+                </span>
+              </div>
+              <button class="card-play-fab" data-story-id="everest-indian-ffsc" title="Play Podcast" aria-label="Play EVEREST: The Indian FFSC">
+                <svg class="sp-icon-svg icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <svg class="sp-icon-svg icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                <div class="sp-equalizer-bars">
+                  <span></span><span></span><span></span>
+                </div>
+              </button>
+            </div>
+            <div class="story-card-content">
+              <div class="story-languages-cue">
+                <span class="lang-wave-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: inline-block; vertical-align: middle;"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="7" y1="6" x2="7" y2="18"></line><line x1="17" y1="6" x2="17" y2="18"></line><line x1="2" y1="10" x2="2" y2="14"></line><line x1="22" y1="10" x2="22" y2="14"></line></svg></span>
+                <span class="lang-names">EN • हिन्दी • മലയാളം • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ</span>
+              </div>
+              <a href="/story.html?id=everest-indian-ffsc" class="story-card-title">EVEREST: The Indian FFSC</a>
+              <p class="story-card-summary">How Indian deep-tech startup Astrobase is engineering India's first Full-Flow Staged Combustion (FFSC) methalox rocket engine — placing India alongside the US, Russia, and China in heavy reusable rocketry.</p>
+              <div class="story-card-footer">
+                <div class="story-meta-col">
+                  <div class="facts-as-of" title="Verified against official sources">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>
+                    Official Fact-Check (07 Aug 2026)
+                  </div>
+                </div>
+                <div class="story-action-col">
+                  <button class="btn-listen-instant" data-story-id="everest-indian-ffsc" aria-label="Listen EVEREST FFSC">
+                    <svg class="icon-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    <span class="btn-text">Listen (10 min)</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Mission 2: Chandrayaan-3 -->
           <article class="story-card" data-story-id="chandrayaan-3" data-duration="3">
             <div class="story-card-top">
               <img src="/media/covers/chandrayaan-3-cover.jpg" alt="Chandrayaan-3: 15 Minutes of Terror &amp; The South Pole Triumph" class="story-card-img" loading="eager" />
@@ -320,7 +418,11 @@
                 <span class="story-badge-cat">ISRO Mission</span>
                 <span class="story-duration-pill">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-                  3 MIN LISTEN
+                  3 MIN
+                </span>
+                <span class="story-play-pill card-play-count" data-story-id="chandrayaan-3" title="0 listens recorded">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                  0 plays
                 </span>
               </div>
               <button class="card-play-fab" data-story-id="chandrayaan-3" title="Play Podcast" aria-label="Play Chandrayaan-3">
@@ -334,7 +436,7 @@
             <div class="story-card-content">
               <div class="story-languages-cue">
                 <span class="lang-wave-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: inline-block; vertical-align: middle;"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="7" y1="6" x2="7" y2="18"></line><line x1="17" y1="6" x2="17" y2="18"></line><line x1="2" y1="10" x2="2" y2="14"></line><line x1="22" y1="10" x2="22" y2="14"></line></svg></span>
-                <span class="lang-names">EN • हिन्दी • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ</span>
+                <span class="lang-names">EN • हिन्दी • മലയാളം • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ</span>
               </div>
               <a href="/story.html?id=chandrayaan-3" class="story-card-title">Chandrayaan-3: 15 Minutes of Terror &amp; The South Pole Triumph</a>
               <p class="story-card-summary">Relive India's historic lunar touchdown narrated in studio Indian voice. Hear how ISRO turned failure into victory at the Moon's rugged south pole.</p>
@@ -355,7 +457,7 @@
             </div>
           </article>
 
-          <!-- Mission 2: NVS-03 -->
+          <!-- Mission 3: NVS-03 -->
           <article class="story-card card-upcoming-highlight" data-story-id="nvs-03" data-duration="9">
             <div class="story-card-top">
               <img src="/media/covers/nvs-03-cover.jpg" alt="NVS-03: NavIC Constellation &amp; The Pyro Valve Gambit" class="story-card-img" loading="eager" />
@@ -363,7 +465,11 @@
                 <span class="story-badge-cat badge-live">Upcoming / Ongoing</span>
                 <span class="story-duration-pill">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-                  9 MIN LISTEN
+                  9 MIN
+                </span>
+                <span class="story-play-pill card-play-count" data-story-id="nvs-03" title="0 listens recorded">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                  0 plays
                 </span>
               </div>
               <button class="card-play-fab" data-story-id="nvs-03" title="Play Podcast" aria-label="Play NVS-03">
@@ -377,7 +483,7 @@
             <div class="story-card-content">
               <div class="story-languages-cue">
                 <span class="lang-wave-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: inline-block; vertical-align: middle;"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="7" y1="6" x2="7" y2="18"></line><line x1="17" y1="6" x2="17" y2="18"></line><line x1="2" y1="10" x2="2" y2="14"></line><line x1="22" y1="10" x2="22" y2="14"></line></svg></span>
-                <span class="lang-names">EN • हिन्दी • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ</span>
+                <span class="lang-names">EN • हिन्दी • മലയാളം • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ</span>
               </div>
               <a href="/story.html?id=nvs-03" class="story-card-title">NVS-03: NavIC Constellation &amp; The Pyro Valve Gambit</a>
               <p class="story-card-summary">From the 1999 Kargil GPS denial to the heartbreak of NVS-02's oxidiser valve glitch — hear how ISRO took a daring, 51-year first gamble on GSLV-F18 to secure India's sovereign navigation system in the skies.</p>
@@ -398,7 +504,7 @@
             </div>
           </article>
 
-          <!-- Mission 3: Mangalyaan -->
+          <!-- Mission 4: Mangalyaan -->
           <article class="story-card" data-story-id="mangalyaan" data-duration="3">
             <div class="story-card-top">
               <img src="/media/covers/mangalyaan-cover.jpg" alt="Mangalyaan: India's Historic Journey to Mars" class="story-card-img" loading="eager" />
@@ -406,7 +512,11 @@
                 <span class="story-badge-cat">ISRO Mission</span>
                 <span class="story-duration-pill">
                   <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-                  3 MIN LISTEN
+                  3 MIN
+                </span>
+                <span class="story-play-pill card-play-count" data-story-id="mangalyaan" title="0 listens recorded">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                  0 plays
                 </span>
               </div>
               <button class="card-play-fab" data-story-id="mangalyaan" title="Play Podcast" aria-label="Play Mangalyaan">
@@ -420,7 +530,7 @@
             <div class="story-card-content">
               <div class="story-languages-cue">
                 <span class="lang-wave-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: inline-block; vertical-align: middle;"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="7" y1="6" x2="7" y2="18"></line><line x1="17" y1="6" x2="17" y2="18"></line><line x1="2" y1="10" x2="2" y2="14"></line><line x1="22" y1="10" x2="22" y2="14"></line></svg></span>
-                <span class="lang-names">EN • हिन्दी • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ</span>
+                <span class="lang-names">EN • हिन्दी • മലയാളം • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ</span>
               </div>
               <a href="/story.html?id=mangalyaan" class="story-card-title">Mangalyaan: India's Historic Journey to Mars</a>
               <p class="story-card-summary">Relive how India reached the Red Planet on its maiden attempt for less than the cost of a Hollywood movie.</p>

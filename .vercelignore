@@ -1,0 +1,15 @@
+.git
+.env
+.env.local
+.env.*
+node_modules
+data/audio/chat/
+data/uploads/
+*.db-shm
+*.db-wal
+.agents/
+tests/
+scripts/
+data/audio/sample-ml.wav
+*.log
+

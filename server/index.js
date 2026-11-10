@@ -2,6 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import path from 'node:path';
+import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { ENV, DIRS } from './config.js';
 import { getDb, getSetting } from './db/db.js';
@@ -53,6 +54,51 @@ app.get('/media/audio/chat/:filename', (req, res) => {
     }
   }
   return res.status(404).send('Audio not found');
+});
+
+// Dynamic Story Audio Handler (transparent WAV <-> MP3 compatibility for lightweight storage)
+app.get('/media/audio/stories/:storyId/:filename', (req, res, next) => {
+  const { storyId, filename } = req.params;
+  const safeFilename = path.basename(filename);
+  let safeStoryId = path.basename(storyId);
+  if (safeStoryId === 'everest-indian-ffsc') safeStoryId = 'everest-ffsc';
+  const targetDir = path.join(DIRS.AUDIO_STORIES, safeStoryId);
+  const directPath = path.join(targetDir, safeFilename);
+
+  if (fs.existsSync(directPath)) {
+    return next();
+  }
+
+  // Fallback: if .wav requested but .mp3 exists, stream .mp3
+  if (safeFilename.endsWith('.wav')) {
+    const mp3Path = path.join(targetDir, safeFilename.replace(/\.wav$/, '.mp3'));
+    if (fs.existsSync(mp3Path)) {
+      res.setHeader('Content-Type', 'audio/mpeg');
+      return res.sendFile(mp3Path);
+    }
+  }
+
+  // Fallback: if .mp3 requested but .wav exists, stream .wav
+  if (safeFilename.endsWith('.mp3')) {
+    const wavPath = path.join(targetDir, safeFilename.replace(/\.mp3$/, '.wav'));
+    if (fs.existsSync(wavPath)) {
+      res.setHeader('Content-Type', 'audio/wav');
+      return res.sendFile(wavPath);
+    }
+  }
+
+  // Graceful language fallback: if requested language audio is not yet recorded for this mission,
+  // stream en-IN or primary audio so playback never crashes or throws 404
+  const fallbackCandidates = ['en-IN.mp3', 'hi-IN.mp3', 'hi-IN.wav', 'en-IN.wav'];
+  for (const cand of fallbackCandidates) {
+    const candPath = path.join(targetDir, cand);
+    if (fs.existsSync(candPath)) {
+      res.setHeader('Content-Type', cand.endsWith('.wav') ? 'audio/wav' : 'audio/mpeg');
+      return res.sendFile(candPath);
+    }
+  }
+
+  next();
 });
 
 // Media File Serving (Audio, Covers, and Gallery)

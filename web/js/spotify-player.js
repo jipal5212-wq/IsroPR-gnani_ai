@@ -4,18 +4,21 @@ import { formatDuration, getActiveLang } from './common.js';
 export const STORY_COVERS = {
   'chandrayaan-3': '/media/covers/chandrayaan-3-cover.jpg',
   'mangalyaan': '/media/covers/mangalyaan-cover.jpg',
-  'nvs-03': '/media/covers/nvs-03-cover.jpg'
+  'nvs-03': '/media/covers/nvs-03-cover.jpg',
+  'everest-indian-ffsc': '/media/covers/everest-ffsc-cover.jpg?v=3'
 };
 
 export const STORY_DURATIONS = {
   'chandrayaan-3': 180,
   'mangalyaan': 180,
-  'nvs-03': 540
+  'nvs-03': 540,
+  'everest-indian-ffsc': 624
 };
 
 let audio = null;
 let state = {
   storyId: 'chandrayaan-3',
+  lang: 'en-IN',
   title: 'Chandrayaan-3: 15 Minutes of Terror & The South Pole Triumph',
   subtitle: 'ISRO Official Outreach • Lunar Landing Podcast',
   coverSrc: STORY_COVERS['chandrayaan-3'],
@@ -83,6 +86,59 @@ export function initGlobalPlayer() {
   updateBarUI();
 }
 
+let lastRecordedPlay = { storyId: null, timestamp: 0 };
+
+function recordStoryPlayback(storyId) {
+  if (!storyId) return;
+  const now = Date.now();
+  // Strictly prevent duplicate triggers: ignore if called again for the same story within 2 seconds
+  if (lastRecordedPlay.storyId === storyId && (now - lastRecordedPlay.timestamp) < 2000) {
+    return;
+  }
+  lastRecordedPlay = { storyId, timestamp: now };
+
+  fetch(`/api/stories/${storyId}/play`, { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      if (data && data.play_count !== undefined) {
+        const count = Number(data.play_count);
+        const playText = count === 1 ? '🎧 1 play' : `🎧 ${count.toLocaleString()} plays`;
+        const pillText = count === 1 ? '1 play' : `${count.toLocaleString()} plays`;
+
+        // Update shelf plays
+        document.querySelectorAll(`.shelf-plays[data-story-id="${storyId}"]`).forEach(el => {
+          el.innerHTML = playText;
+        });
+
+        // Update story card pill (preserving headphone SVG icon)
+        document.querySelectorAll(`.card-play-count[data-story-id="${storyId}"]`).forEach(el => {
+          el.innerHTML = `
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+            ${pillText}
+          `;
+          el.setAttribute('title', `${count.toLocaleString()} listens recorded`);
+        });
+
+        // Update dedicated story page play count
+        const pagePlayEl = document.getElementById('story-play-count');
+        if (pagePlayEl && state.storyId === storyId) {
+          pagePlayEl.textContent = `${count.toLocaleString()}`;
+        }
+      }
+      if (data && data.totalPlays !== undefined) {
+        const playsEl = document.getElementById('telemetry-plays');
+        const playsLabel = document.getElementById('telemetry-plays-label');
+        if (playsEl) {
+          playsEl.textContent = Number(data.totalPlays).toLocaleString();
+        }
+        if (playsLabel) {
+          playsLabel.textContent = Number(data.totalPlays) === 1 ? 'Audio Listen' : 'Audio Listens';
+        }
+      }
+    })
+    .catch(() => {});
+}
+
 function setupAudioListeners() {
   audio.addEventListener('play', () => {
     state.isPlaying = true;
@@ -124,6 +180,24 @@ function setupAudioListeners() {
     notifyState();
     updateTimelineUI();
   });
+
+  audio.addEventListener('error', (e) => {
+    console.warn('Audio playback error, attempting fallback:', e);
+    // If specific language failed, fallback to English narration
+    if (state.audioSrc && !state.audioSrc.includes('en-IN')) {
+      const fallbackSrc = state.audioSrc.replace(/\/[a-z]{2}-IN\.(mp3|wav)/i, '/en-IN.mp3');
+      if (fallbackSrc !== state.audioSrc) {
+        state.audioSrc = fallbackSrc;
+        audio.src = fallbackSrc;
+        audio.load();
+        audio.play().catch(() => {});
+        return;
+      }
+    }
+    state.isPlaying = false;
+    notifyState();
+    updateBarUI();
+  });
 }
 
 let currentPlaySession = 0;
@@ -133,8 +207,15 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
 
   const activeLang = lang || getActiveLang();
   const langCode = activeLang.includes('-') ? activeLang : `${activeLang}-IN`;
-  const audioFile = `${langCode}.wav`;
-  const audioUrl = `/media/audio/stories/${storyId}/${audioFile}?v=nvs03_full_v4`;
+  const audioFolder = storyId === 'everest-indian-ffsc' ? 'everest-ffsc' : storyId;
+  const audioExt = (storyId === 'everest-indian-ffsc' || storyId === 'mangalyaan' || !langCode.startsWith('hi')) ? 'mp3' : 'wav';
+  
+  let audioUrl = metadata.audioPath || `/media/audio/stories/${audioFolder}/${langCode}.${audioExt}`;
+  if (!audioUrl.includes('?')) {
+    audioUrl += '?v=ml2';
+  } else {
+    audioUrl = audioUrl.replace(/(\?|&)v=[^&]*/, '$1v=ml2');
+  }
 
   // Immediately silence and reset any currently playing audio so there is zero overlap
   if (audio) {
@@ -144,11 +225,18 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
   }
 
   state.storyId = storyId;
+  state.lang = langCode;
   state.audioSrc = audioUrl;
 
   const defaultDuration = (storyId === 'nvs-03') 
-    ? (langCode.startsWith('en') ? 510 : 540)
-    : (STORY_DURATIONS[storyId] || 180);
+    ? (langCode.startsWith('ml') ? 374 : langCode.startsWith('en') ? 510 : 540)
+    : (storyId === 'everest-indian-ffsc')
+      ? (langCode.startsWith('hi') ? 624 : langCode.startsWith('ta') ? 520 : langCode.startsWith('kn') ? 514 : langCode.startsWith('te') ? 481 : langCode.startsWith('bn') ? 478 : langCode.startsWith('en') ? 436 : 397)
+      : (storyId === 'mangalyaan')
+        ? (langCode.startsWith('ml') ? 154 : 180)
+        : (storyId === 'chandrayaan-3')
+          ? (langCode.startsWith('ml') ? 192 : 180)
+          : (STORY_DURATIONS[storyId] || 180);
   const targetDuration = metadata.duration || defaultDuration;
 
   // Set duration strictly to the target story's duration, NOT the previous story's duration
@@ -161,24 +249,46 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
     state.title = "Mangalyaan: India's Historic Journey to Mars";
   } else if (storyId === 'nvs-03') {
     state.title = 'NVS-03: NavIC Constellation & The Pyro Valve Gambit';
+  } else if (storyId === 'everest-indian-ffsc') {
+    state.title = 'EVEREST: The Indian FFSC';
   } else {
     state.title = 'Chandrayaan-3: 15 Minutes of Terror & The South Pole Triumph';
   }
 
   if (metadata.subtitle) {
     state.subtitle = metadata.subtitle;
+  } else if (storyId === 'everest-indian-ffsc') {
+    state.subtitle = langCode.startsWith('hi')
+      ? 'एस्ट्रोबेस स्पेस • भारत का पहला फुल-फ्लो रॉकेट इंजन (10 मिनट)'
+      : langCode.startsWith('ta')
+      ? 'ஆஸ்ட்ரோபேஸ் ஸ்பேஸ் • இந்தியாவின் முதல் எஃப்.எஃப்.எஸ்.சி எஞ்சின்'
+      : langCode.startsWith('te')
+      ? 'ఆస్ట్రోబేస్ స్పేస్ • భారతదేశపు మొదటి ఎఫ్.ఎఫ్.ఎస్.సి ఇంజిన్'
+      : langCode.startsWith('bn')
+      ? 'অ্যাস্ট্রোবেস স্পেস • ভারতের প্রথম ফুল-ফ্লো রকেট ইঞ্জিন'
+      : langCode.startsWith('kn')
+      ? 'ಆಸ್ಟ್ರೋಬೇಸ್ ಸ್ಪೇಸ್ • ಭಾರತದ ಮೊದಲ ಎಫ್.ಎಫ್.ಎಸ್.ಸಿ ಎಂಜಿನ್'
+      : (langCode.startsWith('ml')
+          ? 'ആസ്ട്രോബേസ് • ഇന്ത്യയുടെ ആദ്യ എഫ്.എഫ്.എസ്.സി എഞ്ചിൻ (7 മിനിറ്റ്)'
+          : 'Astrobase Space • India\'s First FFSC Methalox Rocket Engine');
   } else if (storyId === 'mangalyaan') {
     state.subtitle = langCode.startsWith('hi') 
       ? 'इसरो आधिकारिक ऑडियो पॉडकास्ट • मंगलयान' 
-      : 'ISRO Official Outreach • Mars Orbiter Mission';
+      : (langCode.startsWith('ml')
+          ? 'ഐ.എസ്.ആർ.ഒ ഔദ്യോഗിക ഓഡിയോ പോഡ്കാസ്റ്റ് • മംഗൾയാൻ (3 മിനിറ്റ്)'
+          : 'ISRO Official Outreach • Mars Orbiter Mission');
   } else if (storyId === 'nvs-03') {
     state.subtitle = langCode.startsWith('hi') 
       ? 'इसरो आधिकारिक ऑडियो पॉडकास्ट • 9 मिनट' 
-      : `ISRO Official Outreach • GSLV-F18 / NavIC (${langCode.split('-')[0].toUpperCase()})`;
+      : (langCode.startsWith('ml')
+          ? 'ഐ.എസ്.ആർ.ഒ ഔദ്യോഗിക ഓഡിയോ പോഡ്കാസ്റ്റ് • നാവിക് എൻവിഎസ്-03 (9 മിനിറ്റ്)'
+          : `ISRO Official Outreach • GSLV-F18 / NavIC (${langCode.split('-')[0].toUpperCase()})`);
   } else {
     state.subtitle = langCode.startsWith('hi') 
       ? 'इसरो आधिकारिक ऑडियो पॉडकास्ट • 3 मिनट' 
-      : 'ISRO Official Outreach • 3 Min Podcast';
+      : (langCode.startsWith('ml')
+          ? 'ഐ.എസ്.ആർ.ഒ ഔദ്യോഗിക ഓഡിയോ പോഡ്കാസ്റ്റ് • ചന്ദ്രയാൻ-3 (3 മിനിറ്റ്)'
+          : 'ISRO Official Outreach • 3 Min Podcast');
   }
 
   // Resolve cover image for chosen story
@@ -214,6 +324,11 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
     state.isPlaying = true;
     notifyState();
     updateBarUI();
+
+    // Record real playback metrics on backend (single call, debounced)
+    if (!metadata.isLanguageSwitch) {
+      recordStoryPlayback(storyId);
+    }
   } catch (err) {
     if (sessionId !== currentPlaySession) return;
     if (err.name !== 'AbortError') {
@@ -224,6 +339,7 @@ export async function playStory(storyId = 'chandrayaan-3', lang = null, metadata
   // Save state
   localStorage.setItem('isro_player_state', JSON.stringify({
     storyId: state.storyId,
+    lang: state.lang,
     title: state.title,
     subtitle: state.subtitle,
     coverSrc: state.coverSrc,
@@ -613,21 +729,13 @@ async function navigateSpa(url, push = true) {
       mountedLangSelect.value = activeLang;
     }
 
-    // Swap <main> content with smooth cross-fade and zero position jumping
+    // Swap <main> content instantly without blank white flash or position jumping
     const currentMain = document.querySelector('main');
     const newMain = doc.querySelector('main');
     if (currentMain && newMain) {
-      // Gentle fade out of old main
-      currentMain.style.transition = 'opacity 0.08s ease-out';
-      currentMain.style.opacity = '0.35';
-      await new Promise(r => setTimeout(r, 65));
-
-      // Prep new main invisibly to measure and position scroll
-      newMain.style.opacity = '0';
-      newMain.style.transition = 'opacity 0.15s ease-in';
       currentMain.replaceWith(newMain);
 
-      // Snap scroll position directly to target BEFORE making visible
+      // Snap scroll position directly to target
       if (targetHash) {
         const targetEl = newMain.querySelector('#' + targetHash);
         if (targetEl) {
@@ -641,10 +749,6 @@ async function navigateSpa(url, push = true) {
       } else {
         window.scrollTo(0, 0);
       }
-
-      // Fade new main in cleanly
-      void newMain.offsetWidth;
-      newMain.style.opacity = '1';
     }
 
     if (push) {

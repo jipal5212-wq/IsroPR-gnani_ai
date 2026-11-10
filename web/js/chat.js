@@ -115,6 +115,8 @@ function setupComposer() {
         currentLang = 'te-IN';
       } else if (/[\u0980-\u09FF]/.test(text)) {
         currentLang = 'bn-IN';
+      } else if (/[\u0D00-\u0D7F]/.test(text)) {
+        currentLang = 'ml-IN';
       }
       setActiveLang(currentLang);
       const langSelect = document.getElementById('chat-lang-select') || document.getElementById('lang-select');

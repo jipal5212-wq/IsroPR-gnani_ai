@@ -20,6 +20,12 @@ const EXISTING_STORIES = [
     duration_hint_min: 9
   },
   {
+    id: 'everest-indian-ffsc',
+    title: 'EVEREST: The Indian FFSC',
+    cover_path: 'everest-ffsc-cover.jpg',
+    duration_hint_min: 10
+  },
+  {
     id: 'mangalyaan',
     title: "Mangalyaan: India's Historic Journey to Mars",
     cover_path: 'mangalyaan-cover.jpg',
@@ -36,9 +42,11 @@ export function playChosenStory(storyId) {
   const pool = availableStoriesPool && availableStoriesPool.length > 0 ? availableStoriesPool : EXISTING_STORIES;
   const story = pool.find(s => s.id === storyId) || EXISTING_STORIES.find(s => s.id === storyId) || { id: storyId };
 
-  const durationSec = storyId === 'nvs-03'
+  const durationSec = (storyId === 'nvs-03')
     ? (currentLang.startsWith('en') ? 510 : 540)
-    : (story.duration || (story.duration_hint_min ? story.duration_hint_min * 60 : 180));
+    : (storyId === 'everest-indian-ffsc')
+      ? (currentLang.startsWith('hi') ? 624 : currentLang.startsWith('ta') ? 520 : currentLang.startsWith('kn') ? 514 : currentLang.startsWith('te') ? 481 : currentLang.startsWith('bn') ? 478 : currentLang.startsWith('en') ? 436 : 397)
+      : (story.duration || (story.duration_hint_min ? story.duration_hint_min * 60 : 180));
 
   const cover = story.cover_path
     ? (story.cover_path.startsWith('/') ? story.cover_path : `/media/covers/${story.cover_path}`)
@@ -66,9 +74,11 @@ export function playRandomStory() {
   const chosen = candidates[Math.floor(Math.random() * candidates.length)] || pool[0];
   if (!chosen) return;
 
-  const durationSec = chosen.id === 'nvs-03'
+  const durationSec = (chosen.id === 'nvs-03')
     ? (currentLang.startsWith('en') ? 483 : 540)
-    : (chosen.duration || (chosen.duration_hint_min ? chosen.duration_hint_min * 60 : 180));
+    : (chosen.id === 'everest-indian-ffsc')
+      ? (currentLang.startsWith('hi') ? 624 : currentLang.startsWith('ta') ? 520 : currentLang.startsWith('kn') ? 514 : currentLang.startsWith('te') ? 481 : currentLang.startsWith('bn') ? 478 : currentLang.startsWith('en') ? 436 : 397)
+      : (chosen.duration || (chosen.duration_hint_min ? chosen.duration_hint_min * 60 : 180));
 
   const cover = chosen.cover_path
     ? (chosen.cover_path.startsWith('/') ? chosen.cover_path : `/media/covers/${chosen.cover_path}`)
@@ -81,12 +91,89 @@ export function playRandomStory() {
   });
 }
 
+let telemetryTimer = null;
+
+function getClientSessionId() {
+  try {
+    let sid = sessionStorage.getItem('isro_sid');
+    if (!sid) {
+      sid = 'sid_' + Math.random().toString(36).substring(2, 10) + '_' + Date.now();
+      sessionStorage.setItem('isro_sid', sid);
+    }
+    return sid;
+  } catch (_) {
+    return 'sid_default';
+  }
+}
+
+export async function updateTelemetry() {
+  try {
+    const sessionId = getClientSessionId();
+    const res = await apiFetch('/api/telemetry/heartbeat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId })
+    });
+    if (!res) return;
+
+    const onlineEl = document.getElementById('telemetry-online');
+    const visitsEl = document.getElementById('telemetry-visits');
+    const visitsLabel = document.getElementById('telemetry-visits-label');
+    const playsEl = document.getElementById('telemetry-plays');
+    const playsLabel = document.getElementById('telemetry-plays-label');
+
+    if (onlineEl && res.onlineNow !== undefined) {
+      onlineEl.textContent = res.onlineNow;
+    }
+    if (visitsEl && res.totalVisits !== undefined) {
+      const v = Number(res.totalVisits);
+      visitsEl.textContent = v.toLocaleString();
+      if (visitsLabel) {
+        visitsLabel.textContent = v === 1 ? 'Exploration' : 'Explorations';
+      }
+    }
+    if (playsEl && res.totalPlays !== undefined) {
+      const p = Number(res.totalPlays);
+      playsEl.textContent = p.toLocaleString();
+      if (playsLabel) {
+        playsLabel.textContent = p === 1 ? 'Audio Listen' : 'Audio Listens';
+      }
+    }
+  } catch (_) {}
+}
+
+export function startTelemetryPolling() {
+  updateTelemetry();
+  if (telemetryTimer) clearInterval(telemetryTimer);
+  telemetryTimer = setInterval(updateTelemetry, 8000); // 8s heartbeat
+
+  // Notify server immediately if user navigates away or closes tab
+  window.addEventListener('beforeunload', () => {
+    try {
+      const sid = getClientSessionId();
+      const payload = JSON.stringify({ sessionId: sid });
+      if (navigator.sendBeacon) {
+        const blob = new Blob([payload], { type: 'application/json' });
+        navigator.sendBeacon('/api/telemetry/leave', blob);
+      }
+    } catch (_) {}
+  });
+
+  // Instant refresh when returning to tab
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      updateTelemetry();
+    }
+  });
+}
+
 export async function initLibrary() {
   initGlobalPlayer();
   await loadLanguages();
   setupEventListeners();
   await loadStories();
   setupScrollSpy();
+  startTelemetryPolling();
 
   // Listen to global player changes to keep card buttons synchronized
   if (libraryUnsubscribe) {
@@ -282,10 +369,15 @@ function syncCardButtons(audioState) {
 
 async function loadLanguages() {
   try {
-    const data = await apiFetch('/api/languages');
     const select = document.getElementById('lang-select');
     if (!select) return;
 
+    if (select.options.length > 0) {
+      select.value = getActiveLang();
+      return;
+    }
+
+    const data = await apiFetch('/api/languages');
     select.innerHTML = '';
     const activeLang = getActiveLang();
 
@@ -299,12 +391,19 @@ async function loadLanguages() {
       select.appendChild(opt);
     }
 
-    select.addEventListener('change', async (e) => {
-      setActiveLang(e.target.value);
+    select.onchange = async (e) => {
+      const newLang = e.target.value;
+      setActiveLang(newLang);
       const chips = document.querySelectorAll('.mah-chip');
-      chips.forEach(c => c.classList.toggle('active', c.dataset.lang === e.target.value));
+      chips.forEach(c => c.classList.toggle('active', c.dataset.lang === newLang));
+      updateNvsCardLang(newLang);
       await loadStories();
-    });
+
+      const st = getAudioState();
+      if (st.isPlaying) {
+        playStory(st.storyId || 'chandrayaan-3', newLang, { isLanguageSwitch: true });
+      }
+    };
   } catch (err) {
     console.error('Failed to load languages:', err);
   }
@@ -339,7 +438,7 @@ function setupEventListeners() {
     syncChips(getActiveLang());
 
     heroLangChips.forEach(chip => {
-      chip.addEventListener('click', async () => {
+      chip.onclick = async () => {
         const targetLang = chip.dataset.lang;
         if (!targetLang) return;
 
@@ -353,21 +452,21 @@ function setupEventListeners() {
 
         const st = getAudioState();
         if (st.isPlaying) {
-          playStory(st.storyId || 'chandrayaan-3', targetLang);
+          playStory(st.storyId || 'chandrayaan-3', targetLang, { isLanguageSwitch: true });
         }
-      });
+      };
     });
   }
 
   // Category filter tabs
   const tabs = document.querySelectorAll('.cat-tab');
   tabs.forEach(tab => {
-    tab.addEventListener('click', async () => {
+    tab.onclick = async () => {
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       currentCategory = tab.dataset.category || 'all';
       await loadStories();
-    });
+    };
   });
 
   // Search input with debounce
@@ -389,7 +488,8 @@ function setupEventListeners() {
     upcomingBtn.onclick = (e) => {
       e.preventDefault();
       const audioState = getAudioState();
-      if (audioState.isPlaying && audioState.storyId === 'nvs-03') {
+      const currentLang = getActiveLang();
+      if (audioState.isPlaying && audioState.storyId === 'nvs-03' && audioState.lang === currentLang) {
         togglePlay();
       } else {
         playChosenStory('nvs-03');
@@ -412,7 +512,8 @@ function setupEventListeners() {
     heroC3Btn.onclick = (e) => {
       e.preventDefault();
       const audioState = getAudioState();
-      if (audioState.isPlaying && audioState.storyId === 'chandrayaan-3') {
+      const currentLang = getActiveLang();
+      if (audioState.isPlaying && audioState.storyId === 'chandrayaan-3' && audioState.lang === currentLang) {
         togglePlay();
       } else {
         playChosenStory('chandrayaan-3');
@@ -437,7 +538,8 @@ function setupEventListeners() {
       const storyId = btn.dataset.storyId;
       if (!storyId) return;
       const audioState = getAudioState();
-      if (audioState.isPlaying && audioState.storyId === storyId) {
+      const currentLang = getActiveLang();
+      if (audioState.isPlaying && audioState.storyId === storyId && audioState.lang === currentLang) {
         togglePlay();
       } else {
         playChosenStory(storyId);
@@ -452,7 +554,8 @@ function setupEventListeners() {
       const storyId = card.dataset.storyId;
       if (!storyId) return;
       const audioState = getAudioState();
-      if (audioState.isPlaying && audioState.storyId === storyId) {
+      const currentLang = getActiveLang();
+      if (audioState.isPlaying && audioState.storyId === storyId && audioState.lang === currentLang) {
         togglePlay();
       } else {
         playChosenStory(storyId);
@@ -472,8 +575,9 @@ function setupEventListeners() {
 
       const storyId = playTarget.dataset.storyId || 'chandrayaan-3';
       const audioState = getAudioState();
+      const currentLang = getActiveLang();
 
-      if (audioState.isPlaying && audioState.storyId === storyId) {
+      if (audioState.isPlaying && audioState.storyId === storyId && audioState.lang === currentLang) {
         togglePlay();
       } else {
         playChosenStory(storyId);
@@ -507,7 +611,7 @@ export async function loadStories() {
     const res = await apiFetch(`/api/stories?${query.toString()}`);
     const stories = res.stories || [];
 
-    if (stories.length > 0) {
+    if ((!currentCategory || currentCategory === 'all') && !searchQuery && stories.length > 0) {
       availableStoriesPool = stories;
     }
 
@@ -523,6 +627,11 @@ export async function loadStories() {
 
     for (const story of stories) {
       container.appendChild(createStoryCard(story, lang));
+      const pc = Number(story.play_count || 0);
+      const text = pc === 1 ? '🎧 1 play' : `🎧 ${pc.toLocaleString()} plays`;
+      document.querySelectorAll(`.shelf-plays[data-story-id="${story.id}"]`).forEach(el => {
+        el.textContent = text;
+      });
     }
 
     // Sync button state immediately after render
@@ -564,8 +673,12 @@ function createStoryCard(story, lang) {
   card.dataset.storyId = story.id;
   card.dataset.duration = duration;
 
-  const coverSrc = story.cover_path ? `/media/covers/${story.cover_path}` : getEditorialCover(story.category);
-  const categoryLabel = isUpcoming ? 'Upcoming / Ongoing' : story.category === 'isro' ? 'ISRO Mission' : story.category === 'startups' ? 'NewSpace India' : 'Space Science';
+  const coverSrc = story.cover_path ? `/media/covers/${story.cover_path}?v=3` : getEditorialCover(story.category);
+  const categoryLabel = isUpcoming ? 'Upcoming / Ongoing' : story.category === 'isro' ? 'ISRO Mission' : (story.category === 'startups' || story.category === 'startup') ? 'Space Startup' : 'Space Science';
+  const langCue = 'EN • हिन्दी • മലയാളം • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ';
+
+  const playCount = Number(story.play_count || 0);
+  const playLabel = playCount === 1 ? '1 play' : `${playCount.toLocaleString()} plays`;
 
   card.innerHTML = `
     <div class="story-card-top">
@@ -575,7 +688,11 @@ function createStoryCard(story, lang) {
         <span class="story-badge-cat ${isUpcoming ? 'badge-live' : ''}">${categoryLabel}</span>
         <span class="story-duration-pill">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-          ${duration} MIN LISTEN
+          ${duration} MIN
+        </span>
+        <span class="story-play-pill card-play-count" data-story-id="${story.id}" title="${playCount.toLocaleString()} listens recorded">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+          ${playLabel}
         </span>
       </div>
 
@@ -592,7 +709,7 @@ function createStoryCard(story, lang) {
     <div class="story-card-content">
       <div class="story-languages-cue">
         <span class="lang-wave-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: inline-block; vertical-align: middle;"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="7" y1="6" x2="7" y2="18"></line><line x1="17" y1="6" x2="17" y2="18"></line><line x1="2" y1="10" x2="2" y2="14"></line><line x1="22" y1="10" x2="22" y2="14"></line></svg></span>
-        <span class="lang-names">EN • हिन्दी • தமிழ் • తెలుగు • বাংলা • ಕನ್ನಡ</span>
+        <span class="lang-names">${langCue}</span>
       </div>
 
       <a href="/story.html?id=${story.id}&lang=${lang}" class="story-card-title">${story.title}</a>

@@ -23,7 +23,7 @@ export const SPACE_GALLERY = [
     "description": "Indian Navy divers and Eastern Fleet recovery team safely securing the Gaganyaan Crew Module in the Bay of Bengal following splashdown.",
     "source": "https://commons.wikimedia.org/wiki/File:First_batch_of_crew_recovery_team_for_Mission_Gaganyaan_completed_Phase-1_of_training_at_Indian_Navy%27s_Water_Survival_Training_Facility_(WSTF)_02.jpg",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/First_batch_of_crew_recovery_team_for_Mission_Gaganyaan_completed_Phase-1_of_training_at_Indian_Navy%27s_Water_Survival_Training_Facility_%28WSTF%29_02.jpg",
-    "localFile": "gaganyaan-recovery.jpg",
+    "localFile": "gaganyaan-recovery.webp",
     "localAvailable": true
   },
   {
@@ -36,7 +36,7 @@ export const SPACE_GALLERY = [
     "description": "Indigenous orange pressure suit engineered to protect Indian Vyomnauts during launch, orbital operations, and atmospheric re-entry.",
     "source": "https://commons.wikimedia.org/wiki/File:Gaganyaan_flight_suit_at_IAC_2021.jpg",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/9/95/Gaganyaan_flight_suit_at_IAC_2021.jpg",
-    "localFile": "gaganyaan-suit.jpg",
+    "localFile": "gaganyaan-suit.webp",
     "localAvailable": true
   },
   {
@@ -49,7 +49,7 @@ export const SPACE_GALLERY = [
     "description": "Full-scale unpressurized structure assembly of the Gaganyaan crew cabin utilized for aerodynamic testing and parachute deceleration trials.",
     "source": "https://commons.wikimedia.org/wiki/File:Simulated_Crew_Module_(SCM)_Structure_Assembly_for_the_Gaganyaan_project.jpg",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Simulated_Crew_Module_%28SCM%29_Structure_Assembly_for_the_Gaganyaan_project.jpg",
-    "localFile": "gaganyaan-scm.jpg",
+    "localFile": "gaganyaan-scm.webp",
     "localAvailable": true
   },
   {
@@ -62,7 +62,7 @@ export const SPACE_GALLERY = [
     "description": "India became the 1st nation in the world to reach Mars on its maiden attempt. The Mars Colour Camera captured historic global portraits of the Red Planet.",
     "source": "https://en.wikipedia.org/wiki/Mars_Orbiter_Mission",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Mars_Orbiter_Mission_Over_Mars_%2815237158879%29.jpg",
-    "localFile": "mangalyaan-mars.jpg",
+    "localFile": "mangalyaan-mars.webp",
     "localAvailable": true
   },
   {
@@ -75,7 +75,7 @@ export const SPACE_GALLERY = [
     "description": "Gold-foil thermal blanketed Mangalyaan orbiter carrying 5 scientific instruments before its historic launch on PSLV-C25.",
     "source": "https://commons.wikimedia.org/wiki/File:Mars_Orbiter_Mission_-_India_-_ArtistsConcept.jpg",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Mars_Orbiter_Mission_-_India_-_ArtistsConcept.jpg",
-    "localFile": "mangalyaan-spacecraft.jpg",
+    "localFile": "mangalyaan-spacecraft.webp",
     "localAvailable": true
   },
   {
@@ -114,7 +114,7 @@ export const SPACE_GALLERY = [
     "description": "Vikram lander mounted directly atop the Chandrayaan-2 lunar orbiter, which remains in active polar orbit returning ultra-high-resolution imagery.",
     "source": "https://commons.wikimedia.org/wiki/File:GSLV_Mk_III_M1,_Chandrayaan-2_-_Vikram_lander_mounted_on_top_of_orbiter.jpg",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ef/GSLV_Mk_III_M1%2C_Chandrayaan-2_-_Vikram_lander_mounted_on_top_of_orbiter.jpg",
-    "localFile": "chandrayaan2-stacking.jpg",
+    "localFile": "chandrayaan2-stacking.webp",
     "localAvailable": true
   },
   {
@@ -127,7 +127,7 @@ export const SPACE_GALLERY = [
     "description": "India’s maiden Moon orbiter carrying the Moon Mineralogy Mapper and Moon Impact Probe, which made the historic global discovery of lunar hydroxyl and water molecules.",
     "source": "https://en.wikipedia.org/wiki/Chandrayaan-1",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fd/CY1_2007_%28cropped%29.jpg",
-    "localFile": "chandrayaan1-spacecraft.jpg",
+    "localFile": "chandrayaan1-spacecraft.webp",
     "localAvailable": true
   },
   {
@@ -140,7 +140,7 @@ export const SPACE_GALLERY = [
     "description": "Positioned 1.5 million km from Earth at the Sun-Earth L1 Lagrangian point, Aditya-L1 continuously observes the solar corona, solar wind, and coronal mass ejections.",
     "source": "https://en.wikipedia.org/wiki/Aditya-L1",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Aditya_L1.png",
-    "localFile": "aditya-l1-solar.png",
+    "localFile": "aditya-l1-solar.webp",
     "localAvailable": true
   },
   {
@@ -179,7 +179,7 @@ export const SPACE_GALLERY = [
     "description": "Engineered for low-cost, on-demand commercial launch capability to Low Earth Orbit with turnaround integration time of under 72 hours.",
     "source": "https://en.wikipedia.org/wiki/Small_Satellite_Launch_Vehicle",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/Mrm7669_Launch_of_SSLV-D1_from_Satish_Dhawan_FLP.jpg",
-    "localFile": "sslv-d1-liftoff.jpg",
+    "localFile": "sslv-d1-liftoff.webp",
     "localAvailable": true
   },
   {
@@ -192,7 +192,7 @@ export const SPACE_GALLERY = [
     "description": "ISRO’s winged autonomous space shuttle technology demonstrator, paving the way for two-stage-to-orbit fully reusable launch vehicles.",
     "source": "https://en.wikipedia.org/wiki/RLV_Technology_Demonstration_Programme",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3b/RLV-TD_HEX01%2C_TDV_being_hoisted.jpg",
-    "localFile": "rlv-td-spaceplane.jpg",
+    "localFile": "rlv-td-spaceplane.webp",
     "localAvailable": true
   },
   {
@@ -205,7 +205,7 @@ export const SPACE_GALLERY = [
     "description": "Named after the legendary 5th-century Indian astronomer, Aryabhata marked India’s entry into the space age, designed and built entirely by ISRO scientists in Bengaluru.",
     "source": "https://en.wikipedia.org/wiki/Aryabhata_(satellite)",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/5/50/Aryabhata_Satellite.jpg",
-    "localFile": "aryabhata-1975.jpg",
+    "localFile": "aryabhata-1975.webp",
     "localAvailable": true
   },
   {
@@ -218,7 +218,7 @@ export const SPACE_GALLERY = [
     "description": "Dr. Vikram Sarabhai and APJ Abdul Kalam launched the first Nike-Apache sounding rocket amidst fishing hamlets in Kerala, working out of St. Mary Magdalene church.",
     "source": "https://commons.wikimedia.org/wiki/File:TERLS-01.jpg",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/2/28/TERLS-01.jpg",
-    "localFile": "thumba-sounding-rocket.jpg",
+    "localFile": "thumba-sounding-rocket.webp",
     "localAvailable": true
   },
   {
@@ -231,7 +231,7 @@ export const SPACE_GALLERY = [
     "description": "India’s premier multi-wavelength space observatory studying black holes, neutron star binaries, and distant star-forming galaxies in X-ray and UV spectrums.",
     "source": "https://en.wikipedia.org/wiki/Astrosat",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Fueling_of_Astrosat-1_in_satellite_preparation_facility_at_SDSC_SHAR.jpg",
-    "localFile": "astrosat-observatory.jpg",
+    "localFile": "astrosat-observatory.webp",
     "localAvailable": true
   },
   {
@@ -244,7 +244,7 @@ export const SPACE_GALLERY = [
     "description": "World’s most advanced dual-frequency synthetic aperture radar satellite jointly developed by NASA and ISRO to track planetary ecosystems and glacial movement.",
     "source": "https://en.wikipedia.org/wiki/NISAR_(satellite)",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Artist%27s_concept_of_NISAR_over_Earth.jpg",
-    "localFile": "nisar-spacecraft.jpg",
+    "localFile": "nisar-spacecraft.webp",
     "localAvailable": true
   },
   {
@@ -283,7 +283,7 @@ export const SPACE_GALLERY = [
     "description": "IIT Madras incubated Agnikul launched Agnibaan SOrTeD powered by the world’s 1st single-piece 3D-printed semi-cryogenic Agnilet engine from their private launchpad.",
     "source": "https://en.wikipedia.org/wiki/Agnikul_Cosmos",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Agnibaan_Republic_Day_Parade_2025.jpg",
-    "localFile": "agnikul-agnibaan.jpg",
+    "localFile": "agnikul-agnibaan.webp",
     "localAvailable": true
   },
   {
@@ -296,7 +296,7 @@ export const SPACE_GALLERY = [
     "description": "Bengaluru-based Pixxel assembling high-resolution hyperspectral satellites (Shakuntala & Anand) mapping mineral deposits, agriculture, and greenhouse gas emissions.",
     "source": "https://en.wikipedia.org/wiki/Pixxel",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Pixxel_facility.jpg",
-    "localFile": "pixxel-satellite-facility.jpg",
+    "localFile": "pixxel-satellite-facility.webp",
     "localAvailable": true
   },
   {
@@ -309,7 +309,7 @@ export const SPACE_GALLERY = [
     "description": "Bellatrix Microwave Electrothermal Thruster (MET) and green monopropellant thrusters tested on ISRO’s PSLV orbital experimental platform (POEM).",
     "source": "https://commons.wikimedia.org/wiki/File:Microwave_Electrothermal_Thruster_(MET)_of_Bellatrix_Aerospace_613149-5fbcf416533fbdcab924846c42f1b1267f3dc9a7.jpg",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Microwave_Electrothermal_Thruster_%28MET%29_of_Bellatrix_Aerospace_613149-5fbcf416533fbdcab924846c42f1b1267f3dc9a7.jpg",
-    "localFile": "bellatrix-met-thruster.jpg",
+    "localFile": "bellatrix-met-thruster.webp",
     "localAvailable": true
   },
   {
@@ -322,7 +322,7 @@ export const SPACE_GALLERY = [
     "description": "IISc incubated Digantara developing India’s commercial space debris monitoring and Space-MAP orbital intelligence platform.",
     "source": "https://en.wikipedia.org/wiki/Digantara",
     "remoteUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6c/9th_Bengaluru_Space_Expo_2026%2C_Bangalore_International_Exhibition_Centre_27.jpg",
-    "localFile": "digantara-space-surveillance.jpg",
+    "localFile": "digantara-space-surveillance.webp",
     "localAvailable": true
   }
 ];

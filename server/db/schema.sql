@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS stories (
     facts_as_of TEXT,
     sources TEXT DEFAULT '[]', -- JSON array of URLs
     duration_hint_min INTEGER DEFAULT 0,
+    play_count INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
