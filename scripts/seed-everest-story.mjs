@@ -10,7 +10,7 @@ const story = {
   summary: "How Indian deep-tech startup Astrobase is engineering India's first Full-Flow Staged Combustion (FFSC) methalox rocket engine — placing India alongside the US, Russia, and China in heavy reusable rocketry.",
   category: 'startup',
   facts_as_of: '2026-08-07',
-  sources: JSON.stringify(['https://astrobase.space', 'https://www.inspace.gov.in']),
+  sources: JSON.stringify(['https://www.astrobase.in/', 'https://www.inspace.gov.in']),
   cover_path: 'everest-ffsc-cover.jpg',
   duration_hint_min: 10,
   published: 1,
@@ -170,14 +170,14 @@ const facts = [
     category: 'startup',
     body: 'Astrobase Space Technologies is an Indian space startup founded in 2024 by IIT Bombay alumni Devakumar Thammisetty (ex-ISRO cryogenic scientist with 13 years experience) and Neeraj Khandelwal (CoinDCX co-founder). Astrobase is developing EVEREST, an 800 kN (~80-tonne thrust) Full-Flow Staged Combustion (FFSC) methalox rocket engine for large reusable launch vehicles. Astrobase has a 46,000 sq ft manufacturing facility in Dobbaspet, Bengaluru, and a 21-acre private engine test facility in Anantapur, Andhra Pradesh.',
     as_of: '2026-08-07',
-    source_url: 'https://astrobase.space'
+    source_url: 'https://www.astrobase.in/'
   },
   {
     title: 'Full-Flow Staged Combustion (FFSC) Rocket Technology',
     category: 'explainer',
     body: 'Full-Flow Staged Combustion (FFSC) is the most advanced and thermodynamically efficient liquid rocket engine cycle. It employs two separate preburners (one fuel-rich, one oxidiser-rich) driving independent turbopumps, with all propellant exhaust flowing into the main chamber with zero dump waste. Historically, only the Soviet Union (RD-270 trials), USA (SpaceX Raptor), and China (LandSpace TQ-12/15) have developed FFSC engines. Astrobase EVEREST aims to make India the 4th country to achieve this technology.',
     as_of: '2026-08-07',
-    source_url: 'https://astrobase.space'
+    source_url: 'https://www.astrobase.in/'
   }
 ];
 

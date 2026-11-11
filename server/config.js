@@ -46,8 +46,20 @@ if (isVercel) {
   try {
     fs.mkdirSync(ENV.DATA_DIR, { recursive: true });
     const seedDb = path.resolve(process.cwd(), 'data/spacebharat.db');
-    if (!fs.existsSync(DIRS.DB_FILE) && fs.existsSync(seedDb)) {
-      fs.copyFileSync(seedDb, DIRS.DB_FILE);
+    if (fs.existsSync(seedDb)) {
+      let shouldCopy = !fs.existsSync(DIRS.DB_FILE);
+      if (!shouldCopy) {
+        try {
+          const destStat = fs.statSync(DIRS.DB_FILE);
+          const srcStat = fs.statSync(seedDb);
+          if (srcStat.mtimeMs > destStat.mtimeMs || srcStat.size !== destStat.size) {
+            shouldCopy = true;
+          }
+        } catch (_) {}
+      }
+      if (shouldCopy) {
+        fs.copyFileSync(seedDb, DIRS.DB_FILE);
+      }
     }
   } catch (err) {
     console.warn('Vercel /tmp DB init notice:', err.message);

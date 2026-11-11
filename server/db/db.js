@@ -28,6 +28,12 @@ export function getDb() {
     db.prepare(`ALTER TABLE stories ADD COLUMN play_count INTEGER DEFAULT 0`).run();
   } catch (_) {}
 
+  // Ensure Astrobase official domain https://www.astrobase.in/
+  try {
+    db.prepare("UPDATE stories SET sources = replace(sources, 'https://astrobase.space', 'https://www.astrobase.in/') WHERE sources LIKE '%astrobase.space%'").run();
+    db.prepare("UPDATE knowledge SET source_url = replace(source_url, 'https://astrobase.space', 'https://www.astrobase.in/') WHERE source_url LIKE '%astrobase.space%'").run();
+  } catch (_) {}
+
   // Initialize default settings if not already present
   const defaultLanguages = ALL_LANGUAGES.filter(l => l.listening).map(l => l.code);
   const defaultSettings = [

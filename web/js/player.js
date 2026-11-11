@@ -23,7 +23,7 @@ const STORY_FAST_CACHE = {
     cover_path: 'everest-ffsc-cover.jpg',
     category: 'startup',
     duration_hint_min: 10,
-    sources: ['https://astrobase.space', 'https://www.inspace.gov.in']
+    sources: ['https://www.astrobase.in/', 'https://www.inspace.gov.in']
   },
   'nvs-03': {
     id: 'nvs-03',
